@@ -1,0 +1,110 @@
+- generic [ref=f1e2]:
+  - generic [ref=f1e4]:
+    - generic [ref=f1e5]: Method Not Allowed
+    - button "Copy as Markdown" [ref=f1e11] [cursor=pointer]
+  - generic [ref=f1e18]:
+    - generic [ref=f1e19]:
+      - heading "Symfony\\Component\\HttpKernel\\Exception\\MethodNotAllowedHttpException" [level=1] [ref=f1e20]
+      - generic [ref=f1e21]: vendor\laravel\framework\src\Illuminate\Routing\AbstractRouteCollection.php:130
+      - paragraph [ref=f1e23]: "The GET method is not supported for route logout. Supported methods: POST."
+    - generic [ref=f1e24]:
+      - generic [ref=f1e25]:
+        - generic [ref=f1e26]:
+          - generic [ref=f1e27]: LARAVEL
+          - generic [ref=f1e28]: 12.69.2
+        - generic [ref=f1e29]:
+          - generic [ref=f1e30]: PHP
+          - generic [ref=f1e31]: 8.2.33
+      - generic [ref=f1e32]: UNHANDLED
+      - generic [ref=f1e36]: CODE 0
+    - generic [ref=f1e38]:
+      - generic [ref=f1e39]: "405"
+      - generic [ref=f1e43]: GET
+      - generic [ref=f1e47]: http://127.0.0.1:8000/logout
+      - button [ref=f1e48] [cursor=pointer]
+  - generic [ref=f1e53]:
+    - generic [ref=f1e54]:
+      - heading "Exception trace" [level=3] [ref=f1e60]
+      - generic [ref=f1e61]:
+        - generic [ref=f1e63] [cursor=pointer]:
+          - generic [ref=f1e68]: 31 vendor frames
+          - button [ref=f1e69]
+        - generic [ref=f1e74]:
+          - generic [ref=f1e75] [cursor=pointer]:
+            - generic [ref=f1e78]:
+              - code [ref=f1e82]:
+                - generic [ref=f1e83]: Illuminate\Foundation\Application->handleRequest(object(Illuminate\Http\Request))
+              - generic [ref=f1e84]: public\index.php:17
+            - button [ref=f1e87]
+          - code [ref=f1e96]:
+            - generic [ref=f1e97]: 12// Register the Composer autoloader...
+            - generic [ref=f1e98]: 13require __DIR__.'/../vendor/autoload.php';
+            - generic [ref=f1e99]: "14"
+            - generic [ref=f1e100]: 15// Bootstrap Laravel and handle the request...
+            - generic [ref=f1e101]: 16(require_once __DIR__.'/../bootstrap/app.php')
+            - generic [ref=f1e102]: 17 ->handleRequest(Request::capture());
+            - generic [ref=f1e103]: "18"
+        - generic [ref=f1e105] [cursor=pointer]:
+          - generic [ref=f1e110]: 1 vendor frame
+          - button [ref=f1e111]
+    - generic [ref=f1e116]:
+      - heading "Queries" [level=3] [ref=f1e122]
+      - generic [ref=f1e123]: // No queries executed
+  - generic [ref=f1e126]:
+    - generic [ref=f1e127]:
+      - heading "Headers" [level=2] [ref=f1e128]
+      - generic [ref=f1e129]:
+        - generic [ref=f1e130]:
+          - generic [ref=f1e131]: host
+          - generic [ref=f1e133]: 127.0.0.1:8000
+        - generic [ref=f1e134]:
+          - generic [ref=f1e135]: connection
+          - generic [ref=f1e137]: keep-alive
+        - generic [ref=f1e138]:
+          - generic [ref=f1e139]: sec-ch-ua
+          - generic [ref=f1e141]: "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Google Chrome\";v=\"152\""
+        - generic [ref=f1e142]:
+          - generic [ref=f1e143]: sec-ch-ua-mobile
+          - generic [ref=f1e145]: "?0"
+        - generic [ref=f1e146]:
+          - generic [ref=f1e147]: sec-ch-ua-platform
+          - generic [ref=f1e149]: "\"Windows\""
+        - generic [ref=f1e150]:
+          - generic [ref=f1e151]: upgrade-insecure-requests
+          - generic [ref=f1e153]: "1"
+        - generic [ref=f1e154]:
+          - generic [ref=f1e155]: user-agent
+          - generic [ref=f1e157]: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36
+        - generic [ref=f1e158]:
+          - generic [ref=f1e159]: accept
+          - generic [ref=f1e161]: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+        - generic [ref=f1e162]:
+          - generic [ref=f1e163]: sec-fetch-site
+          - generic [ref=f1e165]: none
+        - generic [ref=f1e166]:
+          - generic [ref=f1e167]: sec-fetch-mode
+          - generic [ref=f1e169]: navigate
+        - generic [ref=f1e170]:
+          - generic [ref=f1e171]: sec-fetch-user
+          - generic [ref=f1e173]: "?1"
+        - generic [ref=f1e174]:
+          - generic [ref=f1e175]: sec-fetch-dest
+          - generic [ref=f1e177]: document
+        - generic [ref=f1e178]:
+          - generic [ref=f1e179]: accept-encoding
+          - generic [ref=f1e181]: gzip, deflate, br, zstd
+        - generic [ref=f1e182]:
+          - generic [ref=f1e183]: accept-language
+          - generic [ref=f1e185]: en-GB,en-US;q=0.9,en;q=0.8
+        - generic [ref=f1e186]:
+          - generic [ref=f1e187]: cookie
+          - generic [ref=f1e189]: XSRF-TOKEN=eyJpdiI6ImpUaTR3Wmt4TS9aeCt0OEgwZkJYcGc9PSIsInZhbHVlIjoiNngzajFwbThiL1lkOFJrODYrZnMxL2VXcTJPSjNJSUNPNkd5RlllRGxxRHJIQjlDbVBEOGJnTit5QzdCV0pENDY0UEw1Lzhoa3FNOWM5SGk1bG40cHZYRGRYVVpvaVozT2hNUTU0THpybnJNZFVHZlVvRmVVRDk2OVFmek1ISzciLCJtYWMiOiIwMjFhZWQyMWViOGQ2MDVjMDY5M2QyMGI0NThmMjM2MDczMWU1OTlhNmM4ZDI2ODczNTlhZDJlMGJhYmY3ZDUzIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ik93RERZSU5qN2hGemxLeDg3bTdjY1E9PSIsInZhbHVlIjoiZFYvZHg2dU54bXdTb0FUakJBSktVWGRXT3A5VDUrSEIxT1R6aEY1Tm9adEEvN0Z2QlZIekZrbks5UmNCVlk1Z09Ja2Q0bFdGZE52Mm9McWQyVm5rZmZOQkQ3RVNzTVhSS1hwME1WbnJ6aTNPUjgrV2Uyd1ZRR2llMkVxQzBQaHciLCJtYWMiOiI0NTYzNTY5Zjg2YmU2N2Y0MWMxMzQ3MDNkOGFmYmRmYjMzZTEwNjMzNjgyZjFlMjM0MDg5OGIyMjliZmNhNGUxIiwidGFnIjoiIn0%3D
+    - generic [ref=f1e190]:
+      - heading "Body" [level=2] [ref=f1e191]
+      - generic [ref=f1e192]: // No request body
+    - generic [ref=f1e193]:
+      - heading "Routing" [level=2] [ref=f1e194]
+      - generic [ref=f1e195]: // No routing context
+    - generic [ref=f1e197]:
+      - heading "Routing parameters" [level=2] [ref=f1e198]
+      - generic [ref=f1e199]: // No routing parameters

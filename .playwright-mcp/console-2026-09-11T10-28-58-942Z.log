@@ -1,0 +1,17 @@
+[    1196ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://[::1]:5173/node_modules/.vite/deps/react-dom_client.js?v=85151846:17803
+[    1308ms] TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at m (http://[::1]:5173/node_modules/.vite/deps/@inertiajs_react.js?v=85151846:8493:21)
+    at g2 (http://[::1]:5173/node_modules/.vite/deps/@inertiajs_react.js?v=85151846:8504:14)
+    at http://[::1]:5173/node_modules/.vite/deps/@inertiajs_react.js?v=85151846:8501:109
+    at Array.reduce (<anonymous>)
+    at p2 (http://[::1]:5173/node_modules/.vite/deps/@inertiajs_react.js?v=85151846:8501:86)
+    at g2 (http://[::1]:5173/node_modules/.vite/deps/@inertiajs_react.js?v=85151846:8505:39)
+    at y2 (http://[::1]:5173/node_modules/.vite/deps/@inertiajs_react.js?v=85151846:8511:12)
+    at http://[::1]:5173/node_modules/.vite/deps/@inertiajs_react.js?v=85151846:8514:84
+    at Array.map (<anonymous>)
+[    1307ms] [WARNING] %s
+
+%s
+ An error occurred in the <Me2> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. @ http://[::1]:5173/node_modules/.vite/deps/react-dom_client.js?v=85151846:5588

@@ -1,0 +1,63 @@
+- generic [ref=f2e31]:
+  - generic [ref=f2e35]:
+    - list [ref=f2e37]:
+      - listitem [ref=f2e38]:
+        - link "Laravel Starter Kit" [ref=f2e39] [cursor=pointer]:
+          - /url: /dashboard
+    - generic [ref=f2e45]:
+      - generic [ref=f2e46]:
+        - generic [ref=f2e47]: Platform
+        - list [ref=f2e48]:
+          - listitem [ref=f2e49]:
+            - link "Dashboard" [ref=f2e50] [cursor=pointer]:
+              - /url: /dashboard
+      - generic [ref=f2e57]:
+        - generic [ref=f2e58]: Contact Module
+        - list [ref=f2e59]:
+          - listitem [ref=f2e60]:
+            - link "Page Settings" [ref=f2e61] [cursor=pointer]:
+              - /url: /admin/contact/settings
+          - listitem [ref=f2e66]:
+            - link "Information" [ref=f2e67] [cursor=pointer]:
+              - /url: /admin/contact/information
+          - listitem [ref=f2e72]:
+            - link "Form Fields" [ref=f2e73] [cursor=pointer]:
+              - /url: /admin/contact/form-fields
+          - listitem [ref=f2e78]:
+            - link "Submissions" [ref=f2e79] [cursor=pointer]:
+              - /url: /admin/contact/submissions
+          - listitem [ref=f2e84]:
+            - link "FAQs" [ref=f2e85] [cursor=pointer]:
+              - /url: /admin/contact/faqs
+          - listitem [ref=f2e90]:
+            - link "Team" [ref=f2e91] [cursor=pointer]:
+              - /url: /admin/contact/team
+          - listitem [ref=f2e98]:
+            - link "Locations" [ref=f2e99] [cursor=pointer]:
+              - /url: /admin/contact/locations
+          - listitem [ref=f2e103]:
+            - link "Social Links" [ref=f2e104] [cursor=pointer]:
+              - /url: /admin/contact/social-links
+          - listitem [ref=f2e112]:
+            - link "Live Chat" [ref=f2e113] [cursor=pointer]:
+              - /url: /admin/contact/live-chat
+    - generic [ref=f2e117]:
+      - list [ref=f2e120]:
+        - listitem [ref=f2e121]:
+          - link "Repository" [ref=f2e122] [cursor=pointer]:
+            - /url: https://github.com/laravel/react-starter-kit
+        - listitem [ref=f2e126]:
+          - link "Documentation" [ref=f2e127] [cursor=pointer]:
+            - /url: https://laravel.com/docs/starter-kits
+      - list [ref=f2e131]:
+        - listitem [ref=f2e132]:
+          - button "A Admin" [ref=f2e133]:
+            - generic [ref=f2e134]: A
+            - generic [ref=f2e136]: Admin
+  - main [ref=f2e141]:
+    - generic [ref=f2e143]:
+      - button "Toggle Sidebar" [ref=f2e144]
+      - navigation "breadcrumb" [ref=f2e146]:
+        - list [ref=f2e147]:
+          - listitem [ref=f2e148]:
+            - link "Dashboard" [disabled] [ref=f2e149]
