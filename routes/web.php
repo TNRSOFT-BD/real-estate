@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\ContactController;
+use App\Repositories\Contracts\Contact\ContactSubmissionRepositoryInterface;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -9,8 +10,10 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+    Route::get('dashboard', function (ContactSubmissionRepositoryInterface $submissions) {
+        return Inertia::render('dashboard', [
+            'overview' => (object) $submissions->countsOverview(),
+        ]);
     })->name('dashboard');
 });
 

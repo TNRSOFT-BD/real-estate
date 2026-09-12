@@ -14,7 +14,7 @@ export default function ContactFaq({ faqs, hero }: ContactFaqProps) {
 
     return (
         <section id="faq" aria-labelledby="faq-title" className="border-b">
-            <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-24">
+            <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-12 lg:px-8 lg:py-14">
                 <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
                     <ContactReveal className="lg:col-span-4">
                         <div className="lg:sticky lg:top-28">
@@ -29,14 +29,20 @@ export default function ContactFaq({ faqs, hero }: ContactFaqProps) {
                     </ContactReveal>
 
                     <ContactReveal delay={120} className="lg:col-span-8">
-                        <ul className="border-border border-t">
+                        <ul className="space-y-4">
                             {faqs.map((faq, index) => {
                                 const isOpen = openId === faq.id;
                                 const panelId = `faq-panel-${faq.id}`;
                                 const buttonId = `faq-trigger-${faq.id}`;
 
                                 return (
-                                    <li key={faq.id} className="border-border border-b">
+                                    <li
+                                        key={faq.id}
+                                        className={cn(
+                                            'bg-card border shadow-sm transition-all duration-300',
+                                            isOpen ? 'border-foreground/20 shadow-md' : 'hover:border-foreground/20',
+                                        )}
+                                    >
                                         <h3>
                                             <button
                                                 type="button"
@@ -44,12 +50,9 @@ export default function ContactFaq({ faqs, hero }: ContactFaqProps) {
                                                 aria-expanded={isOpen}
                                                 aria-controls={panelId}
                                                 onClick={() => setOpenId(isOpen ? null : faq.id)}
-                                                className="group hover:text-primary flex w-full items-start gap-6 py-6 text-left transition-colors sm:gap-8 sm:py-7"
+                                                className="group hover:text-primary flex w-full items-start gap-6 p-5 text-left transition-colors sm:gap-8 sm:p-6"
                                             >
-                                                <span
-                                                    aria-hidden
-                                                    className="text-muted-foreground mt-1 text-[11px] font-medium tracking-[0.2em] tabular-nums"
-                                                >
+                                                <span className="text-muted-foreground mt-1 text-[11px] font-medium tracking-[0.2em] tabular-nums">
                                                     {String(index + 1).padStart(2, '0')}
                                                 </span>
 
@@ -57,12 +60,15 @@ export default function ContactFaq({ faqs, hero }: ContactFaqProps) {
 
                                                 <span
                                                     aria-hidden
-                                                    className="text-muted-foreground group-hover:text-primary relative mt-2.5 size-4 shrink-0 transition-colors"
+                                                    className={cn(
+                                                        'relative flex size-8 shrink-0 items-center justify-center transition-colors',
+                                                        isOpen ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary',
+                                                    )}
                                                 >
-                                                    <span className="absolute top-1/2 left-0 h-px w-4 -translate-y-1/2 bg-current" />
+                                                    <span className="absolute top-1/2 left-1/2 h-px w-4 -translate-x-1/2 -translate-y-1/2 bg-current" />
                                                     <span
                                                         className={cn(
-                                                            'absolute top-0 left-1/2 h-4 w-px -translate-x-1/2 bg-current transition-transform duration-300 motion-reduce:transition-none',
+                                                            'absolute top-1/2 left-1/2 h-4 w-px -translate-x-1/2 -translate-y-1/2 bg-current transition-transform duration-300 motion-reduce:transition-none',
                                                             isOpen && 'scale-y-0',
                                                         )}
                                                     />
@@ -80,7 +86,7 @@ export default function ContactFaq({ faqs, hero }: ContactFaqProps) {
                                             )}
                                         >
                                             <div className="overflow-hidden">
-                                                <p className="text-muted-foreground pr-8 pb-7 pl-11 text-sm leading-relaxed sm:pl-14 sm:text-base">
+                                                <p className="text-muted-foreground px-5 pb-6 pl-12 text-sm leading-relaxed sm:px-6 sm:pl-14 sm:text-base">
                                                     {faq.answer}
                                                 </p>
                                             </div>

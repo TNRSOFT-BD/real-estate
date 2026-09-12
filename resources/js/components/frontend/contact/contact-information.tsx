@@ -24,7 +24,7 @@ const typeIcons: Record<string, ComponentType<{ className?: string }>> = {
 export default function ContactInformation({ items }: ContactInformationProps) {
     return (
         <section className="border-b" aria-label="Contact information">
-            <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-24">
+            <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-12 lg:px-8 lg:py-14">
                 <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
                     <ContactReveal className="lg:col-span-4">
                         <ContactSectionLabel>Get in touch</ContactSectionLabel>
@@ -35,45 +35,49 @@ export default function ContactInformation({ items }: ContactInformationProps) {
                     </ContactReveal>
 
                     <ContactReveal delay={120} className="lg:col-span-8">
-                        <dl className="border-border border-t">
+                        <div className="grid gap-4 sm:grid-cols-2">
                             {items.map((item) => {
                                 const IconComponent = typeIcons[item.type] ?? typeIcons.other;
                                 const icon = mediaUrl(item.icon);
 
                                 return (
-                                    <div key={item.id} className="border-border grid gap-3 border-b py-7 sm:grid-cols-[minmax(0,12rem)_1fr] sm:gap-8">
-                                        <dt className="text-muted-foreground flex items-center gap-3 text-[11px] font-medium tracking-[0.24em] uppercase">
+                                    <article
+                                        key={item.id}
+                                        className="bg-card flex flex-col gap-3 border p-6 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md"
+                                    >
+                                        <div className="bg-primary/10 flex size-11 shrink-0 items-center justify-center rounded-none">
                                             {icon ? (
-                                                <img src={icon} alt="" aria-hidden className="size-4 shrink-0" />
+                                                <img src={icon} alt="" aria-hidden className="size-5 shrink-0 text-primary" />
                                             ) : (
-                                                <IconComponent className="size-4 shrink-0" />
+                                                <IconComponent className="text-primary size-5 shrink-0" />
                                             )}
-                                            {item.title}
-                                        </dt>
+                                        </div>
 
-                                        <dd className="space-y-2">
+                                        <div>
+                                            <h3 className="text-muted-foreground text-[11px] font-medium tracking-[0.24em] uppercase">{item.title}</h3>
+
                                             {item.link ? (
                                                 <a
                                                     href={item.link}
-                                                    className="text-foreground hover:text-primary text-lg font-medium break-words underline-offset-4 transition-colors hover:underline sm:text-xl"
+                                                    className="text-foreground hover:text-primary mt-1.5 block text-lg font-medium break-words underline-offset-4 transition-colors hover:underline sm:text-xl"
                                                     {...(item.link.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                                                 >
                                                     {item.value}
                                                 </a>
                                             ) : (
-                                                <p className="text-foreground text-lg font-medium break-words sm:text-xl">{item.value}</p>
+                                                <p className="text-foreground mt-1.5 text-lg font-medium break-words sm:text-xl">{item.value}</p>
                                             )}
 
-                                            {item.secondary_value && <p className="text-muted-foreground text-sm">{item.secondary_value}</p>}
+                                            {item.secondary_value && <p className="text-muted-foreground mt-1 text-sm">{item.secondary_value}</p>}
 
                                             {item.description && (
-                                                <p className="text-muted-foreground max-w-xl text-sm leading-relaxed">{item.description}</p>
+                                                <p className="text-muted-foreground mt-1 max-w-xl text-sm leading-relaxed">{item.description}</p>
                                             )}
-                                        </dd>
-                                    </div>
+                                        </div>
+                                    </article>
                                 );
                             })}
-                        </dl>
+                        </div>
                     </ContactReveal>
                 </div>
             </div>

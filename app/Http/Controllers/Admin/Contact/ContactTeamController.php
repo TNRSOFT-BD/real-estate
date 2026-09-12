@@ -29,7 +29,7 @@ class ContactTeamController extends Controller
 
         return Inertia::render('admin/contact/team/index', [
             'items' => $this->teamMemberRepository->paginate($request->only(['search', 'department', 'is_active'])),
-            'filters' => $request->only(['search', 'department', 'is_active']),
+            'filters' => (object) $request->only(['search', 'department', 'is_active']),
         ]);
     }
 
@@ -45,7 +45,13 @@ class ContactTeamController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('avatar')) {
-            $data['avatar'] = $this->mediaService->upload($request->file('avatar'), 'contact/team');
+            $path = $this->mediaService->upload($request->file('avatar'), 'contact/team');
+
+            if ($path !== null) {
+                $data['avatar'] = $path;
+            } else {
+                unset($data['avatar']);
+            }
         }
 
         $this->teamMemberRepository->create($data);
@@ -68,7 +74,13 @@ class ContactTeamController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('avatar')) {
-            $data['avatar'] = $this->mediaService->replace($member->avatar, $request->file('avatar'), 'contact/team');
+            $path = $this->mediaService->replace($member->avatar, $request->file('avatar'), 'contact/team');
+
+            if ($path !== null) {
+                $data['avatar'] = $path;
+            } else {
+                unset($data['avatar']);
+            }
         }
 
         $this->teamMemberRepository->update($member, $data);

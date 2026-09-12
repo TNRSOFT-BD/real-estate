@@ -38,7 +38,7 @@ class ContactFormService
 
         foreach ($fields as $field) {
             if (! $field instanceof ContactFormField) {
-                $field = ContactFormField::from($field);
+                $field = new ContactFormField($field);
             }
 
             $fieldRules = [];
@@ -81,7 +81,7 @@ class ContactFormService
 
         foreach ($fields as $field) {
             if (! $field instanceof ContactFormField) {
-                $field = ContactFormField::from($field);
+                $field = new ContactFormField($field);
             }
 
             $name = $field->name;

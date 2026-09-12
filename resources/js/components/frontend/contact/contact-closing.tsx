@@ -14,8 +14,12 @@ export default function ContactClosing({ hero }: ContactClosingProps) {
     }
 
     return (
-        <section className="bg-primary text-primary-foreground" aria-labelledby="contact-closing-title">
-            <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:py-24 lg:px-8 lg:py-32">
+        <section className="bg-primary text-primary-foreground relative overflow-hidden" aria-labelledby="contact-closing-title">
+            <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] [background-size:56px_56px]"
+            />
+            <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:py-24 lg:px-8 lg:py-32">
                 <ContactReveal className="max-w-4xl">
                     <span className="text-primary-foreground/60 text-[11px] font-medium tracking-[0.28em] uppercase">
                         {hero.closing_badge ?? 'Ready to start'}
@@ -33,7 +37,7 @@ export default function ContactClosing({ hero }: ContactClosingProps) {
                     )}
 
                     <div className="mt-12">
-                        <Button asChild size="lg" className="group bg-primary-foreground text-primary hover:bg-primary-foreground/90 rounded-sm px-7">
+                        <Button asChild size="lg" className="group bg-primary-foreground text-primary hover:bg-primary-foreground/90 rounded-none px-7 shadow-sm hover:shadow-md">
                             <Link href="#contact-form">
                                 Contact our team
                                 <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />

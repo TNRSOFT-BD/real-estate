@@ -121,7 +121,7 @@ export default function SubmissionShow({ submission, assignees = [] }: Submissio
                     description={submission.subject || submission.name || 'Contact message'}
                     actions={
                         <div className="flex items-center gap-2">
-                            {submission.is_spam ? (
+                            {submission.status === 'spam' ? (
                                 <Button variant="secondary" onClick={() => router.patch(route('admin.contact.submissions.restore', { submission: submission.id }), {}, { preserveScroll: true })}>
                                     <Undo2 />
                                     Restore
@@ -180,7 +180,7 @@ export default function SubmissionShow({ submission, assignees = [] }: Submissio
                                 <div className="flex flex-wrap gap-2">
                                     <StatusBadge value={submission.status} />
                                     <PriorityBadge value={submission.priority} />
-                                    {submission.is_spam && <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-xs font-medium text-red-700 dark:text-red-300">Spam</span>}
+                                    {submission.status === 'spam' && <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-xs font-medium text-red-700 dark:text-red-300">Spam</span>}
                                 </div>
                             </CardContent>
                         </Card>

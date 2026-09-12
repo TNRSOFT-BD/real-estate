@@ -66,6 +66,7 @@ export interface ContactLocation {
     id: number;
     name: string;
     address: string;
+    description?: string | null;
     city?: string | null;
     state?: string | null;
     country?: string | null;

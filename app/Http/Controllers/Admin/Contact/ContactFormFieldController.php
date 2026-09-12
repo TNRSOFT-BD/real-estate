@@ -27,7 +27,7 @@ class ContactFormFieldController extends Controller
 
         return Inertia::render('admin/contact/form-fields/index', [
             'items' => $this->formFieldRepository->paginate($request->only(['search', 'type', 'is_active'])),
-            'filters' => $request->only(['search', 'type', 'is_active']),
+            'filters' => (object) $request->only(['search', 'type', 'is_active']),
         ]);
     }
 

@@ -30,7 +30,7 @@ class ContactLocationController extends Controller
 
         return Inertia::render('admin/contact/locations/index', [
             'items' => $this->locationRepository->paginate($request->only(['search', 'is_active'])),
-            'filters' => $request->only(['search', 'is_active']),
+            'filters' => (object) $request->only(['search', 'is_active']),
         ]);
     }
 
@@ -102,7 +102,17 @@ class ContactLocationController extends Controller
 
         $resolved = $this->locationService->resolveGoogleMapsUrl($data['query']);
 
-        return response()->json($resolved ?? ['message' => 'Location could not be resolved.']);
+        if ($resolved) {
+            return response()->json(array_merge($resolved, ['source' => 'geocode']));
+        }
+
+        $linkBased = $this->locationService->resolveGoogleMapsUrlFromLink($data['query']);
+
+        if ($linkBased) {
+            return response()->json(array_merge($linkBased, ['source' => 'link']));
+        }
+
+        return response()->json(['message' => 'Location could not be resolved.'], 422);
     }
 
     public function reorder(Request $request)
@@ -122,6 +132,7 @@ class ContactLocationController extends Controller
         return new ContactLocationData(
             name: (string) $validated['name'],
             address: (string) $validated['address'],
+            description: $validated['description'] ?? null,
             city: $validated['city'] ?? null,
             state: $validated['state'] ?? null,
             country: $validated['country'] ?? null,

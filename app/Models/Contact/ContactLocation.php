@@ -16,6 +16,7 @@ class ContactLocation extends Model
     protected $fillable = [
         'name',
         'address',
+        'description',
         'city',
         'state',
         'country',

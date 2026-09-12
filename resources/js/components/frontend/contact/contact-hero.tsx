@@ -19,8 +19,8 @@ export default function ContactHero({ hero }: ContactHeroProps) {
     const secondaryHref = hero.hero_secondary_button_link ?? '#contact-form';
 
     return (
-        <section className="border-b" aria-labelledby="contact-hero-title">
-            <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-28">
+        <section className="border-b bg-muted/40" aria-labelledby="contact-hero-title">
+            <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-12 lg:px-8 lg:py-16">
                 <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
                     <ContactReveal className="lg:col-span-7">
                         <ContactSectionLabel>{hero.hero_badge ?? 'Contact'}</ContactSectionLabel>
@@ -40,7 +40,7 @@ export default function ContactHero({ hero }: ContactHeroProps) {
                         {(primaryLabel || secondaryLabel) && (
                             <div className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-5">
                                 {primaryLabel && (
-                                    <Button asChild size="lg" className="group rounded-sm px-7">
+                                    <Button asChild size="lg" className="group rounded-none px-7 shadow-sm hover:shadow-md">
                                         <Link href={primaryHref}>
                                             {primaryLabel}
                                             <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -64,22 +64,25 @@ export default function ContactHero({ hero }: ContactHeroProps) {
                     </ContactReveal>
 
                     <ContactReveal delay={120} className="lg:col-span-5">
-                        <div className="bg-muted relative aspect-4/5 w-full overflow-hidden border">
-                            {image ? (
-                                <img
-                                    src={image}
-                                    alt=""
-                                    aria-hidden
-                                    loading="eager"
-                                    className="size-full object-cover transition-transform duration-1000 ease-out hover:scale-[1.03]"
-                                />
-                            ) : (
-                                <div className="flex size-full items-center justify-center p-10">
-                                    <span className="text-muted-foreground text-center text-xs font-medium tracking-[0.28em] uppercase">
-                                        Architecture &middot; Development
-                                    </span>
-                                </div>
-                            )}
+                        <div className="relative">
+                            <span aria-hidden className="bg-primary/5 absolute inset-0 translate-x-4 translate-y-4 border border-primary/10" />
+                            <div className="bg-muted relative aspect-4/5 w-full overflow-hidden border shadow-sm">
+                                {image ? (
+                                    <img
+                                        src={image}
+                                        alt=""
+                                        aria-hidden
+                                        loading="eager"
+                                        className="size-full object-cover transition-transform duration-1000 ease-out hover:scale-[1.03]"
+                                    />
+                                ) : (
+                                    <div className="flex size-full items-center justify-center p-10">
+                                        <span className="text-muted-foreground text-center text-xs font-medium tracking-[0.28em] uppercase">
+                                            Architecture &middot; Development
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </ContactReveal>
                 </div>

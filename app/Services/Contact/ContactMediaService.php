@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Contact;
 
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +24,15 @@ class ContactMediaService
 
         $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
 
-        return Storage::disk(config('filesystems.default'))->putFileAs($path, $file, $filename);
+        $stored = $this->disk()->putFileAs($path, $file, $filename);
+
+        if (! is_string($stored)) {
+            Log::error('Failed to store contact media', ['path' => $path, 'disk' => $this->diskName()]);
+
+            return null;
+        }
+
+        return $stored;
     }
 
     public function replace(?string $existingPath, UploadedFile $file, string $path = 'contact'): ?string
@@ -43,7 +52,7 @@ class ContactMediaService
             return;
         }
 
-        Storage::disk(config('filesystems.default'))->delete($path);
+        $this->disk()->delete($path);
     }
 
     public function validateUpload(UploadedFile $file): bool
@@ -61,5 +70,19 @@ class ContactMediaService
         }
 
         return true;
+    }
+
+    /**
+     * Contact media is served from a public URL by the frontend (see mediaUrl()),
+     * so it must not be written to the private application disk.
+     */
+    private function disk(): Filesystem
+    {
+        return Storage::disk($this->diskName());
+    }
+
+    private function diskName(): string
+    {
+        return (string) config('contact.media.disk', 'public');
     }
 }

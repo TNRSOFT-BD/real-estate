@@ -8,7 +8,7 @@ import { type BreadcrumbItem } from '@/types';
 import { type Assignee, type ContactSubmissionItem, type Filters, type FlashAlert, type Paginator, type SubmissionOverview } from '@/types/contact-admin';
 import { Link, router } from '@inertiajs/react';
 import { ChevronDown, Delete, Eye, Search, ShieldAlert, Trash, Undo2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface SubmissionIndexProps {
     items: Paginator<ContactSubmissionItem>;
@@ -56,7 +56,11 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
     const [selected, setSelected] = useState<number[]>([]);
     const [bulkStatus, setBulkStatus] = useState('');
 
+    const skipFirstRender = useRef(true);
+
     useEffect(() => {
+        if (skipFirstRender.current) return;
+
         const timer = setTimeout(applyFilters, 300);
         return () => clearTimeout(timer);
     }, [search]);
@@ -72,6 +76,10 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
     };
 
     useEffect(() => {
+        if (skipFirstRender.current) {
+            skipFirstRender.current = false;
+            return;
+        }
         applyFilters();
     }, [sort]);
 
@@ -92,10 +100,10 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
 
     const statCards = [
         { label: 'Total', value: overview?.total, active: !filters && true },
-        { label: 'New', value: overview?.new_count, active: status === 'new' },
-        { label: 'In progress', value: overview?.in_progress_count, active: status === 'in_progress' },
-        { label: 'Resolved', value: overview?.resolved_count, active: status === 'resolved' },
-        { label: 'Spam', value: overview?.spam_count, active: status === 'spam' },
+        { label: 'New', value: overview?.new, active: status === 'new' },
+        { label: 'In progress', value: overview?.in_progress, active: status === 'in_progress' },
+        { label: 'Resolved', value: overview?.resolved, active: status === 'resolved' },
+        { label: 'Spam', value: overview?.spam, active: status === 'spam' },
     ];
 
     return (
@@ -207,7 +215,7 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                                             <td className="px-4 py-3 text-sm text-muted-foreground">{item.assignee?.name ?? '—'}</td>
                                             <td className="px-4 py-3 text-sm text-muted-foreground">{new Date(item.created_at).toLocaleString()}</td>
                                             <td className="px-4 py-3 text-sm">
-                                                {item.is_spam && <span className="text-xs font-medium text-destructive">Spam</span>}
+                                                {item.status === 'spam' && <span className="text-xs font-medium text-destructive">Spam</span>}
                                             </td>
                                             <td className="px-4 py-3 text-sm">
                                                 <div className="flex items-center justify-end gap-1">
@@ -216,7 +224,7 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                                                             <Eye />
                                                         </Link>
                                                     </Button>
-                                                    {item.is_spam ? (
+                                                    {item.status === 'spam' ? (
                                                         <Button size="icon" variant="ghost" title="Restore" onClick={() => router.patch(route('admin.contact.submissions.restore', { submission: item.id }), {}, { preserveScroll: true })}>
                                                             <Undo2 />
                                                         </Button>

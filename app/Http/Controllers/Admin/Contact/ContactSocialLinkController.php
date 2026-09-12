@@ -27,7 +27,7 @@ class ContactSocialLinkController extends Controller
 
         return Inertia::render('admin/contact/social-links/index', [
             'items' => $this->socialLinkRepository->paginate($request->only(['search', 'is_active'])),
-            'filters' => $request->only(['search', 'is_active']),
+            'filters' => (object) $request->only(['search', 'is_active']),
         ]);
     }
 

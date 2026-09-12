@@ -31,7 +31,7 @@ class ContactSubmissionController extends Controller
 
         return Inertia::render('admin/contact/submissions/index', [
             'items' => $this->submissionRepository->paginate($filters),
-            'filters' => $filters,
+            'filters' => (object) $filters,
             'overview' => $this->submissionRepository->countsOverview(),
             'assignees' => User::query()->select('id', 'name', 'email')->orderBy('name')->get(),
         ]);

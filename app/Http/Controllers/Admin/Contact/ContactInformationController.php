@@ -27,7 +27,7 @@ class ContactInformationController extends Controller
 
         return Inertia::render('admin/contact/information/index', [
             'items' => $this->informationRepository->paginate($request->only(['search', 'type', 'is_active'])),
-            'filters' => $request->only(['search', 'type', 'is_active']),
+            'filters' => (object) $request->only(['search', 'type', 'is_active']),
         ]);
     }
 

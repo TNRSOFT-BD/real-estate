@@ -29,7 +29,7 @@ export default function TeamMemberForm({ item }: Props) {
     const isEdit = Boolean(item);
     const existingAvatar = typeof item?.avatar === 'string' ? item.avatar : null;
 
-    const { data, setData, post, put, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, transform } = useForm({
         name: typeof item?.name === 'string' ? item.name : '',
         role: typeof item?.role === 'string' ? item.role : '',
         department: typeof item?.department === 'string' ? item.department : 'Support',
@@ -54,10 +54,16 @@ export default function TeamMemberForm({ item }: Props) {
 
     const submit = (event: React.FormEvent) => {
         event.preventDefault();
+        transform((formData) => {
+            const clean: Record<string, unknown> = { ...formData };
+            if (!(clean.avatar instanceof File)) delete clean.avatar;
+            if (isEdit) clean._method = 'put';
+            return clean;
+        });
         if (isEdit) {
-            put(route('admin.contact.team.update', { member: item?.id as number }));
+            post(route('admin.contact.team.update', { member: item?.id as number }), { forceFormData: true });
         } else {
-            post(route('admin.contact.team.store'));
+            post(route('admin.contact.team.store'), { forceFormData: true });
         }
     };
 

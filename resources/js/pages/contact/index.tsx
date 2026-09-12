@@ -37,7 +37,7 @@ export default function ContactIndex(props: ContactPageProps) {
             {contactInformation.length > 0 && <ContactInformation items={contactInformation} />}
 
             <section id="contact-form" className="bg-muted/40 border-b" aria-labelledby="contact-form-title">
-                <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-24">
+                <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-12 lg:px-8 lg:py-14">
                     <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
                         <ContactReveal className="lg:col-span-5">
                             <div className="lg:sticky lg:top-28">

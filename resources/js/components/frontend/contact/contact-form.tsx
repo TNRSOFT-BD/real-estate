@@ -25,13 +25,13 @@ function renderOptions(options?: ContactFormField['options']): Array<{ label: st
 
 const fieldClass = (hasError: boolean) =>
     cn(
-        'border-input text-foreground placeholder:text-muted-foreground/70 focus-visible:border-foreground h-12 rounded-none border-0 border-b bg-transparent px-0 text-base shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base',
+        'bg-muted/50 text-foreground placeholder:text-muted-foreground/70 focus-visible:bg-background h-12 w-full rounded-none border border-input px-4 text-base shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-foreground/60 md:text-base',
         hasError && 'border-destructive focus-visible:border-destructive',
     );
 
 const textareaClass = (hasError: boolean) =>
     cn(
-        'border-input text-foreground placeholder:text-muted-foreground/70 focus-visible:border-foreground min-h-36 rounded-none border-0 border-b bg-transparent px-0 py-3 text-base leading-relaxed shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base',
+        'bg-muted/50 text-foreground placeholder:text-muted-foreground/70 focus-visible:bg-background min-h-36 w-full rounded-none border border-input px-4 py-3 text-base leading-relaxed shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-foreground/60 md:text-base',
         hasError && 'border-destructive focus-visible:border-destructive',
     );
 
@@ -59,7 +59,7 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
 
     if (submitted) {
         return (
-            <div className="bg-background border p-8 sm:p-10">
+            <div className="bg-card border p-8 shadow-sm sm:p-10">
                 <CheckCircle2 className="text-primary size-6" aria-hidden />
                 <h3 className="mt-6 text-2xl font-semibold tracking-tight">Message sent</h3>
                 <p className="text-muted-foreground mt-3 max-w-md text-sm leading-relaxed">
@@ -67,7 +67,7 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
                 </p>
                 <Button
                     variant="outline"
-                    className="mt-8 rounded-sm"
+                    className="mt-8 rounded-none shadow-sm hover:shadow-md"
                     onClick={() => {
                         reset();
                         setSubmitted(false);
@@ -91,7 +91,7 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
     };
 
     return (
-        <form onSubmit={handleSubmit} noValidate className="bg-background border p-6 sm:p-8 lg:p-10">
+        <form onSubmit={handleSubmit} noValidate className="bg-card border p-6 shadow-md sm:p-8 lg:p-10">
             {flash?.success && !submitted && (
                 <div className="border-primary bg-muted/50 text-foreground mb-8 flex items-start gap-3 border-l-2 p-4 text-sm">
                     <CheckCircle2 className="text-primary mt-0.5 size-4 shrink-0" aria-hidden />
@@ -233,7 +233,7 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
             <div className="border-border mt-10 flex flex-col gap-4 border-t pt-8 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-muted-foreground text-xs tracking-[0.18em] uppercase">Fields marked * are required</p>
 
-                <Button type="submit" size="lg" className="group rounded-sm px-7" disabled={processing}>
+                <Button type="submit" size="lg" className="group rounded-none px-7 shadow-sm hover:shadow-md" disabled={processing}>
                     {processing ? (
                         <>
                             <Loader2 className="animate-spin" aria-hidden />

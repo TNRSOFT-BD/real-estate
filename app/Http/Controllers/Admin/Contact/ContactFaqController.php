@@ -27,7 +27,7 @@ class ContactFaqController extends Controller
 
         return Inertia::render('admin/contact/faqs/index', [
             'items' => $this->faqRepository->paginate($request->only(['search', 'category', 'display_location', 'is_active'])),
-            'filters' => $request->only(['search', 'category', 'display_location', 'is_active']),
+            'filters' => (object) $request->only(['search', 'category', 'display_location', 'is_active']),
         ]);
     }
 

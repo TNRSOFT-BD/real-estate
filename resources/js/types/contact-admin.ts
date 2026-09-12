@@ -31,10 +31,10 @@ export interface Assignee {
 
 export interface SubmissionOverview {
     total?: number;
-    new_count?: number;
-    in_progress_count?: number;
-    resolved_count?: number;
-    spam_count?: number;
+    new?: number;
+    in_progress?: number;
+    resolved?: number;
+    spam?: number;
 }
 
 export interface ContactSubmissionNoteItem {
@@ -64,7 +64,6 @@ export interface ContactSubmissionItem {
     assigned_to?: number | null;
     assignee?: { id: number; name: string } | null;
     notes?: ContactSubmissionNoteItem[];
-    is_spam: boolean;
     created_at: string;
     updated_at: string;
     deleted_at?: string | null;

@@ -24,7 +24,7 @@ export default function ContactTeam({ members, hero }: ContactTeamProps) {
 
     return (
         <section id="team" aria-labelledby="team-title" className="border-b">
-            <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-24">
+            <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-12 lg:px-8 lg:py-14">
                 <ContactReveal className="max-w-2xl">
                     <ContactSectionLabel>{hero.team_badge ?? 'Our people'}</ContactSectionLabel>
                     <h2 id="team-title" className="mt-7 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
@@ -33,64 +33,67 @@ export default function ContactTeam({ members, hero }: ContactTeamProps) {
                     {hero.team_description && <p className="text-muted-foreground mt-5 max-w-xl text-sm leading-relaxed">{hero.team_description}</p>}
                 </ContactReveal>
 
-                <div className="border-border mt-14 border-t">
+                <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                     {members.map((member, index) => {
                         const avatar = mediaUrl(member.avatar);
 
                         return (
-                            <ContactReveal key={member.id} delay={index > 0 ? 80 : 0}>
-                                <article className="border-border grid gap-6 border-b py-8 sm:grid-cols-12 sm:gap-8 sm:py-10">
-                                    <div className="sm:col-span-4 lg:col-span-3">
-                                        <div className="bg-muted relative aspect-4/5 w-full overflow-hidden border">
-                                            {avatar ? (
-                                                <img
-                                                    src={avatar}
-                                                    alt={member.name}
-                                                    loading="lazy"
-                                                    className="size-full object-cover transition-transform duration-1000 ease-out hover:scale-[1.03]"
-                                                />
-                                            ) : (
-                                                <div className="flex size-full items-center justify-center">
-                                                    <span className="text-muted-foreground text-2xl font-medium tracking-[0.2em]">
-                                                        {initials(member.name)}
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
+                            <ContactReveal key={member.id} delay={index > 0 ? 80 : 0} className="h-full">
+                                <article className="group flex h-full flex-col overflow-hidden border bg-card shadow-sm transition-all duration-300 hover:border-primary/40 hover:shadow-md">
+                                    <div className="bg-muted relative aspect-square w-full overflow-hidden">
+                                        {avatar ? (
+                                            <img
+                                                src={avatar}
+                                                alt={member.name}
+                                                loading="lazy"
+                                                className="size-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
+                                            />
+                                        ) : (
+                                            <div className="flex size-full items-center justify-center">
+                                                <span className="text-muted-foreground text-2xl font-medium tracking-[0.2em]">
+                                                    {initials(member.name)}
+                                                </span>
+                                            </div>
+                                        )}
+                                        {member.role && (
+                                            <span className="bg-primary text-primary-foreground absolute top-2 left-2 px-2 py-0.5 text-[9px] font-semibold tracking-[0.18em] uppercase">
+                                                {member.role}
+                                            </span>
+                                        )}
                                     </div>
 
-                                    <div className="flex flex-col justify-between gap-8 sm:col-span-8">
+                                    <div className="flex flex-1 flex-col items-start gap-3 p-4">
                                         <div>
-                                            <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">{member.name}</h3>
-                                            <p className="text-primary mt-2 text-[11px] font-medium tracking-[0.24em] uppercase">{member.role}</p>
-                                            {member.department && <p className="text-muted-foreground mt-1 text-xs">{member.department}</p>}
-                                            {member.bio && (
-                                                <p className="text-muted-foreground mt-5 max-w-2xl text-sm leading-relaxed">{member.bio}</p>
+                                            <h3 className="text-sm font-semibold tracking-tight">{member.name}</h3>
+                                            {member.department && (
+                                                <p className="text-muted-foreground mt-0.5 text-[11px]">{member.department}</p>
                                             )}
                                         </div>
 
+                                        {member.bio && <p className="text-muted-foreground text-xs leading-relaxed">{member.bio}</p>}
+
                                         {(member.email || member.phone || member.availability) && (
-                                            <div className="border-border flex flex-wrap items-center gap-x-8 gap-y-3 border-t pt-5 text-sm">
+                                            <div className="border-border mt-auto flex w-full flex-col items-start gap-1.5 border-t pt-3 text-xs">
                                                 {member.email && (
                                                     <a
                                                         href={`mailto:${member.email}`}
-                                                        className="text-muted-foreground hover:text-primary inline-flex items-center gap-2 break-all transition-colors"
+                                                        className="text-muted-foreground hover:text-primary inline-flex items-center gap-1.5 break-all transition-colors"
                                                     >
-                                                        <Mail className="size-4 shrink-0" aria-hidden />
+                                                        <Mail className="size-3.5 shrink-0" aria-hidden />
                                                         {member.email}
                                                     </a>
                                                 )}
                                                 {member.phone && (
                                                     <a
                                                         href={`tel:${member.phone}`}
-                                                        className="text-muted-foreground hover:text-primary inline-flex items-center gap-2 transition-colors"
+                                                        className="text-muted-foreground hover:text-primary inline-flex items-center gap-1.5 transition-colors"
                                                     >
-                                                        <Phone className="size-4 shrink-0" aria-hidden />
+                                                        <Phone className="size-3.5 shrink-0" aria-hidden />
                                                         {member.phone}
                                                     </a>
                                                 )}
                                                 {member.availability && (
-                                                    <span className="text-muted-foreground text-[11px] tracking-[0.2em] uppercase">
+                                                    <span className="text-muted-foreground text-[9px] tracking-[0.18em] uppercase">
                                                         {member.availability}
                                                     </span>
                                                 )}

@@ -117,10 +117,10 @@ class ContactSeeder extends Seeder
         $fields = [
             [ContactFormFieldType::Text, 'name', 'Your name', 'Jane Doe', [], ['required', 'max:255'], true],
             [ContactFormFieldType::Email, 'email', 'Email address', 'you@example.com', [], ['required', 'email', 'max:255'], true],
-            [ContactFormFieldType::Tel, 'phone', 'Phone number', '+84 ...', [], ['nullable', 'max:50'], false],
+            [ContactFormFieldType::Tel, 'phone', 'Phone number', '+880 ...', [], ['nullable', 'max:50'], false],
             [ContactFormFieldType::Text, 'subject', 'Subject', 'Home viewing request', [], ['nullable', 'max:255'], false],
             [ContactFormFieldType::Textarea, 'message', 'Message', 'Tell us a little about what you need…', [], ['required', 'min:10', 'max:5000'], true],
-            [ContactFormFieldType::Select, 'interest', 'I am interested in', 'Apartment', [['label' => 'Buying', 'value' => 'buying'], ['label' => 'Selling', 'value' => 'selling'], ['label' => 'Renting', 'value' => 'renting']], ['required'], true],
+            [ContactFormFieldType::Select, 'interest', 'I am interested in', 'Select an option…', [['label' => 'Apartment', 'value' => 'apartment'], ['label' => 'Buying', 'value' => 'buying'], ['label' => 'Selling', 'value' => 'selling'], ['label' => 'Renting', 'value' => 'renting']], ['required'], true],
         ];
 
         $sort = 0;
@@ -184,6 +184,7 @@ class ContactSeeder extends Seeder
     {
         ContactLocation::updateOrCreate(['name' => 'Head Office'], [
             'address' => '123 Le Loi Street, Ben Nghe Ward, District 1',
+            'description' => 'Our main showroom and sales office. Free parking available in the building basement.',
             'city' => 'Ho Chi Minh City',
             'state' => null,
             'country' => 'Vietnam',
@@ -202,6 +203,7 @@ class ContactSeeder extends Seeder
 
         ContactLocation::updateOrCreate(['name' => 'Hanoi Branch'], [
             'address' => '45 Hang Bai Street, Hoan Kiem District',
+            'description' => 'Branch office for northern clients. 5 minutes from the Old Quarter.',
             'city' => 'Hanoi',
             'state' => null,
             'country' => 'Vietnam',

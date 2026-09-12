@@ -9,6 +9,7 @@ final class ContactLocationData
     public function __construct(
         public readonly string $name,
         public readonly string $address,
+        public readonly ?string $description,
         public readonly ?string $city,
         public readonly ?string $state,
         public readonly ?string $country,
@@ -30,6 +31,7 @@ final class ContactLocationData
         return [
             'name' => $this->name,
             'address' => $this->address,
+            'description' => $this->description,
             'city' => $this->city,
             'state' => $this->state,
             'country' => $this->country,

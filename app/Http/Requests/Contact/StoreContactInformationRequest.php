@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Contact;
 
 use App\Enums\ContactInformationType;
+use App\Rules\SafeLink;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -24,7 +25,7 @@ class StoreContactInformationRequest extends FormRequest
             'secondary_value' => ['nullable', 'string', 'max:5000'],
             'icon' => ['nullable', 'string', 'max:50'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'link' => ['nullable', 'url', 'max:500'],
+            'link' => ['nullable', 'string', 'max:500', new SafeLink()],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['sometimes', 'boolean'],
         ];

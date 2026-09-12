@@ -12,6 +12,8 @@ final class ContactPageSettingsData
 
     public static function fromRequest(Request $request): self
     {
+        // Uploaded files (hero_background_image, og_image) are handled by the
+        // controller so a rejected upload can never overwrite a stored path.
         $allowed = [
             'hero_badge',
             'hero_title',
@@ -21,7 +23,6 @@ final class ContactPageSettingsData
             'hero_primary_button_link',
             'hero_secondary_button_text',
             'hero_secondary_button_link',
-            'hero_background_image',
             'form_title',
             'form_description',
             'form_success_message',
