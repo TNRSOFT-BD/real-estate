@@ -4,6 +4,9 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use App\Services\Company\CompanyProfileService;
+use App\Services\Contact\ContactPageService;
+use App\Services\Site\SiteThemeService;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -38,9 +41,17 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        $company = app(CompanyProfileService::class)->getProfile();
+
         return array_merge(parent::share($request), [
             ...parent::share($request),
-            'name' => config('app.name'),
+            'name' => $company['name'],
+            'company' => $company,
+            'theme' => app(SiteThemeService::class)->themeForFrontend(),
+            'footer' => fn (): array => [
+                'information' => app(ContactPageService::class)->getActiveInformation(),
+                'socialLinks' => app(ContactPageService::class)->getActiveSocialLinks(),
+            ],
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $request->user(),

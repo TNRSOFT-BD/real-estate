@@ -1,4 +1,6 @@
 import { LucideIcon } from 'lucide-react';
+import { type SiteTheme } from './site';
+import { type ContactInformation, type ContactSocialLink } from './contact';
 
 export interface Auth {
     user: User;
@@ -21,8 +23,20 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface CompanyIdentity {
+    name: string;
+    tagline: string | null;
+    logo: string | null;
+}
+
 export interface SharedData {
     name: string;
+    company: CompanyIdentity;
+    theme: SiteTheme;
+    footer: {
+        information: ContactInformation[];
+        socialLinks: ContactSocialLink[];
+    };
     quote: { message: string; author: string };
     auth: Auth;
     [key: string]: unknown;

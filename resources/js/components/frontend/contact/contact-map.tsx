@@ -19,13 +19,13 @@ export default function ContactMap({ location }: ContactMapProps) {
 
     if (!embedUrl) {
         return (
-            <div className="bg-muted relative h-80 w-full overflow-hidden border shadow-sm sm:h-[420px] lg:h-full lg:min-h-[460px]">
+            <div className="border-glass-border bg-glass-strong relative h-80 w-full overflow-hidden rounded-2xl border shadow-sm backdrop-blur-xl sm:h-[420px] lg:h-full lg:min-h-[460px]">
                 <div className="flex size-full flex-col items-center justify-center gap-6 p-8 text-center">
-                    <MapPin className="text-muted-foreground size-5" aria-hidden />
+                    <MapPin className="text-ink-soft size-5" aria-hidden />
 
                     <div>
-                        <p className="text-muted-foreground text-[11px] font-medium tracking-[0.28em] uppercase">{location.name}</p>
-                        <p className="text-muted-foreground mt-3 max-w-xs text-sm leading-relaxed">{location.address}</p>
+                        <p className="text-ink-soft text-[11px] font-medium tracking-[0.28em] uppercase">{location.name}</p>
+                        <p className="text-ink-soft mt-3 max-w-xs text-sm leading-relaxed">{location.address}</p>
                     </div>
 
                     {linkUrl && (
@@ -33,11 +33,9 @@ export default function ContactMap({ location }: ContactMapProps) {
                             href={linkUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group text-foreground hover:text-primary inline-flex items-center gap-2 text-sm font-medium transition-colors"
+                            className="group text-ink hover:text-ink-soft inline-flex items-center gap-2 text-sm font-medium transition-colors"
                         >
-                            <span className="border-border group-hover:border-primary border-b pb-0.5 transition-colors">
-                                Open in Google Maps
-                            </span>
+                            <span className="border-line group-hover:border-ink border-b pb-0.5 transition-colors">Open in Google Maps</span>
                             <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </a>
                     )}
@@ -47,7 +45,7 @@ export default function ContactMap({ location }: ContactMapProps) {
     }
 
     return (
-        <div className="bg-muted relative h-80 w-full overflow-hidden border shadow-sm sm:h-[420px] lg:h-full lg:min-h-[460px]">
+        <div className="border-glass-border relative h-80 w-full overflow-hidden rounded-2xl border shadow-sm sm:h-[420px] lg:h-full lg:min-h-[460px]">
             <iframe
                 src={embedUrl}
                 title={`Map of ${location.name}`}

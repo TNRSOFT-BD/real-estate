@@ -37,7 +37,10 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->call([
+            CompanyProfileSeeder::class,
+            SiteSettingSeeder::class,
             ContactSeeder::class,
+            AboutSeeder::class,
         ]);
     }
 }

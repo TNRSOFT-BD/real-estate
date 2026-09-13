@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\About\AboutItemController;
+use App\Http\Controllers\Admin\About\AboutPageSettingsController;
+use App\Http\Controllers\Admin\About\CompanyProfileController;
 use App\Http\Controllers\Admin\Contact\ContactFaqController;
 use App\Http\Controllers\Admin\Contact\ContactFormFieldController;
 use App\Http\Controllers\Admin\Contact\ContactInformationController;
@@ -10,9 +13,32 @@ use App\Http\Controllers\Admin\Contact\ContactSocialLinkController;
 use App\Http\Controllers\Admin\Contact\ContactSubmissionController;
 use App\Http\Controllers\Admin\Contact\ContactSubmissionNoteController;
 use App\Http\Controllers\Admin\Contact\ContactTeamController;
+use App\Http\Controllers\Admin\Site\SiteThemeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::prefix('site')->name('admin.site.')->group(function () {
+        Route::get('appearance', [SiteThemeController::class, 'edit'])->name('appearance.edit');
+        Route::put('appearance', [SiteThemeController::class, 'update'])->name('appearance.update');
+    });
+
+    Route::prefix('about')->name('admin.about.')->group(function () {
+        Route::get('settings', [AboutPageSettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('settings', [AboutPageSettingsController::class, 'update'])->name('settings.update');
+
+        Route::get('company', [CompanyProfileController::class, 'edit'])->name('company.edit');
+        Route::put('company', [CompanyProfileController::class, 'update'])->name('company.update');
+
+        Route::get('items', [AboutItemController::class, 'index'])->name('items.index');
+        Route::get('items/create', [AboutItemController::class, 'create'])->name('items.create');
+        Route::post('items', [AboutItemController::class, 'store'])->name('items.store');
+        Route::patch('items/reorder', [AboutItemController::class, 'reorder'])->name('items.reorder');
+        Route::get('items/{item}/edit', [AboutItemController::class, 'edit'])->whereNumber('item')->name('items.edit');
+        Route::put('items/{item}', [AboutItemController::class, 'update'])->whereNumber('item')->name('items.update');
+        Route::delete('items/{item}', [AboutItemController::class, 'destroy'])->whereNumber('item')->name('items.destroy');
+        Route::patch('items/{item}/toggle', [AboutItemController::class, 'toggle'])->whereNumber('item')->name('items.toggle');
+    });
+
     Route::prefix('contact')->name('admin.contact.')->group(function () {
         Route::get('settings', [ContactPageSettingsController::class, 'edit'])->name('settings.edit');
         Route::put('settings', [ContactPageSettingsController::class, 'update'])->name('settings.update');

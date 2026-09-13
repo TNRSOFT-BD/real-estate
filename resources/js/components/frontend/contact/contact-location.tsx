@@ -1,6 +1,7 @@
 import ContactMap from '@/components/frontend/contact/contact-map';
-import ContactReveal from '@/components/frontend/contact/contact-reveal';
-import ContactSectionLabel from '@/components/frontend/contact/contact-section-label';
+import GlassPanel from '@/components/frontend/glass/glass-panel';
+import Reveal from '@/components/frontend/glass/reveal';
+import SectionLabel from '@/components/frontend/glass/section-label';
 import { type ContactHero, type ContactLocation } from '@/types/contact';
 import { ArrowUpRight, Clock, Mail, Phone } from 'lucide-react';
 
@@ -31,132 +32,118 @@ export default function ContactLocation({ locations, hero }: ContactLocationProp
     const others = locations.filter((location) => location.id !== primary.id);
 
     return (
-        <section id="locations" aria-labelledby="locations-title" className="border-b">
-            <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-12 lg:px-8 lg:py-14">
-                <ContactReveal className="max-w-2xl">
-                    <ContactSectionLabel>{hero.location_badge ?? 'Visit us'}</ContactSectionLabel>
-                    <h2 id="locations-title" className="mt-7 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-                        {hero.location_title ?? 'Find us'}
-                    </h2>
-                    {hero.location_description && (
-                        <p className="text-muted-foreground mt-5 max-w-xl text-sm leading-relaxed">{hero.location_description}</p>
-                    )}
-                </ContactReveal>
+        <section id="locations" aria-labelledby="locations-title" className="mx-auto w-full max-w-7xl px-4 py-8 sm:py-12 lg:px-8 lg:py-16">
+            <Reveal className="max-w-2xl">
+                <SectionLabel>{hero.location_badge ?? 'Visit us'}</SectionLabel>
+                <h2 id="locations-title" className="text-ink mt-7 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance sm:text-4xl">
+                    {hero.location_title ?? 'Find us'}
+                </h2>
+                {hero.location_description && <p className="text-ink-soft mt-5 max-w-xl text-sm leading-relaxed">{hero.location_description}</p>}
+            </Reveal>
 
-                <div className="mt-14 grid gap-12 lg:grid-cols-12 lg:gap-16">
-                    <ContactReveal className="lg:col-span-5">
-                        <div className="flex flex-col gap-6">
-                            <div className="bg-card border p-7 shadow-sm sm:p-8">
-                                <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">
-                                    {primary.google_maps_url ? (
+            <div className="mt-12 grid gap-10 lg:grid-cols-12 lg:gap-12">
+                <Reveal className="lg:col-span-5">
+                    <div className="flex flex-col gap-5">
+                        <GlassPanel strong className="p-7 sm:p-8">
+                            <h3 className="text-ink text-xl font-medium tracking-[-0.01em] sm:text-2xl">
+                                {primary.google_maps_url ? (
+                                    <a
+                                        href={primary.google_maps_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group inline-flex items-center gap-2 transition-colors hover:opacity-70"
+                                    >
+                                        {primary.name}
+                                        <ArrowUpRight className="text-ink-soft size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                    </a>
+                                ) : (
+                                    primary.name
+                                )}
+                            </h3>
+
+                            {!isLinkText(primary.address) && (
+                                <address className="text-ink-soft mt-3 max-w-sm text-sm leading-relaxed not-italic">
+                                    {primary.address}
+                                    {primary.city && <span className="block">{primary.city}</span>}
+                                </address>
+                            )}
+
+                            {primary.description && <p className="text-ink-soft mt-3 max-w-sm text-sm leading-relaxed">{primary.description}</p>}
+
+                            {(primary.phone || primary.email) && (
+                                <div className="mt-7 flex flex-col gap-3 text-sm">
+                                    {primary.phone && (
                                         <a
-                                            href={primary.google_maps_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="group inline-flex items-center gap-2 transition-colors hover:text-primary"
+                                            href={`tel:${primary.phone}`}
+                                            className="text-ink-soft hover:text-ink inline-flex items-center gap-3 transition-colors"
                                         >
-                                            {primary.name}
-                                            <ArrowUpRight className="text-muted-foreground size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary" />
+                                            <Phone className="size-4 shrink-0" aria-hidden />
+                                            {primary.phone}
                                         </a>
-                                    ) : (
-                                        primary.name
                                     )}
-                                </h3>
+                                    {primary.email && (
+                                        <a
+                                            href={`mailto:${primary.email}`}
+                                            className="text-ink-soft hover:text-ink inline-flex items-center gap-3 break-all transition-colors"
+                                        >
+                                            <Mail className="size-4 shrink-0" aria-hidden />
+                                            {primary.email}
+                                        </a>
+                                    )}
+                                </div>
+                            )}
 
-                                {!isLinkText(primary.address) && (
-                                    <address className="text-muted-foreground mt-3 max-w-sm text-sm leading-relaxed not-italic">
-                                        {primary.address}
-                                        {primary.city && <span className="block">{primary.city}</span>}
-                                    </address>
-                                )}
-
-                                {primary.description && (
-                                    <p className="text-muted-foreground mt-3 max-w-sm text-sm leading-relaxed">{primary.description}</p>
-                                )}
-
-                                {(primary.phone || primary.email) && (
-                                    <div className="mt-7 flex flex-col gap-3 text-sm">
-                                        {primary.phone && (
-                                            <a
-                                                href={`tel:${primary.phone}`}
-                                                className="text-muted-foreground hover:text-primary inline-flex items-center gap-3 transition-colors"
-                                            >
-                                                <Phone className="size-4 shrink-0" aria-hidden />
-                                                {primary.phone}
-                                            </a>
-                                        )}
-                                        {primary.email && (
-                                            <a
-                                                href={`mailto:${primary.email}`}
-                                                className="text-muted-foreground hover:text-primary inline-flex items-center gap-3 break-all transition-colors"
-                                            >
-                                                <Mail className="size-4 shrink-0" aria-hidden />
-                                                {primary.email}
-                                            </a>
-                                        )}
-                                    </div>
-                                )}
-
-                                {parseHours(primary.business_hours).length > 0 && (
-                                    <div className="border-border mt-8 border-t pt-6">
-                                        <p className="text-muted-foreground flex items-center gap-3 text-[11px] font-medium tracking-[0.24em] uppercase">
-                                            <Clock className="size-4 shrink-0" aria-hidden />
-                                            Business hours
-                                        </p>
-                                        <ul className="text-muted-foreground mt-4 space-y-2 text-sm">
-                                            {parseHours(primary.business_hours).map((line) => (
-                                                <li key={line}>{line}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
-
-                            {others.length > 0 && (
-                                <div className="bg-card border p-7 shadow-sm sm:p-8">
-                                    <p className="text-muted-foreground text-[11px] font-medium tracking-[0.28em] uppercase">Other offices</p>
-                                    <ul className="border-border mt-5 border-t">
-                                        {others.map((location) => (
-                                            <li key={location.id} className="border-border border-b py-5">
-                                                <h4 className="font-medium">{location.name}</h4>
-                                                {!isLinkText(location.address) && (
-                                                    <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{location.address}</p>
-                                                )}
-                                                {location.description && (
-                                                    <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{location.description}</p>
-                                                )}
-                                                {(location.phone || location.email) && (
-                                                    <div className="mt-2 flex flex-col gap-1 text-sm">
-                                                        {location.phone && (
-                                                            <a
-                                                                href={`tel:${location.phone}`}
-                                                                className="text-muted-foreground hover:text-primary transition-colors"
-                                                            >
-                                                                {location.phone}
-                                                            </a>
-                                                        )}
-                                                        {location.email && (
-                                                            <a
-                                                                href={`mailto:${location.email}`}
-                                                                className="text-muted-foreground hover:text-primary break-all transition-colors"
-                                                            >
-                                                                {location.email}
-                                                            </a>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </li>
+                            {parseHours(primary.business_hours).length > 0 && (
+                                <div className="border-line mt-8 border-t pt-6">
+                                    <p className="text-ink-soft flex items-center gap-3 text-[11px] font-medium tracking-[0.24em] uppercase">
+                                        <Clock className="size-4 shrink-0" aria-hidden />
+                                        Business hours
+                                    </p>
+                                    <ul className="text-ink-soft mt-4 space-y-2 text-sm">
+                                        {parseHours(primary.business_hours).map((line) => (
+                                            <li key={line}>{line}</li>
                                         ))}
                                     </ul>
                                 </div>
                             )}
-                        </div>
-                    </ContactReveal>
+                        </GlassPanel>
 
-                    <ContactReveal delay={120} className="lg:col-span-7">
-                        <ContactMap location={primary} />
-                    </ContactReveal>
-                </div>
+                        {others.length > 0 && (
+                            <GlassPanel className="p-7 sm:p-8">
+                                <p className="text-ink-soft text-[11px] font-medium tracking-[0.28em] uppercase">Other offices</p>
+                                <ul className="border-line mt-5 border-t">
+                                    {others.map((location) => (
+                                        <li key={location.id} className="border-line border-b py-5 last:border-b-0">
+                                            <h4 className="text-ink font-medium">{location.name}</h4>
+                                            {!isLinkText(location.address) && (
+                                                <p className="text-ink-soft mt-1 text-sm leading-relaxed">{location.address}</p>
+                                            )}
+                                            {location.description && <p className="text-ink-soft mt-1 text-sm leading-relaxed">{location.description}</p>}
+                                            {(location.phone || location.email) && (
+                                                <div className="mt-2 flex flex-col gap-1 text-sm">
+                                                    {location.phone && (
+                                                        <a href={`tel:${location.phone}`} className="text-ink-soft hover:text-ink transition-colors">
+                                                            {location.phone}
+                                                        </a>
+                                                    )}
+                                                    {location.email && (
+                                                        <a href={`mailto:${location.email}`} className="text-ink-soft hover:text-ink break-all transition-colors">
+                                                            {location.email}
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </GlassPanel>
+                        )}
+                    </div>
+                </Reveal>
+
+                <Reveal delay={120} className="lg:col-span-7">
+                    <ContactMap location={primary} />
+                </Reveal>
             </div>
         </section>
     );

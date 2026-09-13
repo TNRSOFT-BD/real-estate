@@ -1,14 +1,13 @@
-import ContactClosing from '@/components/frontend/contact/contact-closing';
 import ContactFaq from '@/components/frontend/contact/contact-faq';
 import ContactForm from '@/components/frontend/contact/contact-form';
 import ContactHero from '@/components/frontend/contact/contact-hero';
 import ContactInformation from '@/components/frontend/contact/contact-information';
 import ContactLocation from '@/components/frontend/contact/contact-location';
-import ContactReveal from '@/components/frontend/contact/contact-reveal';
-import ContactSectionLabel from '@/components/frontend/contact/contact-section-label';
 import ContactSocialLinks from '@/components/frontend/contact/contact-social-links';
 import ContactTeam from '@/components/frontend/contact/contact-team';
 import LiveChatWidget from '@/components/frontend/contact/live-chat-widget';
+import Reveal from '@/components/frontend/glass/reveal';
+import SectionLabel from '@/components/frontend/glass/section-label';
 import PublicLayout from '@/layouts/public-layout';
 import { type ContactPageProps } from '@/types/contact';
 import { Head } from '@inertiajs/react';
@@ -21,7 +20,7 @@ export default function ContactIndex(props: ContactPageProps) {
     return (
         <PublicLayout>
             <Head>
-                <title>{`${seo.title ?? 'Contact Us'} | Real Estate`}</title>
+                <title>{seo.title ?? 'Contact Us | Real Estate'}</title>
                 {seo.title && <meta name="title" content={seo.title} />}
                 {seo.description && <meta name="description" content={seo.description} />}
                 {seo.keywords && <meta name="keywords" content={seo.keywords} />}
@@ -36,33 +35,30 @@ export default function ContactIndex(props: ContactPageProps) {
 
             {contactInformation.length > 0 && <ContactInformation items={contactInformation} />}
 
-            <section id="contact-form" className="bg-muted/40 border-b" aria-labelledby="contact-form-title">
-                <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-12 lg:px-8 lg:py-14">
-                    <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-                        <ContactReveal className="lg:col-span-5">
-                            <div className="lg:sticky lg:top-28">
-                                <ContactSectionLabel>Inquiry</ContactSectionLabel>
+            <section id="contact-form" className="mx-auto w-full max-w-7xl px-4 py-8 sm:py-12 lg:px-8 lg:py-16" aria-labelledby="contact-form-title">
+                <div className="mx-auto max-w-4xl">
+                    <Reveal className="flex flex-col items-center text-center">
+                        <SectionLabel withLine={false}>Inquiry</SectionLabel>
 
-                                <h2 id="contact-form-title" className="mt-7 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-                                    {hero.form_title ?? 'Tell us about your project'}
-                                </h2>
+                        <h2
+                            id="contact-form-title"
+                            className="text-ink mt-6 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance sm:text-4xl"
+                        >
+                            {hero.form_title ?? 'Send us a message'}
+                        </h2>
 
-                                {hero.form_description && (
-                                    <p className="text-muted-foreground mt-5 max-w-md text-sm leading-relaxed">{hero.form_description}</p>
-                                )}
+                        {hero.form_description && <p className="text-ink-soft mt-4 max-w-xl text-sm leading-relaxed">{hero.form_description}</p>}
+                    </Reveal>
 
-                                {socialLinks.length > 0 && (
-                                    <div className="border-border mt-12 border-t pt-8">
-                                        <ContactSocialLinks items={socialLinks} />
-                                    </div>
-                                )}
-                            </div>
-                        </ContactReveal>
+                    <Reveal delay={120} className="mt-10">
+                        <ContactForm fields={form} successMessage={hero.form_success_message} />
+                    </Reveal>
 
-                        <ContactReveal delay={120} className="lg:col-span-7">
-                            <ContactForm fields={form} successMessage={hero.form_success_message} />
-                        </ContactReveal>
-                    </div>
+                    {socialLinks.length > 0 && (
+                        <Reveal delay={160} className="mt-10 flex justify-center">
+                            <ContactSocialLinks items={socialLinks} orientation="horizontal" />
+                        </Reveal>
+                    )}
                 </div>
             </section>
 
@@ -71,8 +67,6 @@ export default function ContactIndex(props: ContactPageProps) {
             <ContactTeam members={teamMembers} hero={hero} />
 
             {locations.length > 0 && <ContactLocation locations={locations} hero={hero} />}
-
-            <ContactClosing hero={hero} />
 
             {liveChat?.enabled && <LiveChatWidget config={liveChat} />}
         </PublicLayout>

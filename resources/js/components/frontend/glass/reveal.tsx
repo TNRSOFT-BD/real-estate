@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 type RevealState = 'idle' | 'hidden' | 'shown';
 
-interface ContactRevealProps {
+interface RevealProps {
     children: ReactNode;
     className?: string;
     delay?: number;
@@ -16,7 +16,7 @@ interface ContactRevealProps {
  * unavailable; the transition is only armed for elements that start below the
  * fold. Motion is disabled for users who prefer reduced motion.
  */
-export default function ContactReveal({ children, className, delay = 0 }: ContactRevealProps) {
+export default function Reveal({ children, className, delay = 0 }: RevealProps) {
     const ref = useRef<HTMLDivElement>(null);
     const [state, setState] = useState<RevealState>('idle');
 

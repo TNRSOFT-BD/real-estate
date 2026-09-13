@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Repositories\Contracts\Contact\ContactSubmissionRepositoryInterface;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 });
 
+Route::get('about', [AboutController::class, 'show'])->name('about.show');
 Route::get('contact', [ContactController::class, 'show'])->name('contact.show');
 Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:contact-submit')->name('contact.store');
 

@@ -6,13 +6,18 @@ import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
+    Building2,
     Folder,
     HelpCircle,
     Inbox,
+    Info,
+    Landmark,
+    Layers,
     LayoutGrid,
     ListChecks,
     Map,
     MessageCircle,
+    Palette,
     Settings,
     Share2,
     Users,
@@ -75,6 +80,47 @@ const contactNavItems: NavItem[] = [
     },
 ];
 
+const siteNavItems: NavItem[] = [
+    {
+        title: 'Appearance',
+        url: '/admin/site/appearance',
+        icon: Palette,
+    },
+];
+
+const aboutNavItems: NavItem[] = [
+    {
+        title: 'Page Settings',
+        url: '/admin/about/settings',
+        icon: Info,
+    },
+    {
+        title: 'Company',
+        url: '/admin/about/company',
+        icon: Landmark,
+    },
+    {
+        title: 'Content',
+        url: '/admin/about/items',
+        icon: Layers,
+    },
+    {
+        title: 'Company Info',
+        url: '/admin/contact/information',
+        icon: Building2,
+    },
+    {
+        title: 'Social Links',
+        url: '/admin/contact/social-links',
+        icon: Share2,
+    },
+    {
+        title: 'Team',
+        url: '/admin/contact/team',
+        icon: Users,
+    },
+];
+
 const footerNavItems: NavItem[] = [
     {
         title: 'Repository',
@@ -107,6 +153,38 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
+
+                <SidebarGroup className="px-2 py-0">
+                    <SidebarGroupLabel>About Us</SidebarGroupLabel>
+                    <SidebarMenu>
+                        {aboutNavItems.map((item) => (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton asChild isActive={page.url === item.url || page.url.startsWith(`${item.url}/`)}>
+                                    <Link href={item.url} prefetch>
+                                        {item.icon && <item.icon />}
+                                        <span>{item.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroup>
+
+                <SidebarGroup className="px-2 py-0">
+                    <SidebarGroupLabel>Site</SidebarGroupLabel>
+                    <SidebarMenu>
+                        {siteNavItems.map((item) => (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton asChild isActive={page.url === item.url || page.url.startsWith(`${item.url}/`)}>
+                                    <Link href={item.url} prefetch>
+                                        {item.icon && <item.icon />}
+                                        <span>{item.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroup>
 
                 <SidebarGroup className="px-2 py-0">
                     <SidebarGroupLabel>Contact Module</SidebarGroupLabel>

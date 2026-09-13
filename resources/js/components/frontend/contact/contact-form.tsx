@@ -1,3 +1,4 @@
+import GlassPanel from '@/components/frontend/glass/glass-panel';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,14 +26,14 @@ function renderOptions(options?: ContactFormField['options']): Array<{ label: st
 
 const fieldClass = (hasError: boolean) =>
     cn(
-        'bg-muted/50 text-foreground placeholder:text-muted-foreground/70 focus-visible:bg-background h-12 w-full rounded-none border border-input px-4 text-base shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-foreground/60 md:text-base',
-        hasError && 'border-destructive focus-visible:border-destructive',
+        'text-ink placeholder:text-ink-soft/50 bg-field border-line hover:border-ink/35 focus-visible:border-ink h-12 w-full rounded-xl border px-4 text-base shadow-sm transition-all duration-200 focus-visible:ring-4 focus-visible:ring-ink/10 focus-visible:outline-hidden md:text-base',
+        hasError && 'border-destructive hover:border-destructive focus-visible:border-destructive focus-visible:ring-destructive/15',
     );
 
 const textareaClass = (hasError: boolean) =>
     cn(
-        'bg-muted/50 text-foreground placeholder:text-muted-foreground/70 focus-visible:bg-background min-h-36 w-full rounded-none border border-input px-4 py-3 text-base leading-relaxed shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-foreground/60 md:text-base',
-        hasError && 'border-destructive focus-visible:border-destructive',
+        'text-ink placeholder:text-ink-soft/50 bg-field border-line hover:border-ink/35 focus-visible:border-ink min-h-36 w-full rounded-xl border px-4 py-3 text-base leading-relaxed shadow-sm transition-all duration-200 focus-visible:ring-4 focus-visible:ring-ink/10 focus-visible:outline-hidden md:text-base',
+        hasError && 'border-destructive hover:border-destructive focus-visible:border-destructive focus-visible:ring-destructive/15',
     );
 
 export default function ContactForm({ fields, successMessage }: ContactFormProps) {
@@ -51,23 +52,23 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
 
     if (fields.length === 0) {
         return (
-            <div className="text-muted-foreground border border-dashed p-8 text-sm leading-relaxed sm:p-10">
+            <GlassPanel className="text-ink-soft p-8 text-sm leading-relaxed sm:p-10">
                 The contact form is not configured yet. Please reach out another way.
-            </div>
+            </GlassPanel>
         );
     }
 
     if (submitted) {
         return (
-            <div className="bg-card border p-8 shadow-sm sm:p-10">
-                <CheckCircle2 className="text-primary size-6" aria-hidden />
-                <h3 className="mt-6 text-2xl font-semibold tracking-tight">Message sent</h3>
-                <p className="text-muted-foreground mt-3 max-w-md text-sm leading-relaxed">
+            <GlassPanel strong className="p-8 sm:p-10">
+                <CheckCircle2 className="text-ink size-6" aria-hidden />
+                <h3 className="text-ink mt-6 text-2xl font-medium tracking-tight">Message sent</h3>
+                <p className="text-ink-soft mt-3 max-w-md text-sm leading-relaxed">
                     {flash?.success ?? successMessage ?? 'Thank you. Your message has been received and we will get back to you shortly.'}
                 </p>
                 <Button
                     variant="outline"
-                    className="mt-8 rounded-none shadow-sm hover:shadow-md"
+                    className="border-glass-border bg-glass-strong text-ink hover:bg-glass mt-8 rounded-full shadow-sm"
                     onClick={() => {
                         reset();
                         setSubmitted(false);
@@ -75,7 +76,7 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
                 >
                     Send another message
                 </Button>
-            </div>
+            </GlassPanel>
         );
     }
 
@@ -91,162 +92,172 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
     };
 
     return (
-        <form onSubmit={handleSubmit} noValidate className="bg-card border p-6 shadow-md sm:p-8 lg:p-10">
-            {flash?.success && !submitted && (
-                <div className="border-primary bg-muted/50 text-foreground mb-8 flex items-start gap-3 border-l-2 p-4 text-sm">
-                    <CheckCircle2 className="text-primary mt-0.5 size-4 shrink-0" aria-hidden />
-                    <span>{flash.success}</span>
-                </div>
-            )}
+        <GlassPanel strong className="p-6 sm:p-8 lg:p-10">
+            <form onSubmit={handleSubmit} noValidate>
+                {flash?.success && !submitted && (
+                    <div className="border-glass-border bg-glass text-ink mb-8 flex items-start gap-3 rounded-xl border p-4 text-sm">
+                        <CheckCircle2 className="text-ink mt-0.5 size-4 shrink-0" aria-hidden />
+                        <span>{flash.success}</span>
+                    </div>
+                )}
 
-            {flash?.error && (
-                <div className="border-destructive bg-destructive/5 text-destructive mb-8 flex items-start gap-3 border-l-2 p-4 text-sm">
-                    <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden />
-                    <span>{flash.error}</span>
-                </div>
-            )}
+                {flash?.error && (
+                    <div className="border-destructive/40 bg-destructive/10 text-destructive mb-8 flex items-start gap-3 rounded-xl border p-4 text-sm">
+                        <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden />
+                        <span>{flash.error}</span>
+                    </div>
+                )}
 
-            <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
-                {fields.map((field) => {
-                    const error = errors[field.name];
-                    const isWide = field.type === 'textarea' || field.type === 'radio' || field.type === 'checkbox';
-                    const commonProps = {
-                        id: `field-${field.name}`,
-                        name: field.name,
-                        required: field.is_required,
-                        'aria-required': field.is_required,
-                        'aria-describedby': field.help_text ? `help-${field.name}` : undefined,
-                        'aria-invalid': Boolean(error),
-                        'aria-label': `${field.label}${field.is_required ? ' (required)' : ''}`,
-                    };
+                <div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+                    {fields.map((field) => {
+                        const error = errors[field.name];
+                        const isWide = field.type === 'textarea' || field.type === 'radio' || field.type === 'checkbox';
+                        const commonProps = {
+                            id: `field-${field.name}`,
+                            name: field.name,
+                            required: field.is_required,
+                            'aria-required': field.is_required,
+                            'aria-describedby': field.help_text ? `help-${field.name}` : undefined,
+                            'aria-invalid': Boolean(error),
+                            'aria-label': `${field.label}${field.is_required ? ' (required)' : ''}`,
+                        };
 
-                    return (
-                        <div key={field.id} className={cn('space-y-3', isWide && 'sm:col-span-2')}>
-                            <Label htmlFor={`field-${field.name}`} className="text-foreground text-sm font-medium tracking-wide">
-                                {field.label}
-                                {field.is_required && (
-                                    <span className="text-primary ml-1" aria-hidden>
-                                        *
-                                    </span>
-                                )}
-                            </Label>
-
-                            {field.type === 'textarea' && (
-                                <textarea
-                                    {...commonProps}
-                                    value={String(data[field.name] ?? '')}
-                                    onChange={(e) => setData(field.name, e.target.value)}
-                                    rows={5}
-                                    placeholder={field.placeholder ?? undefined}
-                                    className={textareaClass(Boolean(error))}
-                                />
-                            )}
-
-                            {field.type === 'select' && (
-                                <select
-                                    {...commonProps}
-                                    value={String(data[field.name] ?? '')}
-                                    onChange={(e) => setData(field.name, e.target.value)}
-                                    className={fieldClass(Boolean(error))}
+                        return (
+                            <div key={field.id} className={cn('group space-y-3', isWide && 'sm:col-span-2')}>
+                                <Label
+                                    htmlFor={`field-${field.name}`}
+                                    className="text-ink-soft group-focus-within:text-ink block text-[11px] font-medium tracking-[0.18em] uppercase transition-colors"
                                 >
-                                    <option value="">{field.placeholder ?? 'Select an option'}</option>
-                                    {renderOptions(field.options).map((option) => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-                            )}
+                                    {field.label}
+                                    {field.is_required && (
+                                        <span className="text-ink ml-1" aria-hidden>
+                                            *
+                                        </span>
+                                    )}
+                                </Label>
 
-                            {(field.type === 'radio' || field.type === 'checkbox') && (
-                                <fieldset className="space-y-3 pt-1">
-                                    <legend className="sr-only">{field.label}</legend>
-                                    {renderOptions(field.options).map((option) => {
-                                        const raw = data[field.name];
-                                        const currentArray: string[] = Array.isArray(raw) ? raw : [];
-                                        const isChecked = field.type === 'checkbox' ? currentArray.includes(option.value) : raw === option.value;
+                                {field.type === 'textarea' && (
+                                    <textarea
+                                        {...commonProps}
+                                        value={String(data[field.name] ?? '')}
+                                        onChange={(e) => setData(field.name, e.target.value)}
+                                        rows={5}
+                                        placeholder={field.placeholder ?? undefined}
+                                        className={textareaClass(Boolean(error))}
+                                    />
+                                )}
 
-                                        return (
-                                            <div key={`${field.name}-${option.value}`} className="flex items-center gap-3">
-                                                <input
-                                                    id={`field-${field.name}-${option.value}`}
-                                                    type={field.type}
-                                                    name={field.name}
-                                                    value={option.value}
-                                                    checked={isChecked}
-                                                    onChange={(e) => {
-                                                        if (field.type === 'checkbox') {
-                                                            const next = e.target.checked
-                                                                ? [...currentArray, option.value]
-                                                                : currentArray.filter((v) => v !== option.value);
-                                                            setData(field.name, next);
-                                                        } else {
-                                                            setData(field.name, option.value);
-                                                        }
-                                                    }}
-                                                    className="accent-primary size-4"
-                                                />
-                                                <Label htmlFor={`field-${field.name}-${option.value}`} className="text-muted-foreground font-normal">
-                                                    {option.label}
-                                                </Label>
-                                            </div>
-                                        );
-                                    })}
-                                </fieldset>
-                            )}
+                                {field.type === 'select' && (
+                                    <select
+                                        {...commonProps}
+                                        value={String(data[field.name] ?? '')}
+                                        onChange={(e) => setData(field.name, e.target.value)}
+                                        className={fieldClass(Boolean(error))}
+                                    >
+                                        <option value="">{field.placeholder ?? 'Select an option'}</option>
+                                        {renderOptions(field.options).map((option) => (
+                                            <option key={option.value} value={option.value}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
 
-                            {(field.type === 'text' || field.type === 'email' || field.type === 'tel') && (
-                                <Input
-                                    {...commonProps}
-                                    type={field.type}
-                                    value={String(data[field.name] ?? '')}
-                                    onChange={(e) => setData(field.name, e.target.value)}
-                                    placeholder={field.placeholder ?? undefined}
-                                    className={fieldClass(Boolean(error))}
-                                />
-                            )}
+                                {(field.type === 'radio' || field.type === 'checkbox') && (
+                                    <fieldset className="space-y-3 pt-1">
+                                        <legend className="sr-only">{field.label}</legend>
+                                        {renderOptions(field.options).map((option) => {
+                                            const raw = data[field.name];
+                                            const currentArray: string[] = Array.isArray(raw) ? raw : [];
+                                            const isChecked = field.type === 'checkbox' ? currentArray.includes(option.value) : raw === option.value;
 
-                            {field.help_text && (
-                                <p id={`help-${field.name}`} className="text-muted-foreground text-xs leading-relaxed">
-                                    {field.help_text}
-                                </p>
-                            )}
+                                            return (
+                                                <div key={`${field.name}-${option.value}`} className="flex items-center gap-3">
+                                                    <input
+                                                        id={`field-${field.name}-${option.value}`}
+                                                        type={field.type}
+                                                        name={field.name}
+                                                        value={option.value}
+                                                        checked={isChecked}
+                                                        onChange={(e) => {
+                                                            if (field.type === 'checkbox') {
+                                                                const next = e.target.checked
+                                                                    ? [...currentArray, option.value]
+                                                                    : currentArray.filter((v) => v !== option.value);
+                                                                setData(field.name, next);
+                                                            } else {
+                                                                setData(field.name, option.value);
+                                                            }
+                                                        }}
+                                                        className="accent-ink size-4"
+                                                    />
+                                                    <Label htmlFor={`field-${field.name}-${option.value}`} className="text-ink-soft font-normal">
+                                                        {option.label}
+                                                    </Label>
+                                                </div>
+                                            );
+                                        })}
+                                    </fieldset>
+                                )}
 
-                            {error && <InputError message={error} />}
-                        </div>
-                    );
-                })}
+                                {(field.type === 'text' || field.type === 'email' || field.type === 'tel') && (
+                                    <Input
+                                        {...commonProps}
+                                        type={field.type}
+                                        value={String(data[field.name] ?? '')}
+                                        onChange={(e) => setData(field.name, e.target.value)}
+                                        placeholder={field.placeholder ?? undefined}
+                                        className={fieldClass(Boolean(error))}
+                                    />
+                                )}
 
-                <div className="hidden" aria-hidden>
-                    <Label htmlFor="website">Website</Label>
-                    <Input
-                        id="website"
-                        type="text"
-                        value={String(data.website ?? '')}
-                        onChange={(e) => setData('website', e.target.value)}
-                        tabIndex={-1}
-                        autoComplete="off"
-                    />
+                                {field.help_text && (
+                                    <p id={`help-${field.name}`} className="text-ink-soft text-xs leading-relaxed">
+                                        {field.help_text}
+                                    </p>
+                                )}
+
+                                {error && <InputError message={error} />}
+                            </div>
+                        );
+                    })}
+
+                    <div className="hidden" aria-hidden>
+                        <Label htmlFor="website">Website</Label>
+                        <Input
+                            id="website"
+                            type="text"
+                            value={String(data.website ?? '')}
+                            onChange={(e) => setData('website', e.target.value)}
+                            tabIndex={-1}
+                            autoComplete="off"
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="border-border mt-10 flex flex-col gap-4 border-t pt-8 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-muted-foreground text-xs tracking-[0.18em] uppercase">Fields marked * are required</p>
+                <div className="border-line mt-9 flex flex-col gap-4 border-t pt-7 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-ink-soft text-xs tracking-[0.18em] uppercase">Fields marked * are required</p>
 
-                <Button type="submit" size="lg" className="group rounded-none px-7 shadow-sm hover:shadow-md" disabled={processing}>
-                    {processing ? (
-                        <>
-                            <Loader2 className="animate-spin" aria-hidden />
-                            Sending…
-                        </>
-                    ) : (
-                        <>
-                            Send inquiry
-                            <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
-                        </>
-                    )}
-                </Button>
-            </div>
-        </form>
+                    <Button
+                        type="submit"
+                        size="lg"
+                        className="group bg-ink text-canvas hover:opacity-90 rounded-full border-0 px-7 shadow-sm hover:shadow-md"
+                        disabled={processing}
+                    >
+                        {processing ? (
+                            <>
+                                <Loader2 className="animate-spin" aria-hidden />
+                                Sending…
+                            </>
+                        ) : (
+                            <>
+                                Send inquiry
+                                <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+                            </>
+                        )}
+                    </Button>
+                </div>
+            </form>
+        </GlassPanel>
     );
 }

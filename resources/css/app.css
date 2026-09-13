@@ -56,6 +56,26 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+
+    --color-canvas: var(--canvas);
+    --color-ink: var(--ink);
+    --color-ink-soft: var(--ink-soft);
+    --color-line: var(--line);
+    --color-glass: var(--glass);
+    --color-glass-strong: var(--glass-strong);
+    --color-glass-border: var(--glass-border);
+    --color-field: var(--field);
+
+    --animate-marquee: marquee 60s linear infinite;
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
 }
 
 /*
@@ -110,6 +130,44 @@
     --sidebar-accent-foreground: hsl(0, 0%, 30%);
     --sidebar-border: hsl(0, 0%, 91%);
     --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
+
+    --canvas: #f4f2ed;
+    --ink: #1a1815;
+    --ink-soft: rgba(26, 24, 21, 0.62);
+    --line: rgba(26, 24, 21, 0.12);
+    --glass: rgba(255, 255, 255, 0.38);
+    --glass-strong: rgba(255, 255, 255, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.55);
+    --field: #ffffff;
+}
+
+.site-dark {
+    --ink: #f5f3ef;
+    --ink-soft: rgba(245, 243, 239, 0.64);
+    --line: rgba(255, 255, 255, 0.14);
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-strong: rgba(255, 255, 255, 0.09);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --field: rgba(255, 255, 255, 0.06);
+}
+
+/*
+ * Re-resolve the Tailwind colour tokens on the public shell itself.
+ * `@theme` maps e.g. `--color-ink` to `var(--ink)`, but custom properties are
+ * substituted where they are declared (`:root`), so a descendant overriding
+ * `--ink` would not affect the inherited `--color-ink`. Declaring the mappings
+ * on the shell makes them resolve against the shell's values.
+ */
+.site-light,
+.site-dark {
+    --color-canvas: var(--canvas);
+    --color-ink: var(--ink);
+    --color-ink-soft: var(--ink-soft);
+    --color-line: var(--line);
+    --color-glass: var(--glass);
+    --color-glass-strong: var(--glass-strong);
+    --color-glass-border: var(--glass-border);
+    --color-field: var(--field);
 }
 
 .dark {
