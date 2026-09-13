@@ -55,6 +55,10 @@ class HandleInertiaRequests extends Middleware
                 'legal' => app(LegalPageService::class)->getFooterPages(),
             ],
             'quote' => ['message' => trim($message), 'author' => trim($author)],
+            'flash' => fn (): array => [
+                'success' => $request->session()->get('success'),
+                'error' => $request->session()->get('error'),
+            ],
             'auth' => [
                 'user' => $request->user(),
             ],

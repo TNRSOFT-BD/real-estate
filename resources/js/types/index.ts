@@ -41,6 +41,7 @@ export interface SharedData {
         legal: LegalFooterLink[];
     };
     quote: { message: string; author: string };
+    flash: { success?: string; error?: string };
     auth: Auth;
     [key: string]: unknown;
 }

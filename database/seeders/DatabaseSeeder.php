@@ -42,6 +42,8 @@ class DatabaseSeeder extends Seeder
             ContactSeeder::class,
             AboutSeeder::class,
             LegalPageSeeder::class,
+            ProjectTypeSeeder::class,
+            ProjectStatusSeeder::class,
         ]);
     }
 }

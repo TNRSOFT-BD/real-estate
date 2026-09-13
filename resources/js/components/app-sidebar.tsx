@@ -4,6 +4,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } fr
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import {
+    Activity,
     Building2,
     HelpCircle,
     Inbox,
@@ -27,6 +28,24 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         url: '/dashboard',
         icon: LayoutGrid,
+    },
+];
+
+const realEstateNavItems: NavItem[] = [
+    {
+        title: 'Projects',
+        url: '/admin/projects',
+        icon: Building2,
+    },
+    {
+        title: 'Project Types',
+        url: '/admin/project-types',
+        icon: Layers,
+    },
+    {
+        title: 'Project Statuses',
+        url: '/admin/project-statuses',
+        icon: Activity,
     },
 ];
 
@@ -138,6 +157,7 @@ export function AppSidebar() {
 
             <SidebarContent className="pt-2">
                 <NavMain label="Platform" items={mainNavItems} collapsible={false} />
+                <NavMain label="Real Estate" items={realEstateNavItems} />
                 <NavMain label="About Us" items={aboutNavItems} />
                 <NavMain label="Website Settings" items={siteNavItems} collapsible={false} />
                 <NavMain label="Legal" items={legalNavItems} collapsible={false} />

@@ -6,22 +6,38 @@ use App\Enums\AboutPermission;
 use App\Enums\CompanyPermission;
 use App\Enums\ContactPermission;
 use App\Enums\LegalPermission;
+use App\Enums\ProjectPermission;
 use App\Enums\SitePermission;
 use App\Models\User;
 use App\Models\About\AboutItem;
 use App\Models\About\AboutPageSetting;
 use App\Models\Company\CompanyProfile;
 use App\Models\Legal\LegalPage;
+use App\Models\Project\Project;
+use App\Models\Project\ProjectGallery;
+use App\Models\Project\ProjectPricingPlan;
+use App\Models\Project\ProjectStatus;
+use App\Models\Project\ProjectType;
 use App\Models\Site\SiteSetting;
 use App\Policies\AboutItemPolicy;
 use App\Policies\AboutPageSettingsPolicy;
 use App\Policies\CompanyProfilePolicy;
 use App\Policies\LegalPagePolicy;
+use App\Policies\ProjectGalleryPolicy;
+use App\Policies\ProjectPolicy;
+use App\Policies\ProjectPricingPlanPolicy;
+use App\Policies\ProjectStatusPolicy;
+use App\Policies\ProjectTypePolicy;
 use App\Policies\SiteThemePolicy;
 use App\Repositories\Contracts\About\AboutItemRepositoryInterface;
 use App\Repositories\Contracts\About\AboutPageSettingRepositoryInterface;
 use App\Repositories\Contracts\Company\CompanyProfileRepositoryInterface;
 use App\Repositories\Contracts\Legal\LegalPageRepositoryInterface;
+use App\Repositories\Contracts\Project\ProjectGalleryRepositoryInterface;
+use App\Repositories\Contracts\Project\ProjectPricingPlanRepositoryInterface;
+use App\Repositories\Contracts\Project\ProjectRepositoryInterface;
+use App\Repositories\Contracts\Project\ProjectStatusRepositoryInterface;
+use App\Repositories\Contracts\Project\ProjectTypeRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactFaqRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactFormFieldRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactInformationRepositoryInterface;
@@ -45,6 +61,11 @@ use App\Repositories\Eloquent\About\EloquentAboutPageSettingRepository;
 use App\Repositories\Eloquent\About\EloquentAboutItemRepository;
 use App\Repositories\Eloquent\Company\EloquentCompanyProfileRepository;
 use App\Repositories\Eloquent\Legal\EloquentLegalPageRepository;
+use App\Repositories\Eloquent\Project\EloquentProjectGalleryRepository;
+use App\Repositories\Eloquent\Project\EloquentProjectPricingPlanRepository;
+use App\Repositories\Eloquent\Project\EloquentProjectRepository;
+use App\Repositories\Eloquent\Project\EloquentProjectStatusRepository;
+use App\Repositories\Eloquent\Project\EloquentProjectTypeRepository;
 use App\Repositories\Eloquent\Site\EloquentSiteSettingRepository;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -75,6 +96,12 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(LegalPageRepositoryInterface::class, EloquentLegalPageRepository::class);
 
+        $this->app->bind(ProjectRepositoryInterface::class, EloquentProjectRepository::class);
+        $this->app->bind(ProjectTypeRepositoryInterface::class, EloquentProjectTypeRepository::class);
+        $this->app->bind(ProjectStatusRepositoryInterface::class, EloquentProjectStatusRepository::class);
+        $this->app->bind(ProjectGalleryRepositoryInterface::class, EloquentProjectGalleryRepository::class);
+        $this->app->bind(ProjectPricingPlanRepositoryInterface::class, EloquentProjectPricingPlanRepository::class);
+
         $this->app->bind(SiteSettingRepositoryInterface::class, EloquentSiteSettingRepository::class);
     }
 
@@ -88,6 +115,11 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(AboutItem::class, AboutItemPolicy::class);
         Gate::policy(CompanyProfile::class, CompanyProfilePolicy::class);
         Gate::policy(LegalPage::class, LegalPagePolicy::class);
+        Gate::policy(Project::class, ProjectPolicy::class);
+        Gate::policy(ProjectType::class, ProjectTypePolicy::class);
+        Gate::policy(ProjectStatus::class, ProjectStatusPolicy::class);
+        Gate::policy(ProjectGallery::class, ProjectGalleryPolicy::class);
+        Gate::policy(ProjectPricingPlan::class, ProjectPricingPlanPolicy::class);
 
         Gate::before(function (User $user) {
             if ($user->isAdministrator()) {
@@ -114,6 +146,10 @@ class AppServiceProvider extends ServiceProvider
         }
 
         foreach (LegalPermission::all() as $permission) {
+            Gate::define($permission, fn (User $user) => $user->hasPermission($permission));
+        }
+
+        foreach (ProjectPermission::all() as $permission) {
             Gate::define($permission, fn (User $user) => $user->hasPermission($permission));
         }
 

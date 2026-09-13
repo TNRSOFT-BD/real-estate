@@ -1,0 +1,148 @@
+import AdminPageHeader from '@/components/admin/contact/admin-page-header';
+import AdminPagination from '@/components/admin/contact/admin-pagination';
+import RowActions from '@/components/admin/contact/row-actions';
+import ReassignDialog from '@/components/admin/project/reassign-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { type Filters, type FlashAlert, type Paginator, type ProjectTypeItem, type SelectOption } from '@/types/project-admin';
+import { Link, router } from '@inertiajs/react';
+import { Plus, Search, Shuffle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+interface ProjectTypeIndexProps {
+    items: Paginator<ProjectTypeItem>;
+    filters: Filters;
+    options: SelectOption[];
+    flash?: FlashAlert;
+}
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Project Types', href: '/admin/project-types' },
+];
+
+export default function ProjectTypeIndex({ items, filters, options, flash }: ProjectTypeIndexProps) {
+    const pathname = window.location.pathname;
+    const [search, setSearch] = useState(filters.search ?? '');
+    const [active, setActive] = useState(filters.is_active ?? '');
+    const [reassigning, setReassigning] = useState<ProjectTypeItem | null>(null);
+
+    const applyFilters = () => {
+        const params: Record<string, string> = {};
+        if (search) params.search = search;
+        if (active) params.is_active = active;
+        router.get(pathname, params, { preserveState: true, preserveScroll: true, replace: true });
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(applyFilters, 300);
+        return () => clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search]);
+
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
+                <AdminPageHeader
+                    title="Project Types"
+                    description="Dynamic, database-driven project types."
+                    flash={flash}
+                    actions={
+                        <Button asChild>
+                            <Link href={route('admin.project-types.create')}>
+                                <Plus />
+                                Add type
+                            </Link>
+                        </Button>
+                    }
+                />
+
+                <div className="overflow-hidden rounded-xl border">
+                    <div className="bg-muted/40 flex flex-wrap items-center gap-3 border-b p-4">
+                        <div className="relative">
+                            <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                            <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search…" className="w-56 pl-9" aria-label="Search" />
+                        </div>
+                        <select
+                            value={active}
+                            onChange={(event) => {
+                                setActive(event.target.value);
+                                setTimeout(applyFilters, 0);
+                            }}
+                            className="border-input bg-background h-10 rounded-md border px-3 text-sm"
+                            aria-label="Filter by status"
+                        >
+                            <option value="">Any status</option>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+
+                    {items.data.length > 0 ? (
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[760px] border-collapse">
+                                <thead className="bg-muted/40 border-b">
+                                    <tr>
+                                        <th className="text-muted-foreground px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase">Name</th>
+                                        <th className="text-muted-foreground px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase">Slug</th>
+                                        <th className="text-muted-foreground px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase">Projects</th>
+                                        <th className="text-muted-foreground px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase">Status</th>
+                                        <th className="text-muted-foreground px-4 py-3 text-right text-xs font-semibold tracking-wide uppercase">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {items.data.map((item) => (
+                                        <tr key={item.id} className="hover:bg-muted/40 border-b last:border-0">
+                                            <td className="px-4 py-3 text-sm font-medium">{item.name}</td>
+                                            <td className="text-muted-foreground px-4 py-3 text-sm">{item.slug}</td>
+                                            <td className="px-4 py-3 text-sm">{item.projects_count ?? 0}</td>
+                                            <td className="px-4 py-3 text-sm">
+                                                <Badge variant={item.is_active ? 'default' : 'secondary'}>{item.is_active ? 'Active' : 'Inactive'}</Badge>
+                                            </td>
+                                            <td className="px-4 py-3 text-sm">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => setReassigning(item)}
+                                                        disabled={(item.projects_count ?? 0) === 0}
+                                                    >
+                                                        <Shuffle className="size-4" />
+                                                        Reassign
+                                                    </Button>
+                                                    <RowActions
+                                                        editUrl={route('admin.project-types.edit', { projectType: item.id })}
+                                                        onToggle={() => router.patch(route('admin.project-types.toggle', { projectType: item.id }), {}, { preserveScroll: true })}
+                                                        onDelete={() => router.delete(route('admin.project-types.destroy', { projectType: item.id }), { preserveScroll: true })}
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <div className="text-muted-foreground flex min-h-40 items-center justify-center p-8 text-sm">No project types found.</div>
+                    )}
+
+                    <AdminPagination paginator={items} />
+                </div>
+            </div>
+
+            {reassigning && (
+                <ReassignDialog
+                    open={reassigning !== null}
+                    onOpenChange={(open) => !open && setReassigning(null)}
+                    title={`Reassign projects from "${reassigning.name}"`}
+                    description={`${reassigning.projects_count ?? 0} project(s) use this type. Choose another type to move them to before deleting.`}
+                    options={options.filter((option) => option.value !== String(reassigning.id))}
+                    action={route('admin.project-types.reassign', { projectType: reassigning.id })}
+                />
+            )}
+        </AppLayout>
+    );
+}

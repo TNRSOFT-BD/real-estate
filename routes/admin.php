@@ -14,6 +14,11 @@ use App\Http\Controllers\Admin\Contact\ContactSubmissionController;
 use App\Http\Controllers\Admin\Contact\ContactSubmissionNoteController;
 use App\Http\Controllers\Admin\Contact\ContactTeamController;
 use App\Http\Controllers\Admin\Legal\LegalPageController as AdminLegalPageController;
+use App\Http\Controllers\Admin\Project\ProjectController;
+use App\Http\Controllers\Admin\Project\ProjectGalleryController;
+use App\Http\Controllers\Admin\Project\ProjectPricingPlanController;
+use App\Http\Controllers\Admin\Project\ProjectStatusController;
+use App\Http\Controllers\Admin\Project\ProjectTypeController;
 use App\Http\Controllers\Admin\Site\SiteThemeController;
 use Illuminate\Support\Facades\Route;
 
@@ -125,5 +130,61 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
         Route::get('live-chat', [ContactLiveChatController::class, 'edit'])->name('live-chat.edit');
         Route::put('live-chat', [ContactLiveChatController::class, 'update'])->name('live-chat.update');
+    });
+
+    Route::prefix('projects')->name('admin.projects.')->group(function () {
+        Route::get('/', [ProjectController::class, 'index'])->name('index');
+        Route::get('create', [ProjectController::class, 'create'])->name('create');
+        Route::post('/', [ProjectController::class, 'store'])->name('store');
+
+        Route::prefix('{project}')->whereNumber('project')->group(function () {
+            Route::get('gallery', [ProjectGalleryController::class, 'index'])->name('gallery.index');
+            Route::post('gallery', [ProjectGalleryController::class, 'store'])->name('gallery.store');
+            Route::patch('gallery/reorder', [ProjectGalleryController::class, 'reorder'])->name('gallery.reorder');
+            Route::put('gallery/{gallery}', [ProjectGalleryController::class, 'update'])->whereNumber('gallery')->name('gallery.update');
+            Route::delete('gallery/{gallery}', [ProjectGalleryController::class, 'destroy'])->whereNumber('gallery')->name('gallery.destroy');
+            Route::patch('gallery/{gallery}/feature', [ProjectGalleryController::class, 'feature'])->whereNumber('gallery')->name('gallery.feature');
+
+            Route::get('pricing', [ProjectPricingPlanController::class, 'index'])->name('pricing.index');
+            Route::post('pricing', [ProjectPricingPlanController::class, 'store'])->name('pricing.store');
+            Route::patch('pricing/reorder', [ProjectPricingPlanController::class, 'reorder'])->name('pricing.reorder');
+            Route::put('pricing/{pricing}', [ProjectPricingPlanController::class, 'update'])->whereNumber('pricing')->name('pricing.update');
+            Route::delete('pricing/{pricing}', [ProjectPricingPlanController::class, 'destroy'])->whereNumber('pricing')->name('pricing.destroy');
+            Route::post('pricing/{pricing}/duplicate', [ProjectPricingPlanController::class, 'duplicate'])->whereNumber('pricing')->name('pricing.duplicate');
+
+            Route::patch('publish', [ProjectController::class, 'publish'])->name('publish');
+            Route::patch('unpublish', [ProjectController::class, 'unpublish'])->name('unpublish');
+            Route::patch('feature', [ProjectController::class, 'feature'])->name('feature');
+            Route::patch('unfeature', [ProjectController::class, 'unfeature'])->name('unfeature');
+
+            Route::get('/', [ProjectController::class, 'show'])->name('show');
+            Route::get('edit', [ProjectController::class, 'edit'])->name('edit');
+            Route::put('/', [ProjectController::class, 'update'])->name('update');
+            Route::delete('/', [ProjectController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    Route::prefix('project-types')->name('admin.project-types.')->group(function () {
+        Route::get('/', [ProjectTypeController::class, 'index'])->name('index');
+        Route::get('create', [ProjectTypeController::class, 'create'])->name('create');
+        Route::post('/', [ProjectTypeController::class, 'store'])->name('store');
+        Route::patch('reorder', [ProjectTypeController::class, 'reorder'])->name('reorder');
+        Route::get('{projectType}/edit', [ProjectTypeController::class, 'edit'])->whereNumber('projectType')->name('edit');
+        Route::put('{projectType}', [ProjectTypeController::class, 'update'])->whereNumber('projectType')->name('update');
+        Route::delete('{projectType}', [ProjectTypeController::class, 'destroy'])->whereNumber('projectType')->name('destroy');
+        Route::patch('{projectType}/toggle', [ProjectTypeController::class, 'toggle'])->whereNumber('projectType')->name('toggle');
+        Route::patch('{projectType}/reassign', [ProjectTypeController::class, 'reassign'])->whereNumber('projectType')->name('reassign');
+    });
+
+    Route::prefix('project-statuses')->name('admin.project-statuses.')->group(function () {
+        Route::get('/', [ProjectStatusController::class, 'index'])->name('index');
+        Route::get('create', [ProjectStatusController::class, 'create'])->name('create');
+        Route::post('/', [ProjectStatusController::class, 'store'])->name('store');
+        Route::patch('reorder', [ProjectStatusController::class, 'reorder'])->name('reorder');
+        Route::get('{projectStatus}/edit', [ProjectStatusController::class, 'edit'])->whereNumber('projectStatus')->name('edit');
+        Route::put('{projectStatus}', [ProjectStatusController::class, 'update'])->whereNumber('projectStatus')->name('update');
+        Route::delete('{projectStatus}', [ProjectStatusController::class, 'destroy'])->whereNumber('projectStatus')->name('destroy');
+        Route::patch('{projectStatus}/toggle', [ProjectStatusController::class, 'toggle'])->whereNumber('projectStatus')->name('toggle');
+        Route::patch('{projectStatus}/reassign', [ProjectStatusController::class, 'reassign'])->whereNumber('projectStatus')->name('reassign');
     });
 });
