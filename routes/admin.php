@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Contact\ContactSocialLinkController;
 use App\Http\Controllers\Admin\Contact\ContactSubmissionController;
 use App\Http\Controllers\Admin\Contact\ContactSubmissionNoteController;
 use App\Http\Controllers\Admin\Contact\ContactTeamController;
+use App\Http\Controllers\Admin\Legal\LegalPageController as AdminLegalPageController;
 use App\Http\Controllers\Admin\Site\SiteThemeController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,17 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::prefix('site')->name('admin.site.')->group(function () {
         Route::get('appearance', [SiteThemeController::class, 'edit'])->name('appearance.edit');
         Route::put('appearance', [SiteThemeController::class, 'update'])->name('appearance.update');
+    });
+
+    Route::prefix('legal')->name('admin.legal.')->group(function () {
+        Route::get('/', [AdminLegalPageController::class, 'index'])->name('index');
+        Route::get('create', [AdminLegalPageController::class, 'create'])->name('create');
+        Route::post('/', [AdminLegalPageController::class, 'store'])->name('store');
+        Route::get('{page}/edit', [AdminLegalPageController::class, 'edit'])->whereNumber('page')->name('edit');
+        Route::put('{page}', [AdminLegalPageController::class, 'update'])->whereNumber('page')->name('update');
+        Route::delete('{page}', [AdminLegalPageController::class, 'destroy'])->whereNumber('page')->name('destroy');
+        Route::patch('{page}/publish', [AdminLegalPageController::class, 'publish'])->whereNumber('page')->name('publish');
+        Route::patch('{page}/unpublish', [AdminLegalPageController::class, 'unpublish'])->whereNumber('page')->name('unpublish');
     });
 
     Route::prefix('about')->name('admin.about.')->group(function () {

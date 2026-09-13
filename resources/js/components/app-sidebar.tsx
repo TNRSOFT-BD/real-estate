@@ -1,13 +1,10 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
-    BookOpen,
     Building2,
-    Folder,
     HelpCircle,
     Inbox,
     Info,
@@ -18,6 +15,7 @@ import {
     Map,
     MessageCircle,
     Palette,
+    Scale,
     Settings,
     Share2,
     Users,
@@ -88,6 +86,14 @@ const siteNavItems: NavItem[] = [
     },
 ];
 
+const legalNavItems: NavItem[] = [
+    {
+        title: 'Legal Pages',
+        url: '/admin/legal',
+        icon: Scale,
+    },
+];
+
 const aboutNavItems: NavItem[] = [
     {
         title: 'Page Settings',
@@ -121,25 +127,10 @@ const aboutNavItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
-];
-
 export function AppSidebar() {
-    const page = usePage();
-
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar collapsible="offcanvas" variant="inset">
+            <SidebarHeader className="h-16 justify-center border-b border-sidebar-border/60 px-3">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -151,62 +142,19 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
-                <NavMain items={mainNavItems} />
-
-                <SidebarGroup className="px-2 py-0">
-                    <SidebarGroupLabel>About Us</SidebarGroupLabel>
-                    <SidebarMenu>
-                        {aboutNavItems.map((item) => (
-                            <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton asChild isActive={page.url === item.url || page.url.startsWith(`${item.url}/`)}>
-                                    <Link href={item.url} prefetch>
-                                        {item.icon && <item.icon />}
-                                        <span>{item.title}</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        ))}
-                    </SidebarMenu>
-                </SidebarGroup>
-
-                <SidebarGroup className="px-2 py-0">
-                    <SidebarGroupLabel>Site</SidebarGroupLabel>
-                    <SidebarMenu>
-                        {siteNavItems.map((item) => (
-                            <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton asChild isActive={page.url === item.url || page.url.startsWith(`${item.url}/`)}>
-                                    <Link href={item.url} prefetch>
-                                        {item.icon && <item.icon />}
-                                        <span>{item.title}</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        ))}
-                    </SidebarMenu>
-                </SidebarGroup>
-
-                <SidebarGroup className="px-2 py-0">
-                    <SidebarGroupLabel>Contact Module</SidebarGroupLabel>
-                    <SidebarMenu>
-                        {contactNavItems.map((item) => (
-                            <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton asChild isActive={page.url === item.url || page.url.startsWith(`${item.url}/`)}>
-                                    <Link href={item.url} prefetch>
-                                        {item.icon && <item.icon />}
-                                        <span>{item.title}</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        ))}
-                    </SidebarMenu>
-                </SidebarGroup>
+            <SidebarContent className="pt-2">
+                <NavMain label="Platform" items={mainNavItems} collapsible={false} />
+                <NavMain label="About Us" items={aboutNavItems} />
+                <NavMain label="Website Settings" items={siteNavItems} collapsible={false} />
+                <NavMain label="Legal" items={legalNavItems} collapsible={false} />
+                <NavMain label="Contact Module" items={contactNavItems} />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
+
+            <SidebarRail />
         </Sidebar>
     );
 }

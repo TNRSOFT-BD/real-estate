@@ -198,7 +198,14 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         <p className="text-ink-soft">
                             &copy; {new Date().getFullYear()} {name}. All rights reserved.
                         </p>
-                        <p className="text-ink-soft">Built for modern living.</p>
+                        <nav className="flex items-center gap-6" aria-label="Legal">
+                            <Link href={route('privacy-policy')} className="text-ink-soft hover:text-ink transition-colors">
+                                Privacy Policy
+                            </Link>
+                            <Link href={route('terms-conditions')} className="text-ink-soft hover:text-ink transition-colors">
+                                Terms &amp; Conditions
+                            </Link>
+                        </nav>
                     </div>
                 </div>
             </footer>

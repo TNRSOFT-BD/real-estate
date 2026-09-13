@@ -30,7 +30,11 @@ class CompanyProfileController extends Controller
     {
         $this->authorize('update', CompanyProfile::class);
 
-        $this->profileService->update($request->safe()->except('logo'), $request->file('logo'));
+        $this->profileService->update(
+            $request->safe()->except(['logo', 'favicon']),
+            $request->file('logo'),
+            $request->file('favicon'),
+        );
 
         return back()->with('success', 'Company profile updated.');
     }

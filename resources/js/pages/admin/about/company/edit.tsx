@@ -16,6 +16,7 @@ interface CompanyProfileProps {
         name?: string | null;
         tagline?: string | null;
         logo?: string | null;
+        favicon?: string | null;
     };
     flash?: FlashAlert;
 }
@@ -35,15 +36,18 @@ export default function CompanyProfileEdit({ profile, flash }: CompanyProfilePro
         name: str(profile.name),
         tagline: str(profile.tagline),
         logo: null,
+        favicon: null,
     });
 
     const currentLogo = mediaUrl(str(profile.logo));
+    const currentFavicon = mediaUrl(str(profile.favicon));
 
     const submit = (event: React.FormEvent) => {
         event.preventDefault();
         transform((formData) => {
             const clean: ProfileForm = { ...formData, _method: 'put' as string };
             if (!(clean.logo instanceof File)) delete clean.logo;
+            if (!(clean.favicon instanceof File)) delete clean.favicon;
             return clean;
         });
         post(route('admin.about.company.update'), { forceFormData: true, preserveScroll: true });
@@ -99,6 +103,33 @@ export default function CompanyProfileEdit({ profile, flash }: CompanyProfilePro
                                 )}
 
                                 {errors.logo && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.logo}</p>}
+                            </div>
+
+                            <div>
+                                <label className="text-sm font-medium">
+                                    Favicon
+                                    <input
+                                        type="file"
+                                        accept=".png,.jpg,.jpeg,.webp,.ico,image/*"
+                                        onChange={(event) => setData('favicon', event.target.files?.[0] ?? null)}
+                                        className="text-muted-foreground file:bg-muted mt-2 flex h-10 w-full cursor-pointer items-center text-sm file:mr-3 file:cursor-pointer file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
+                                    />
+                                </label>
+
+                                <p className="text-muted-foreground mt-1 text-xs">
+                                    Shown in the browser tab. PNG, JPG, WebP or ICO, up to 1&nbsp;MB.
+                                </p>
+
+                                {data.favicon instanceof File && <p className="text-muted-foreground mt-1 text-xs">New file: {data.favicon.name}</p>}
+
+                                {currentFavicon && !(data.favicon instanceof File) && (
+                                    <div className="mt-3">
+                                        <p className="text-muted-foreground text-xs">Current favicon</p>
+                                        <img src={currentFavicon} alt="" className="mt-1 size-8 border object-contain p-0.5" />
+                                    </div>
+                                )}
+
+                                {errors.favicon && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.favicon}</p>}
                             </div>
                         </CardContent>
                     </Card>

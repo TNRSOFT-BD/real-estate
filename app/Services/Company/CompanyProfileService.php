@@ -30,6 +30,7 @@ class CompanyProfileService
                     'name' => $profile->name ?: config('app.name'),
                     'tagline' => $profile->tagline,
                     'logo' => $profile->logo,
+                    'favicon' => $profile->favicon,
                 ];
             },
         );
@@ -41,16 +42,25 @@ class CompanyProfileService
             'name',
             'tagline',
             'logo',
+            'favicon',
         ]);
     }
 
-    public function update(array $data, ?UploadedFile $logo = null): void
+    public function update(array $data, ?UploadedFile $logo = null, ?UploadedFile $favicon = null): void
     {
         if ($logo instanceof UploadedFile) {
             $stored = $this->mediaService->replace($this->repository->getSingleton()->logo, $logo, 'company/logo');
 
             if ($stored !== null) {
                 $data['logo'] = $stored;
+            }
+        }
+
+        if ($favicon instanceof UploadedFile) {
+            $stored = $this->mediaService->replace($this->repository->getSingleton()->favicon, $favicon, 'company/favicon');
+
+            if ($stored !== null) {
+                $data['favicon'] = $stored;
             }
         }
 

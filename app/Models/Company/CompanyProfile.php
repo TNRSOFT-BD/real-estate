@@ -17,6 +17,7 @@ class CompanyProfile extends Model
         'name',
         'tagline',
         'logo',
+        'favicon',
     ];
 
     public static function singleton(): self

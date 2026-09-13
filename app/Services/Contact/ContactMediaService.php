@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class ContactMediaService
 {
-    private const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+    private const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon'];
 
     private const MAX_SIZE_KB = 2048;
 

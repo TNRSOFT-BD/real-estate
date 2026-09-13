@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @plugin 'tailwindcss-animate';
+@plugin '@tailwindcss/typography';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
@@ -97,6 +98,7 @@
 }
 
 :root {
+    color-scheme: light;
     --background: hsl(0, 0%, 100%);
     --foreground: hsl(0, 0%, 3.9%);
     --card: hsl(0, 0%, 100%);
@@ -142,6 +144,7 @@
 }
 
 .site-dark {
+    color-scheme: dark;
     --ink: #f5f3ef;
     --ink-soft: rgba(245, 243, 239, 0.64);
     --line: rgba(255, 255, 255, 0.14);

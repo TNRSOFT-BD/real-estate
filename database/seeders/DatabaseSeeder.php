@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             SiteSettingSeeder::class,
             ContactSeeder::class,
             AboutSeeder::class,
+            LegalPageSeeder::class,
         ]);
     }
 }

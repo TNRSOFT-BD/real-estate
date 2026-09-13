@@ -11,7 +11,7 @@ import { Loader2, Save } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Site', href: '/admin/site/appearance' },
+    { title: 'Website Settings', href: '/admin/site/appearance' },
     { title: 'Appearance', href: '/admin/site/appearance' },
 ];
 
@@ -68,7 +68,7 @@ export default function AppearanceEdit({ settings, flash }: SiteAppearanceProps)
         <AppLayout breadcrumbs={breadcrumbs}>
             <form onSubmit={submit} className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
                 <AdminPageHeader
-                    title="Site Appearance"
+                    title="Website Appearance"
                     description="Control the public site background colour and text mode."
                     flash={flash}
                 />

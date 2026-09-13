@@ -4,7 +4,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        @php($companyProfile = app(\App\Services\Company\CompanyProfileService::class)->getProfile() ?? [])
+
+        <title inertia>{{ $companyProfile['name'] ?? '' }}</title>
+
+        @if (! empty($companyProfile['favicon']))
+            <link rel="icon" href="{{ asset('storage/'.ltrim($companyProfile['favicon'], '/')) }}">
+        @endif
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />

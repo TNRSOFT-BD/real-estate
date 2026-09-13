@@ -19,6 +19,7 @@ class UpdateCompanyProfileRequest extends FormRequest
             'name' => ['nullable', 'string', 'max:100'],
             'tagline' => ['nullable', 'string', 'max:160'],
             'logo' => ['nullable', 'image', 'mimes:jpeg,png,webp,svg', 'max:4096'],
+            'favicon' => ['nullable', 'file', 'mimes:jpeg,png,webp,ico', 'max:1024'],
         ];
     }
 }

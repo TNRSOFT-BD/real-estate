@@ -5,19 +5,23 @@ namespace App\Providers;
 use App\Enums\AboutPermission;
 use App\Enums\CompanyPermission;
 use App\Enums\ContactPermission;
+use App\Enums\LegalPermission;
 use App\Enums\SitePermission;
 use App\Models\User;
 use App\Models\About\AboutItem;
 use App\Models\About\AboutPageSetting;
 use App\Models\Company\CompanyProfile;
+use App\Models\Legal\LegalPage;
 use App\Models\Site\SiteSetting;
 use App\Policies\AboutItemPolicy;
 use App\Policies\AboutPageSettingsPolicy;
 use App\Policies\CompanyProfilePolicy;
+use App\Policies\LegalPagePolicy;
 use App\Policies\SiteThemePolicy;
 use App\Repositories\Contracts\About\AboutItemRepositoryInterface;
 use App\Repositories\Contracts\About\AboutPageSettingRepositoryInterface;
 use App\Repositories\Contracts\Company\CompanyProfileRepositoryInterface;
+use App\Repositories\Contracts\Legal\LegalPageRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactFaqRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactFormFieldRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactInformationRepositoryInterface;
@@ -40,6 +44,7 @@ use App\Repositories\Eloquent\Contact\EloquentContactTeamMemberRepository;
 use App\Repositories\Eloquent\About\EloquentAboutPageSettingRepository;
 use App\Repositories\Eloquent\About\EloquentAboutItemRepository;
 use App\Repositories\Eloquent\Company\EloquentCompanyProfileRepository;
+use App\Repositories\Eloquent\Legal\EloquentLegalPageRepository;
 use App\Repositories\Eloquent\Site\EloquentSiteSettingRepository;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -68,6 +73,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(CompanyProfileRepositoryInterface::class, EloquentCompanyProfileRepository::class);
 
+        $this->app->bind(LegalPageRepositoryInterface::class, EloquentLegalPageRepository::class);
+
         $this->app->bind(SiteSettingRepositoryInterface::class, EloquentSiteSettingRepository::class);
     }
 
@@ -80,6 +87,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(AboutPageSetting::class, AboutPageSettingsPolicy::class);
         Gate::policy(AboutItem::class, AboutItemPolicy::class);
         Gate::policy(CompanyProfile::class, CompanyProfilePolicy::class);
+        Gate::policy(LegalPage::class, LegalPagePolicy::class);
 
         Gate::before(function (User $user) {
             if ($user->isAdministrator()) {
@@ -102,6 +110,10 @@ class AppServiceProvider extends ServiceProvider
         }
 
         foreach (CompanyPermission::all() as $permission) {
+            Gate::define($permission, fn (User $user) => $user->hasPermission($permission));
+        }
+
+        foreach (LegalPermission::all() as $permission) {
             Gate::define($permission, fn (User $user) => $user->hasPermission($permission));
         }
 

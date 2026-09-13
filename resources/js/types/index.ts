@@ -27,6 +27,7 @@ export interface CompanyIdentity {
     name: string;
     tagline: string | null;
     logo: string | null;
+    favicon: string | null;
 }
 
 export interface SharedData {
