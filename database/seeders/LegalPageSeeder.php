@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Enums\LegalPageStatus;
-use App\Enums\LegalPageType;
 use App\Models\Legal\LegalPage;
 use Illuminate\Database\Seeder;
 
@@ -14,7 +13,6 @@ class LegalPageSeeder extends Seeder
     public function run(): void
     {
         LegalPage::updateOrCreate(['slug' => 'privacy-policy'], [
-            'type' => LegalPageType::PrivacyPolicy->value,
             'title' => 'Privacy Policy',
             'status' => LegalPageStatus::Published->value,
             'published_at' => now(),
@@ -40,7 +38,6 @@ class LegalPageSeeder extends Seeder
         ]);
 
         LegalPage::updateOrCreate(['slug' => 'terms-and-conditions'], [
-            'type' => LegalPageType::TermsConditions->value,
             'title' => 'Terms & Conditions',
             'status' => LegalPageStatus::Published->value,
             'published_at' => now(),

@@ -3,11 +3,11 @@
 namespace Tests\Feature\Legal;
 
 use App\Enums\LegalPageStatus;
-use App\Enums\LegalPageType;
 use App\Models\Legal\LegalPage;
 use App\Models\User;
 use App\Services\Legal\LegalContentSanitizer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class LegalPageTest extends TestCase
@@ -22,7 +22,6 @@ class LegalPageTest extends TestCase
     private function makePage(array $overrides = []): LegalPage
     {
         return LegalPage::create(array_merge([
-            'type' => LegalPageType::PrivacyPolicy->value,
             'title' => 'Privacy Policy',
             'slug' => 'privacy-policy',
             'content' => '<p>Hello</p>',
@@ -36,13 +35,11 @@ class LegalPageTest extends TestCase
         $this->get(route('admin.legal.index'))->assertRedirect('/login');
     }
 
-    public function test_admin_can_create_a_privacy_policy(): void
+    public function test_admin_can_create_a_page_with_an_auto_generated_slug(): void
     {
         $this->actingAs($this->admin())
             ->post(route('admin.legal.store'), [
-                'type' => 'privacy_policy',
                 'title' => 'Privacy Policy',
-                'slug' => 'privacy-policy',
                 'content' => '<p>Content</p>',
                 'status' => 'published',
             ])
@@ -51,11 +48,10 @@ class LegalPageTest extends TestCase
         $this->assertDatabaseHas('legal_pages', ['slug' => 'privacy-policy', 'status' => 'published']);
     }
 
-    public function test_slug_is_generated_from_title_when_omitted(): void
+    public function test_slug_is_generated_from_the_title(): void
     {
         $this->actingAs($this->admin())
             ->post(route('admin.legal.store'), [
-                'type' => 'terms_conditions',
                 'title' => 'Terms & Conditions',
                 'content' => '<p>Terms</p>',
                 'status' => 'draft',
@@ -64,32 +60,41 @@ class LegalPageTest extends TestCase
         $this->assertDatabaseHas('legal_pages', ['slug' => 'terms-conditions']);
     }
 
-    public function test_content_is_required_when_publishing(): void
-    {
-        $this->actingAs($this->admin())
-            ->post(route('admin.legal.store'), [
-                'type' => 'privacy_policy',
-                'title' => 'Privacy',
-                'slug' => 'privacy-x',
-                'content' => '',
-                'status' => 'published',
-            ])
-            ->assertSessionHasErrors('content');
-    }
-
-    public function test_duplicate_slug_is_rejected(): void
+    public function test_duplicate_titles_get_a_unique_slug(): void
     {
         $this->makePage(['slug' => 'privacy-policy']);
 
         $this->actingAs($this->admin())
             ->post(route('admin.legal.store'), [
-                'type' => 'terms_conditions',
-                'title' => 'Other',
-                'slug' => 'privacy-policy',
+                'title' => 'Privacy Policy',
                 'content' => '<p>x</p>',
                 'status' => 'draft',
+            ]);
+
+        $this->assertDatabaseHas('legal_pages', ['slug' => 'privacy-policy-2']);
+    }
+
+    public function test_reserved_slugs_are_skipped(): void
+    {
+        $this->actingAs($this->admin())
+            ->post(route('admin.legal.store'), [
+                'title' => 'Login',
+                'content' => '<p>x</p>',
+                'status' => 'draft',
+            ]);
+
+        $this->assertDatabaseHas('legal_pages', ['slug' => 'login-2']);
+    }
+
+    public function test_content_is_required_when_publishing(): void
+    {
+        $this->actingAs($this->admin())
+            ->post(route('admin.legal.store'), [
+                'title' => 'Privacy',
+                'content' => '',
+                'status' => 'published',
             ])
-            ->assertSessionHasErrors('slug');
+            ->assertSessionHasErrors('content');
     }
 
     public function test_admin_can_update_and_delete(): void
@@ -99,18 +104,28 @@ class LegalPageTest extends TestCase
 
         $this->actingAs($admin)
             ->put(route('admin.legal.update', $page), [
-                'type' => 'privacy_policy',
                 'title' => 'Privacy Policy (updated)',
-                'slug' => 'privacy-policy',
                 'content' => '<p>Updated</p>',
                 'status' => 'published',
             ])
             ->assertRedirect();
 
-        $this->assertDatabaseHas('legal_pages', ['id' => $page->id, 'title' => 'Privacy Policy (updated)']);
+        $this->assertDatabaseHas('legal_pages', [
+            'id' => $page->id,
+            'title' => 'Privacy Policy (updated)',
+            'slug' => 'privacy-policy-updated',
+        ]);
 
         $this->actingAs($admin)->delete(route('admin.legal.destroy', $page))->assertRedirect(route('admin.legal.index'));
         $this->assertSoftDeleted('legal_pages', ['id' => $page->id]);
+    }
+
+    public function test_the_public_url_follows_the_slug(): void
+    {
+        $this->makePage(['title' => 'Privacy', 'slug' => 'privacy']);
+
+        $this->get('/privacy')->assertOk()->assertSee('Privacy', false);
+        $this->get('/privacy-policy')->assertNotFound();
     }
 
     public function test_draft_is_not_public(): void
@@ -140,9 +155,7 @@ class LegalPageTest extends TestCase
     public function test_content_is_sanitized_on_save(): void
     {
         $this->actingAs($this->admin())->post(route('admin.legal.store'), [
-            'type' => 'privacy_policy',
-            'title' => 'Privacy',
-            'slug' => 'privacy-sanitize',
+            'title' => 'Privacy Sanitize',
             'status' => 'draft',
             'content' => '<p onclick="evil()">Hi</p><script>alert(1)</script><a href="javascript:alert(1)">x</a>',
         ]);
@@ -163,9 +176,7 @@ class LegalPageTest extends TestCase
 
         $this->actingAs($this->admin())
             ->post(route('admin.legal.store'), [
-                'type' => 'terms_conditions',
-                'title' => 'Terms',
-                'slug' => 'terms-formatting',
+                'title' => 'Terms Formatting',
                 'status' => 'draft',
                 'content' => $content,
             ])
@@ -181,18 +192,20 @@ class LegalPageTest extends TestCase
         }
     }
 
-    public function test_footer_contains_legal_links_and_pages_resolve(): void
+    public function test_footer_links_follow_the_slug(): void
     {
-        $this->makePage(['slug' => 'privacy-policy']);
-        $this->makePage(['type' => 'terms_conditions', 'slug' => 'terms-and-conditions', 'title' => 'Terms & Conditions']);
+        $this->makePage(['title' => 'Privacy', 'slug' => 'privacy']);
+        $this->makePage(['title' => 'Terms', 'slug' => 'terms']);
 
         $this->get('/about')
             ->assertOk()
-            ->assertSee('privacy-policy', false)
-            ->assertSee('terms-conditions', false);
+            ->assertInertia(fn (Assert $page) => $page->where('footer.legal', [
+                ['title' => 'Privacy', 'slug' => 'privacy'],
+                ['title' => 'Terms', 'slug' => 'terms'],
+            ]));
 
-        $this->get('/privacy-policy')->assertOk()->assertSee('Privacy Policy', false);
-        $this->get('/terms-and-conditions')->assertOk()->assertSee('Terms', false);
+        $this->get('/privacy')->assertOk()->assertSee('Privacy', false);
+        $this->get('/terms')->assertOk()->assertSee('Terms', false);
     }
 
     public function test_sanitizer_blocks_dangerous_markup_and_styles(): void

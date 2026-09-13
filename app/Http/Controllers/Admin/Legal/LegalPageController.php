@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\Legal;
 
-use App\Enums\LegalPageType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Legal\StoreLegalPageRequest;
 use App\Http\Requests\Legal\UpdateLegalPageRequest;
@@ -27,9 +26,8 @@ class LegalPageController extends Controller
         $this->authorize('viewAny', LegalPage::class);
 
         return Inertia::render('admin/legal/index', [
-            'items' => $this->repository->paginate($request->only(['search', 'type', 'status'])),
-            'filters' => (object) $request->only(['search', 'type', 'status']),
-            'types' => $this->typeOptions(),
+            'items' => $this->repository->paginate($request->only(['search', 'status'])),
+            'filters' => (object) $request->only(['search', 'status']),
         ]);
     }
 
@@ -37,9 +35,7 @@ class LegalPageController extends Controller
     {
         $this->authorize('create', LegalPage::class);
 
-        return Inertia::render('admin/legal/create', [
-            'types' => $this->typeOptions(),
-        ]);
+        return Inertia::render('admin/legal/create');
     }
 
     public function store(StoreLegalPageRequest $request)
@@ -55,7 +51,6 @@ class LegalPageController extends Controller
 
         return Inertia::render('admin/legal/edit', [
             'page' => $page,
-            'types' => $this->typeOptions(),
         ]);
     }
 
@@ -91,17 +86,5 @@ class LegalPageController extends Controller
         $this->service->unpublish($page);
 
         return back()->with('success', 'Legal page unpublished.');
-    }
-
-    private function typeOptions(): array
-    {
-        return array_map(
-            fn (LegalPageType $type) => [
-                'value' => $type->value,
-                'label' => $type->label(),
-                'slug' => $type->slug(),
-            ],
-            LegalPageType::cases(),
-        );
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use App\Services\Company\CompanyProfileService;
 use App\Services\Contact\ContactPageService;
+use App\Services\Legal\LegalPageService;
 use App\Services\Site\SiteThemeService;
 use Inertia\Middleware;
 
@@ -51,6 +52,7 @@ class HandleInertiaRequests extends Middleware
             'footer' => fn (): array => [
                 'information' => app(ContactPageService::class)->getActiveInformation(),
                 'socialLinks' => app(ContactPageService::class)->getActiveSocialLinks(),
+                'legal' => app(LegalPageService::class)->getFooterPages(),
             ],
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [

@@ -7,22 +7,14 @@ export interface LegalPublicPage {
 }
 
 export interface LegalShowProps {
-    type: string;
     page: LegalPublicPage;
     [key: string]: unknown;
 }
 
 export type LegalStatus = 'draft' | 'published';
 
-export interface LegalTypeOption {
-    value: string;
-    label: string;
-    slug: string;
-}
-
 export interface AdminLegalItem {
     id: number;
-    type: string;
     title: string;
     slug: string;
     content?: string | null;
@@ -30,4 +22,9 @@ export interface AdminLegalItem {
     published_at?: string | null;
     created_at: string;
     updated_at: string;
+}
+
+export interface LegalFooterLink {
+    title: string;
+    slug: string;
 }

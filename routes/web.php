@@ -23,9 +23,10 @@ Route::get('about', [AboutController::class, 'show'])->name('about.show');
 Route::get('contact', [ContactController::class, 'show'])->name('contact.show');
 Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:contact-submit')->name('contact.store');
 
-Route::get('privacy-policy', [LegalPageController::class, 'show'])->defaults('type', 'privacy_policy')->name('privacy-policy');
-Route::get('terms-and-conditions', [LegalPageController::class, 'show'])->defaults('type', 'terms_conditions')->name('terms-conditions');
-
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
+
+Route::get('{slug}', [LegalPageController::class, 'show'])
+    ->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
+    ->name('legal.show');

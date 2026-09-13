@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models\Legal;
 
 use App\Enums\LegalPageStatus;
-use App\Enums\LegalPageType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +18,6 @@ class LegalPage extends Model
     protected $table = 'legal_pages';
 
     protected $fillable = [
-        'type',
         'title',
         'slug',
         'content',
@@ -28,7 +26,6 @@ class LegalPage extends Model
     ];
 
     protected $casts = [
-        'type' => LegalPageType::class,
         'status' => LegalPageStatus::class,
         'published_at' => 'datetime',
     ];
@@ -36,11 +33,6 @@ class LegalPage extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status', LegalPageStatus::Published->value);
-    }
-
-    public function scopeOfType(Builder $query, LegalPageType $type): Builder
-    {
-        return $query->where('type', $type->value);
     }
 
     public function isPublished(): bool

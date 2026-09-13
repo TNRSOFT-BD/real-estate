@@ -1,6 +1,7 @@
 import { LucideIcon } from 'lucide-react';
 import { type SiteTheme } from './site';
 import { type ContactInformation, type ContactSocialLink } from './contact';
+import { type LegalFooterLink } from './legal';
 
 export interface Auth {
     user: User;
@@ -37,6 +38,7 @@ export interface SharedData {
     footer: {
         information: ContactInformation[];
         socialLinks: ContactSocialLink[];
+        legal: LegalFooterLink[];
     };
     quote: { message: string; author: string };
     auth: Auth;

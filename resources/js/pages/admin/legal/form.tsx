@@ -4,13 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { type AdminLegalItem, type LegalTypeOption } from '@/types/legal';
+import { type AdminLegalItem } from '@/types/legal';
 import { router, useForm } from '@inertiajs/react';
 import { ArrowLeft, Loader2, Save } from 'lucide-react';
 
 interface LegalPageFormProps {
     page?: AdminLegalItem;
-    types: LegalTypeOption[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -22,16 +21,26 @@ function str(value: unknown): string {
     return typeof value === 'string' ? value : value == null ? '' : String(value);
 }
 
-export default function LegalPageForm({ page, types }: LegalPageFormProps) {
+function slugify(value: string): string {
+    return value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+}
+
+export default function LegalPageForm({ page }: LegalPageFormProps) {
     const isEdit = Boolean(page);
 
     const { data, setData, post, put, processing, errors } = useForm({
-        type: str(page?.type) || types[0]?.value || 'privacy_policy',
         title: str(page?.title),
-        slug: str(page?.slug),
         status: str(page?.status) || 'draft',
         content: str(page?.content),
     });
+
+    const slug = slugify(data.title);
 
     const submit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -49,7 +58,7 @@ export default function LegalPageForm({ page, types }: LegalPageFormProps) {
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <h1 className="text-2xl font-semibold tracking-tight">{isEdit ? 'Edit' : 'Create'} Legal Page</h1>
-                        <p className="text-muted-foreground mt-1 text-sm">Manage the Privacy Policy and Terms &amp; Conditions content.</p>
+                        <p className="text-muted-foreground mt-1 text-sm">Manage the content shown on the public legal pages.</p>
                     </div>
                     <Button type="button" variant="outline" onClick={() => router.visit(route('admin.legal.index'))}>
                         <ArrowLeft />
@@ -61,17 +70,9 @@ export default function LegalPageForm({ page, types }: LegalPageFormProps) {
                     <Card>
                         <CardHeader>
                             <CardTitle>Page</CardTitle>
-                            <CardDescription>Type, title, slug and publishing status.</CardDescription>
+                            <CardDescription>Title and publishing status. The URL is generated from the title.</CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-5 sm:grid-cols-2">
-                            <SelectField
-                                label="Page type"
-                                value={data.type}
-                                onChange={(value) => setData('type', value)}
-                                options={types.map((type) => ({ value: type.value, label: type.label }))}
-                                error={errors.type}
-                                required
-                            />
                             <SelectField
                                 label="Status"
                                 value={data.status}
@@ -84,7 +85,15 @@ export default function LegalPageForm({ page, types }: LegalPageFormProps) {
                                 required
                             />
                             <TextField label="Title" value={data.title} onChange={(value) => setData('title', value)} error={errors.title} required />
-                            <TextField label="Slug" value={data.slug} onChange={(value) => setData('slug', value)} error={errors.slug} hint="Lowercase words separated by hyphens." />
+                            <div className="grid gap-2 sm:col-span-2">
+                                <span className="text-sm font-medium">Public URL</span>
+                                <div className="border-input bg-muted/40 text-muted-foreground flex h-10 items-center rounded-md border px-3 text-sm">
+                                    <span className="truncate">/{slug || '…'}</span>
+                                </div>
+                                <p className="text-muted-foreground text-xs">
+                                    Generated from the title. A numeric suffix is added automatically if the URL is already taken.
+                                </p>
+                            </div>
                         </CardContent>
                     </Card>
 

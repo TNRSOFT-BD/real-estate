@@ -34,6 +34,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
     const information = footer?.information ?? [];
     const socialLinks = footer?.socialLinks ?? [];
+    const legalLinks = footer?.legal ?? [];
     const firstOfType = (types: string[]) => information.find((item) => types.includes(item.type));
     const address = firstOfType(['address']);
     const phone = firstOfType(['hotline', 'phone']);
@@ -198,14 +199,15 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         <p className="text-ink-soft">
                             &copy; {new Date().getFullYear()} {name}. All rights reserved.
                         </p>
-                        <nav className="flex items-center gap-6" aria-label="Legal">
-                            <Link href={route('privacy-policy')} className="text-ink-soft hover:text-ink transition-colors">
-                                Privacy Policy
-                            </Link>
-                            <Link href={route('terms-conditions')} className="text-ink-soft hover:text-ink transition-colors">
-                                Terms &amp; Conditions
-                            </Link>
-                        </nav>
+                        {legalLinks.length > 0 && (
+                            <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2" aria-label="Legal">
+                                {legalLinks.map((page) => (
+                                    <Link key={page.slug} href={`/${page.slug}`} className="text-ink-soft hover:text-ink transition-colors">
+                                        {page.title}
+                                    </Link>
+                                ))}
+                            </nav>
+                        )}
                     </div>
                 </div>
             </footer>

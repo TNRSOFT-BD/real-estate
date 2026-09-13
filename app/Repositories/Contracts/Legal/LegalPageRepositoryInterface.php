@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repositories\Contracts\Legal;
 
-use App\Enums\LegalPageType;
 use App\Models\Legal\LegalPage;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface LegalPageRepositoryInterface
@@ -14,9 +14,7 @@ interface LegalPageRepositoryInterface
 
     public function findById(int $id): ?LegalPage;
 
-    public function findByType(LegalPageType $type): ?LegalPage;
-
-    public function findPublishedByType(LegalPageType $type): ?LegalPage;
+    public function allPublished(): Collection;
 
     public function create(array $data): LegalPage;
 

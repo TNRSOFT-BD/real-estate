@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { type Filters, type FlashAlert, type Paginator } from '@/types/contact-admin';
-import { type AdminLegalItem, type LegalTypeOption } from '@/types/legal';
+import { type AdminLegalItem } from '@/types/legal';
 import { Link, router } from '@inertiajs/react';
 import { Plus, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -15,7 +15,6 @@ import { useEffect, useState } from 'react';
 interface LegalIndexProps {
     items: Paginator<AdminLegalItem>;
     filters: Filters;
-    types: LegalTypeOption[];
     flash?: FlashAlert;
 }
 
@@ -24,16 +23,14 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Legal', href: '/admin/legal' },
 ];
 
-export default function LegalIndex({ items, filters, types, flash }: LegalIndexProps) {
+export default function LegalIndex({ items, filters, flash }: LegalIndexProps) {
     const pathname = window.location.pathname;
     const [search, setSearch] = useState(filters.search ?? '');
-    const [type, setType] = useState(filters.type ?? '');
     const [status, setStatus] = useState(filters.status ?? '');
 
     const applyFilters = () => {
         const params: Record<string, string> = {};
         if (search) params.search = search;
-        if (type) params.type = type;
         if (status) params.status = status;
         router.get(pathname, params, { preserveState: true, preserveScroll: true, replace: true });
     };
@@ -74,22 +71,6 @@ export default function LegalIndex({ items, filters, types, flash }: LegalIndexP
                                 <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search…" className="w-56 pl-9" aria-label="Search" />
                             </div>
                             <select
-                                value={type}
-                                onChange={(event) => {
-                                    setType(event.target.value);
-                                    setTimeout(applyFilters, 0);
-                                }}
-                                className="border-input bg-background h-10 rounded-md border px-3 text-sm"
-                                aria-label="Filter by type"
-                            >
-                                <option value="">All types</option>
-                                {types.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                            <select
                                 value={status}
                                 onChange={(event) => {
                                     setStatus(event.target.value);
@@ -111,7 +92,6 @@ export default function LegalIndex({ items, filters, types, flash }: LegalIndexP
                                 <thead className="bg-muted/40 border-b">
                                     <tr>
                                         <th className="text-muted-foreground px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase">Title</th>
-                                        <th className="text-muted-foreground px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase">Type</th>
                                         <th className="text-muted-foreground px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase">Status</th>
                                         <th className="text-muted-foreground px-4 py-3 text-right text-xs font-semibold tracking-wide uppercase">Actions</th>
                                     </tr>
@@ -122,9 +102,6 @@ export default function LegalIndex({ items, filters, types, flash }: LegalIndexP
                                             <td className="max-w-md px-4 py-3 text-sm font-medium">
                                                 <div className="truncate">{item.title}</div>
                                                 <div className="text-muted-foreground truncate text-xs">/{item.slug}</div>
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
-                                                <Badge variant="secondary">{types.find((option) => option.value === item.type)?.label ?? item.type}</Badge>
                                             </td>
                                             <td className="px-4 py-3 text-sm">
                                                 <Badge variant={item.status === 'published' ? 'default' : 'secondary'}>{item.status}</Badge>
