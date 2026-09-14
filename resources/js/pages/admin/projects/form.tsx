@@ -73,6 +73,9 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
         hero_banner: null as File | null,
         hero_banner_alt: str(project?.hero_banner_alt),
         remove_hero_banner: false as boolean,
+        at_a_glance_image: null as File | null,
+        at_a_glance_image_alt: str(project?.at_a_glance_image_alt),
+        remove_at_a_glance_image: false as boolean,
         brochure_pdf: null as File | null,
         remove_brochure_pdf: false as boolean,
         promo_video_url: str(project?.promo_video_url),
@@ -80,9 +83,6 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
         legal_approval_no: str(project?.legal_approval_no),
         legal_approval_document: null as File | null,
         remove_legal_approval_document: false as boolean,
-
-        developer_name: str(project?.developer_name),
-        developer_website: str(project?.developer_website),
 
         meta_title: str(project?.meta_title),
         meta_description: str(project?.meta_description),
@@ -258,6 +258,22 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                                 onChange={(file) => setData('hero_banner', file)}
                             />
                             <TextField label="Hero banner alt text" value={data.hero_banner_alt} onChange={(v) => setData('hero_banner_alt', v)} error={errors.hero_banner_alt} />
+                            <ImageUploadField
+                                label="At a glance image"
+                                currentSrc={project?.at_a_glance_image}
+                                file={data.at_a_glance_image}
+                                error={errors.at_a_glance_image}
+                                hint={imageHint}
+                                removeFlag={data.remove_at_a_glance_image}
+                                onToggleRemove={() => setData('remove_at_a_glance_image', !data.remove_at_a_glance_image)}
+                                onChange={(file) => setData('at_a_glance_image', file)}
+                            />
+                            <TextField
+                                label="At a glance image alt text"
+                                value={data.at_a_glance_image_alt}
+                                onChange={(v) => setData('at_a_glance_image_alt', v)}
+                                error={errors.at_a_glance_image_alt}
+                            />
                             <FileUploadField
                                 label="Brochure (PDF)"
                                 currentSrc={project?.brochure_pdf}
@@ -289,17 +305,6 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                                 onToggleRemove={() => setData('remove_legal_approval_document', !data.remove_legal_approval_document)}
                                 onChange={(file) => setData('legal_approval_document', file)}
                             />
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Developer</CardTitle>
-                            <CardDescription>Optional developer details.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="grid gap-5 sm:grid-cols-2">
-                            <TextField label="Developer name" value={data.developer_name} onChange={(v) => setData('developer_name', v)} error={errors.developer_name} />
-                            <TextField label="Developer website" value={data.developer_website} onChange={(v) => setData('developer_website', v)} error={errors.developer_website} />
                         </CardContent>
                     </Card>
 

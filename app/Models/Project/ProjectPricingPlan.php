@@ -25,7 +25,6 @@ class ProjectPricingPlan extends Model
         'booking_money',
         'down_payment_percentage',
         'installment_plan',
-        'floor_plan_image',
         'status',
         'sort_order',
         'is_featured',

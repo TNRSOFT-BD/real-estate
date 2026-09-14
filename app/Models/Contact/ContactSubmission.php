@@ -6,6 +6,7 @@ namespace App\Models\Contact;
 
 use App\Enums\SubmissionPriority;
 use App\Enums\SubmissionStatus;
+use App\Models\Project\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ class ContactSubmission extends Model
         'phone',
         'subject',
         'message',
+        'project_id',
         'form_data',
         'status',
         'priority',
@@ -37,6 +39,7 @@ class ContactSubmission extends Model
     protected $casts = [
         'form_data' => 'array',
         'assigned_to' => 'integer',
+        'project_id' => 'integer',
         'submitted_at' => 'datetime',
         'status' => SubmissionStatus::class,
         'priority' => SubmissionPriority::class,
@@ -50,5 +53,10 @@ class ContactSubmission extends Model
     public function assignee()
     {
         return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
     }
 }

@@ -17,7 +17,7 @@ class ProjectService
     /**
      * @var list<string>
      */
-    private const IMAGE_FIELDS = ['hero_banner', 'og_image', 'twitter_image'];
+    private const IMAGE_FIELDS = ['hero_banner', 'at_a_glance_image', 'og_image', 'twitter_image'];
 
     /**
      * @var list<string>
@@ -69,10 +69,6 @@ class ProjectService
 
         foreach ($project->galleries as $gallery) {
             $this->media->delete($gallery->image_path);
-        }
-
-        foreach ($project->pricingPlans as $plan) {
-            $this->media->delete($plan->floor_plan_image);
         }
 
         $slug = $project->slug;

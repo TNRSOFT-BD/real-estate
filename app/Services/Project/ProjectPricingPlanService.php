@@ -8,48 +8,23 @@ use App\Enums\PricingStatus;
 use App\Models\Project\Project;
 use App\Models\Project\ProjectPricingPlan;
 use App\Repositories\Contracts\Project\ProjectPricingPlanRepositoryInterface;
-use Illuminate\Http\UploadedFile;
 
 class ProjectPricingPlanService
 {
     public function __construct(
         private readonly ProjectPricingPlanRepositoryInterface $repository,
-        private readonly ProjectMediaService $media,
     ) {}
 
-    public function create(Project $project, array $data, ?UploadedFile $floorPlan = null): ProjectPricingPlan
+    public function create(Project $project, array $data): ProjectPricingPlan
     {
         $data['project_id'] = $project->id;
         $data['sort_order'] = (int) ($project->pricingPlans()->max('sort_order') ?? 0) + 1;
 
-        if ($floorPlan instanceof UploadedFile) {
-            $path = $this->media->uploadImage($floorPlan, 'projects/pricing');
-
-            if ($path !== null) {
-                $data['floor_plan_image'] = $path;
-            }
-        }
-
         return $this->repository->create($data);
     }
 
-    public function update(
-        ProjectPricingPlan $plan,
-        array $data,
-        ?UploadedFile $floorPlan = null,
-        bool $removeFloorPlan = false,
-    ): ProjectPricingPlan {
-        if ($floorPlan instanceof UploadedFile) {
-            $stored = $this->media->replaceImage($plan->floor_plan_image, $floorPlan, 'projects/pricing');
-
-            if ($stored !== null) {
-                $data['floor_plan_image'] = $stored;
-            }
-        } elseif ($removeFloorPlan) {
-            $this->media->delete($plan->floor_plan_image);
-            $data['floor_plan_image'] = null;
-        }
-
+    public function update(ProjectPricingPlan $plan, array $data): ProjectPricingPlan
+    {
         return $this->repository->update($plan, $data);
     }
 
@@ -65,7 +40,6 @@ class ProjectPricingPlanService
                 'booking_money',
                 'down_payment_percentage',
                 'installment_plan',
-                'floor_plan_image',
                 'status',
                 'is_featured',
             ]),
@@ -80,8 +54,6 @@ class ProjectPricingPlanService
 
     public function delete(ProjectPricingPlan $plan): void
     {
-        $this->media->delete($plan->floor_plan_image);
-
         $this->repository->delete($plan);
     }
 

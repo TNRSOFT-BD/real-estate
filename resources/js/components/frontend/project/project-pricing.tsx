@@ -1,8 +1,7 @@
-import Reveal from '@/components/frontend/glass/reveal';
-import SectionLabel from '@/components/frontend/glass/section-label';
 import { formatArea, formatMoney, formatNumber, statusLabel } from '@/lib/format';
 import { type CurrencyConfig, type ProjectPricingPlan } from '@/types/project';
 import { Star } from 'lucide-react';
+import ProjectSectionHeading from './project-section-heading';
 
 export default function ProjectPricing({ plans, currency }: { plans: ProjectPricingPlan[]; currency: CurrencyConfig }) {
     const validPlans = (plans ?? []).filter((plan) => plan.unit_type.trim() !== '');
@@ -12,57 +11,49 @@ export default function ProjectPricing({ plans, currency }: { plans: ProjectPric
     }
 
     return (
-        <section className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-24" aria-labelledby="project-pricing-title">
-            <Reveal>
-                <SectionLabel>Pricing &amp; availability</SectionLabel>
-            </Reveal>
-            <Reveal delay={80}>
-                <h2 id="project-pricing-title" className="text-ink mt-6 max-w-2xl text-3xl leading-[1.08] font-medium tracking-[-0.02em] sm:text-4xl">
-                    Units and investment
-                </h2>
-            </Reveal>
+        <div>
+            <ProjectSectionHeading id="project-pricing-title">Units and Availability</ProjectSectionHeading>
 
-            <div className="mt-12 space-y-4">
-                {validPlans.map((plan, index) => {
-                    const specs: Array<{ label: string; value: string | null }> = [
-                        { label: 'Size', value: formatArea(plan.size_sqft) },
-                        { label: `Price / sqft (${currency.code})`, value: formatMoney(plan.price_per_sqft, currency.symbol) },
-                        { label: `Total price (${currency.code})`, value: formatMoney(plan.total_price, currency.symbol) },
-                        { label: `Booking money (${currency.code})`, value: formatMoney(plan.booking_money, currency.symbol) },
-                        { label: 'Down payment', value: plan.down_payment_percentage ? `${formatNumber(plan.down_payment_percentage)}%` : null },
-                    ].filter((spec) => spec.value !== null);
-
-                    return (
-                        <Reveal key={plan.id} delay={index * 50}>
-                            <article
-                                className="border-line flex flex-col gap-6 border-b pb-8 lg:flex-row lg:items-start lg:justify-between"
-                                aria-label={plan.unit_type}
-                            >
-                                <div className="lg:w-1/4">
-                                    <div className="flex items-center gap-2">
-                                        <h3 className="text-ink text-xl font-medium tracking-[-0.01em]">{plan.unit_type}</h3>
-                                        {plan.is_featured && <Star className="text-ink size-4 fill-current" aria-label="Featured unit" />}
-                                    </div>
-                                    <span className="border-line text-ink-soft mt-3 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-medium tracking-[0.16em] uppercase">
+            <div className="border-line overflow-x-auto rounded-2xl border">
+                <table className="w-full min-w-[720px] border-collapse text-sm">
+                    <thead className="bg-glass/60 text-ink-soft border-line border-b text-left text-[11px] tracking-[0.14em] uppercase">
+                        <tr>
+                            <th className="px-5 py-4 font-medium">Unit type</th>
+                            <th className="px-5 py-4 font-medium">Size</th>
+                            <th className="px-5 py-4 font-medium">Price / sqft</th>
+                            <th className="px-5 py-4 font-medium">Total price</th>
+                            <th className="px-5 py-4 font-medium">Booking</th>
+                            <th className="px-5 py-4 font-medium">Down payment</th>
+                            <th className="px-5 py-4 font-medium">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {validPlans.map((plan) => (
+                            <tr key={plan.id} className="border-line hover:bg-glass/40 border-b last:border-0">
+                                <td className="px-5 py-4">
+                                    <span className="text-ink inline-flex items-center gap-2 font-medium">
+                                        {plan.unit_type}
+                                        {plan.is_featured && <Star className="text-ink size-3.5 fill-current" aria-label="Featured unit" />}
+                                    </span>
+                                    {plan.installment_plan && <p className="text-ink-soft mt-1 text-xs">Installment: {plan.installment_plan}</p>}
+                                </td>
+                                <td className="text-ink-soft px-5 py-4">{formatArea(plan.size_sqft) ?? '—'}</td>
+                                <td className="text-ink-soft px-5 py-4">{formatMoney(plan.price_per_sqft, currency.symbol) ?? '—'}</td>
+                                <td className="text-ink px-5 py-4 font-medium">{formatMoney(plan.total_price, currency.symbol) ?? '—'}</td>
+                                <td className="text-ink-soft px-5 py-4">{formatMoney(plan.booking_money, currency.symbol) ?? '—'}</td>
+                                <td className="text-ink-soft px-5 py-4">
+                                    {plan.down_payment_percentage ? `${formatNumber(plan.down_payment_percentage)}%` : '—'}
+                                </td>
+                                <td className="px-5 py-4">
+                                    <span className="border-line text-ink-soft inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-medium tracking-[0.14em] uppercase">
                                         {statusLabel(plan.status)}
                                     </span>
-                                </div>
-
-                                <dl className="grid flex-1 grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-3 lg:grid-cols-5">
-                                    {specs.map((spec) => (
-                                        <div key={spec.label}>
-                                            <dt className="text-ink-soft text-[11px] font-medium tracking-[0.18em] uppercase">{spec.label}</dt>
-                                            <dd className="text-ink mt-1.5 text-base font-medium">{spec.value}</dd>
-                                        </div>
-                                    ))}
-                                </dl>
-                            </article>
-
-                            {plan.installment_plan && <p className="text-ink-soft -mt-4 text-sm leading-relaxed">Installment: {plan.installment_plan}</p>}
-                        </Reveal>
-                    );
-                })}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
-        </section>
+        </div>
     );
 }

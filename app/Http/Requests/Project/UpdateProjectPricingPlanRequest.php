@@ -25,8 +25,6 @@ class UpdateProjectPricingPlanRequest extends FormRequest
             'booking_money' => ['nullable', 'numeric', 'min:0'],
             'down_payment_percentage' => ['nullable', 'numeric', 'between:0,100'],
             'installment_plan' => ['nullable', 'string', 'max:1000'],
-            'floor_plan_image' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:4096'],
-            'remove_floor_plan_image' => ['sometimes', 'boolean'],
             'status' => ['required', Rule::in(PricingStatus::all())],
             'is_featured' => ['sometimes', 'boolean'],
         ];

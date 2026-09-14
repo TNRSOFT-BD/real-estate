@@ -1,9 +1,9 @@
 import Reveal from '@/components/frontend/glass/reveal';
-import SectionLabel from '@/components/frontend/glass/section-label';
 import { mediaUrl } from '@/lib/media';
 import { type RelatedProject } from '@/types/project';
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight } from 'lucide-react';
+import ProjectSectionHeading from './project-section-heading';
 
 export default function RelatedProjects({ projects }: { projects: RelatedProject[] }) {
     if (projects.length === 0) {
@@ -11,15 +11,10 @@ export default function RelatedProjects({ projects }: { projects: RelatedProject
     }
 
     return (
-        <section className="border-line border-t" aria-labelledby="related-projects-title">
-            <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-24">
+        <section aria-labelledby="related-projects-title">
+            <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:py-9 lg:px-8 lg:py-12">
                 <Reveal>
-                    <SectionLabel>More projects</SectionLabel>
-                </Reveal>
-                <Reveal delay={80}>
-                    <h2 id="related-projects-title" className="text-ink mt-6 text-3xl leading-[1.08] font-medium tracking-[-0.02em] sm:text-4xl">
-                        Continue exploring
-                    </h2>
+                    <ProjectSectionHeading id="related-projects-title">Related Properties</ProjectSectionHeading>
                 </Reveal>
 
                 <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -46,13 +46,13 @@ class ProjectGalleryTest extends ProjectTestCase
 
         $this->actingAs($admin)
             ->put(route('admin.projects.gallery.update', ['project' => $project->id, 'gallery' => $first->id]), [
-                'type' => 'floor_plan',
+                'type' => 'interior',
                 'caption' => 'Ground floor',
-                'alt_text' => 'Ground floor plan',
+                'alt_text' => 'Ground floor',
             ])
             ->assertRedirect();
 
-        $this->assertDatabaseHas('project_galleries', ['id' => $first->id, 'type' => 'floor_plan', 'caption' => 'Ground floor']);
+        $this->assertDatabaseHas('project_galleries', ['id' => $first->id, 'type' => 'interior', 'caption' => 'Ground floor']);
 
         $this->actingAs($admin)
             ->patch(route('admin.projects.gallery.reorder', $project), ['ids' => [$second->id, $first->id]])

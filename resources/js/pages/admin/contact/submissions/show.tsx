@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { type Assignee, type ContactSubmissionItem, type ContactSubmissionNoteItem } from '@/types/contact-admin';
-import { router, useForm } from '@inertiajs/react';
+import { router, useForm, Link } from '@inertiajs/react';
 import { ArrowLeft, Loader2, Pencil, Save, Send, ShieldAlert, Trash, Undo2, User } from 'lucide-react';
 import { useState } from 'react';
 
@@ -212,6 +212,16 @@ export default function SubmissionShow({ submission, assignees = [] }: Submissio
                                     <>
                                         <div className="text-muted-foreground">Source</div>
                                         <div className="break-all">{submission.source}</div>
+                                    </>
+                                )}
+                                {submission.project && (
+                                    <>
+                                        <div className="text-muted-foreground">Project</div>
+                                        <div className="break-all">
+                                            <Link href={`/projects/${submission.project.slug}`} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                                                {submission.project.title}
+                                            </Link>
+                                        </div>
                                     </>
                                 )}
                                 {submission.user_agent && (

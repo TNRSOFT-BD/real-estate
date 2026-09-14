@@ -1,75 +1,77 @@
 import Reveal from '@/components/frontend/glass/reveal';
-import SectionLabel from '@/components/frontend/glass/section-label';
 import { formatDate, formatNumber } from '@/lib/format';
+import { mediaUrl } from '@/lib/media';
 import { type PublicProject } from '@/types/project';
-import { Activity, Building, Building2, CalendarClock, House, LandPlot, Layers, MapPin, Users, type LucideIcon } from 'lucide-react';
 
 interface Fact {
     label: string;
     value: string;
-    icon: LucideIcon;
+    dot?: string | null;
 }
 
 export default function ProjectFacts({ project }: { project: PublicProject }) {
     const location = [project.location_area, project.location_city, project.location_country].filter(Boolean).join(', ');
 
     const facts: Fact[] = [
-        project.type?.name ? { label: 'Project type', value: project.type.name, icon: Building2 } : null,
-        project.status?.name ? { label: 'Status', value: project.status.name, icon: Activity } : null,
+        project.type?.name ? { label: 'Project type', value: project.type.name } : null,
+        project.status?.name ? { label: 'Status', value: project.status.name, dot: project.status.color ?? null } : null,
         project.total_land_area
-            ? { label: 'Land area', value: formatNumber(project.total_land_area) ?? String(project.total_land_area), icon: LandPlot }
+            ? { label: 'Land area', value: formatNumber(project.total_land_area) ?? String(project.total_land_area) }
             : null,
-        project.total_units != null ? { label: 'Total units', value: String(project.total_units), icon: House } : null,
-        project.number_of_floors != null ? { label: 'Floors', value: String(project.number_of_floors), icon: Layers } : null,
-        project.number_of_buildings != null ? { label: 'Buildings', value: String(project.number_of_buildings), icon: Building } : null,
-        project.units_per_floor != null ? { label: 'Units per floor', value: String(project.units_per_floor), icon: Users } : null,
-        project.handover_date ? { label: 'Handover', value: formatDate(project.handover_date) ?? '', icon: CalendarClock } : null,
-        location ? { label: 'Location', value: location, icon: MapPin } : null,
+        project.total_units != null ? { label: 'Total units', value: String(project.total_units) } : null,
+        project.number_of_floors != null ? { label: 'Floors', value: String(project.number_of_floors) } : null,
+        project.number_of_buildings != null ? { label: 'Buildings', value: String(project.number_of_buildings) } : null,
+        project.units_per_floor != null ? { label: 'Units per floor', value: String(project.units_per_floor) } : null,
+        project.handover_date ? { label: 'Handover', value: formatDate(project.handover_date) ?? '' } : null,
+        location ? { label: 'Location', value: location } : null,
     ].filter((fact): fact is Fact => fact !== null);
 
     if (facts.length === 0) {
         return null;
     }
 
+    const image = mediaUrl(project.at_a_glance_image ?? null);
+    const heading = [project.type?.name, project.status?.name].filter(Boolean).join(' · ');
+
     return (
-        <section aria-label="Quick facts" className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-24">
+        <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:py-9 lg:px-8 lg:py-12" aria-label="At a glance">
             <Reveal>
-                <div className="border-line bg-glass-strong relative rounded-[1.75rem] border p-6 shadow-[0_30px_80px_-40px_rgba(20,18,15,0.35)] sm:p-10 lg:p-14">
-                    <span aria-hidden className="border-ink/20 pointer-events-none absolute top-5 left-5 size-4 border-t border-l" />
-                    <span aria-hidden className="border-ink/20 pointer-events-none absolute top-5 right-5 size-4 border-t border-r" />
-                    <span aria-hidden className="border-ink/20 pointer-events-none absolute bottom-5 left-5 size-4 border-b border-l" />
-                    <span aria-hidden className="border-ink/20 pointer-events-none absolute right-5 bottom-5 size-4 border-r border-b" />
+                <div className="border-line relative isolate flex min-h-[300px] items-end overflow-hidden rounded-3xl border sm:min-h-[340px]">
+                    {image ? (
+                        <img
+                            src={image}
+                            alt={project.at_a_glance_image_alt ?? ''}
+                            aria-hidden={project.at_a_glance_image_alt ? undefined : true}
+                            loading="lazy"
+                            className="absolute inset-0 size-full object-cover"
+                        />
+                    ) : (
+                        <div aria-hidden className="bg-ink absolute inset-0" />
+                    )}
 
-                    <header className="border-line flex flex-wrap items-end justify-between gap-4 border-b pb-8">
-                        <div>
-                            <SectionLabel>At a glance</SectionLabel>
-                            <h2 className="text-ink mt-5 text-3xl leading-[1.08] font-medium tracking-[-0.02em] sm:text-4xl">The essentials</h2>
-                        </div>
+                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/25" />
 
-                        <div className="flex flex-wrap items-center gap-3">
-                            {project.status && (
-                                <span className="border-line inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
-                                    <span className="size-2 rounded-full" style={{ backgroundColor: project.status.color ?? undefined }} aria-hidden />
-                                    {project.status.name}
-                                </span>
-                            )}
-                            {project.project_code && (
-                                <span className="text-ink-soft text-[11px] font-medium tracking-[0.24em] uppercase">Ref {project.project_code}</span>
-                            )}
-                        </div>
-                    </header>
+                    <div className="relative z-10 w-full p-5 sm:p-6 lg:p-8">
+                        <p className="text-[11px] font-medium tracking-[0.28em] text-white/60 uppercase">At a glance</p>
 
-                    <dl className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {facts.map((fact) => (
-                            <div key={fact.label} className="border-line flex flex-col border-t py-7 pr-8">
-                                <span className="border-line text-ink inline-flex size-11 shrink-0 items-center justify-center rounded-full border" aria-hidden>
-                                    <fact.icon className="size-5" />
-                                </span>
-                                <dt className="text-ink-soft mt-5 text-[11px] font-medium tracking-[0.24em] uppercase">{fact.label}</dt>
-                                <dd className="text-ink mt-2 text-2xl font-medium tracking-[-0.02em] tabular-nums sm:text-3xl">{fact.value}</dd>
-                            </div>
-                        ))}
-                    </dl>
+                        {heading && (
+                            <h2 className="mt-4 max-w-2xl text-3xl leading-[1.06] font-medium tracking-[-0.02em] text-balance text-white sm:text-4xl">
+                                {heading}
+                            </h2>
+                        )}
+
+                        <dl className="mt-8 flex flex-wrap gap-3">
+                            {facts.map((fact) => (
+                                <div key={fact.label} className="rounded-2xl border border-white/15 bg-white/10 px-5 py-4 backdrop-blur-md">
+                                    <dt className="flex items-center gap-2 text-[10px] font-medium tracking-[0.22em] text-white/60 uppercase">
+                                        {fact.dot && <span className="size-2 rounded-full" style={{ backgroundColor: fact.dot }} aria-hidden />}
+                                        {fact.label}
+                                    </dt>
+                                    <dd className="mt-1.5 text-2xl font-medium tracking-[-0.01em] text-white tabular-nums">{fact.value}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                    </div>
                 </div>
             </Reveal>
         </section>

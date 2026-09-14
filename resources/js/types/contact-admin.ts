@@ -56,6 +56,7 @@ export interface ContactSubmissionItem {
     subject?: string | null;
     message?: string | null;
     source?: string | null;
+    project?: { id: number; title: string; slug: string } | null;
     user_agent?: string | null;
     ip_hash?: string | null;
     data: Record<string, unknown>;

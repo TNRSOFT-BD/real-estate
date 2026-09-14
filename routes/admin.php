@@ -15,8 +15,10 @@ use App\Http\Controllers\Admin\Contact\ContactSubmissionNoteController;
 use App\Http\Controllers\Admin\Contact\ContactTeamController;
 use App\Http\Controllers\Admin\Legal\LegalPageController as AdminLegalPageController;
 use App\Http\Controllers\Admin\Project\ProjectController;
+use App\Http\Controllers\Admin\Project\ProjectFloorPlanController;
 use App\Http\Controllers\Admin\Project\ProjectGalleryController;
 use App\Http\Controllers\Admin\Project\ProjectPricingPlanController;
+use App\Http\Controllers\Admin\Project\ProjectReviewController;
 use App\Http\Controllers\Admin\Project\ProjectStatusController;
 use App\Http\Controllers\Admin\Project\ProjectTypeController;
 use App\Http\Controllers\Admin\Site\SiteThemeController;
@@ -151,6 +153,17 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::put('pricing/{pricing}', [ProjectPricingPlanController::class, 'update'])->whereNumber('pricing')->name('pricing.update');
             Route::delete('pricing/{pricing}', [ProjectPricingPlanController::class, 'destroy'])->whereNumber('pricing')->name('pricing.destroy');
             Route::post('pricing/{pricing}/duplicate', [ProjectPricingPlanController::class, 'duplicate'])->whereNumber('pricing')->name('pricing.duplicate');
+
+            Route::get('floor-plans', [ProjectFloorPlanController::class, 'index'])->name('floor-plans.index');
+            Route::post('floor-plans', [ProjectFloorPlanController::class, 'store'])->name('floor-plans.store');
+            Route::patch('floor-plans/reorder', [ProjectFloorPlanController::class, 'reorder'])->name('floor-plans.reorder');
+            Route::put('floor-plans/{floorPlan}', [ProjectFloorPlanController::class, 'update'])->whereNumber('floorPlan')->name('floor-plans.update');
+            Route::delete('floor-plans/{floorPlan}', [ProjectFloorPlanController::class, 'destroy'])->whereNumber('floorPlan')->name('floor-plans.destroy');
+
+            Route::get('reviews', [ProjectReviewController::class, 'index'])->name('reviews.index');
+            Route::patch('reviews/{review}/approve', [ProjectReviewController::class, 'approve'])->whereNumber('review')->name('reviews.approve');
+            Route::patch('reviews/{review}/unapprove', [ProjectReviewController::class, 'unapprove'])->whereNumber('review')->name('reviews.unapprove');
+            Route::delete('reviews/{review}', [ProjectReviewController::class, 'destroy'])->whereNumber('review')->name('reviews.destroy');
 
             Route::patch('publish', [ProjectController::class, 'publish'])->name('publish');
             Route::patch('unpublish', [ProjectController::class, 'unpublish'])->name('unpublish');

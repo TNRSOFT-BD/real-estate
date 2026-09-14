@@ -18,6 +18,7 @@ final class CreateContactSubmissionData
         public readonly ?string $ipHash,
         public readonly ?string $userAgent,
         public readonly ?string $source,
+        public readonly ?int $projectId = null,
     ) {}
 
     public static function fromRequest(Request $request, array $normalizedFields): self
@@ -35,6 +36,26 @@ final class CreateContactSubmissionData
         );
     }
 
+    public static function fromProjectRequest(Request $request, int $projectId, string $projectTitle): self
+    {
+        return new self(
+            name: (string) $request->string('name'),
+            email: (string) $request->string('email'),
+            phone: $request->filled('phone') ? (string) $request->string('phone') : null,
+            subject: 'Project enquiry: '.$projectTitle,
+            message: (string) $request->string('message'),
+            formData: [
+                'source' => 'project_page',
+                'project_id' => $projectId,
+                'project' => $projectTitle,
+            ],
+            ipHash: $request->ip() ? hash('sha256', $request->ip()) : null,
+            userAgent: $request->userAgent(),
+            source: 'project_page',
+            projectId: $projectId,
+        );
+    }
+
     public function toArray(): array
     {
         return [
@@ -43,6 +64,7 @@ final class CreateContactSubmissionData
             'phone' => $this->phone,
             'subject' => $this->subject,
             'message' => $this->message,
+            'project_id' => $this->projectId,
             'form_data' => $this->formData,
             'ip_hash' => $this->ipHash,
             'user_agent' => $this->userAgent,

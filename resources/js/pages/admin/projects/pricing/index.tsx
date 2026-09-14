@@ -9,7 +9,6 @@ import {
     type FlashAlert,
     type ProjectPricingPlanItem,
     type SelectOption,
-    pricingStatusLabels,
 } from '@/types/project-admin';
 import { Link, router, useForm } from '@inertiajs/react';
 import { ArrowLeft, ArrowDown, ArrowUp, Copy, Loader2, Plus, Trash2 } from 'lucide-react';
@@ -101,7 +100,6 @@ function NewPricingPlan({ projectId, statuses }: { projectId: number; statuses: 
         installment_plan: string;
         status: string;
         is_featured: boolean;
-        floor_plan_image: File | null;
     }>({
         unit_type: '',
         size_sqft: '',
@@ -112,7 +110,6 @@ function NewPricingPlan({ projectId, statuses }: { projectId: number; statuses: 
         installment_plan: '',
         status: 'available',
         is_featured: false,
-        floor_plan_image: null,
     });
 
     const submit = (event: React.FormEvent) => {
@@ -157,10 +154,6 @@ function NewPricingPlan({ projectId, statuses }: { projectId: number; statuses: 
                             <TextAreaField label="Installment plan" value={data.installment_plan} onChange={(v) => setData('installment_plan', v)} error={errors.installment_plan} rows={2} />
                         </div>
                         <div className="sm:col-span-3">
-                            <label className="text-sm font-medium">Floor plan image</label>
-                            <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => setData('floor_plan_image', e.target.files?.[0] ?? null)} className="mt-1 block text-sm" />
-                        </div>
-                        <div className="sm:col-span-3">
                             <Button type="submit" disabled={processing}>
                                 {processing ? <Loader2 className="animate-spin" /> : <Plus />}
                                 Add plan
@@ -202,7 +195,6 @@ function PricingRow({
         installment_plan: plan.installment_plan ?? '',
         status: plan.status,
         is_featured: plan.is_featured,
-        remove_floor_plan_image: false as boolean,
     });
 
     const save = () => {
@@ -221,11 +213,6 @@ function PricingRow({
                 <SelectField label="Status" value={data.status} onChange={(v) => setData('status', v)} options={statuses} error={errors.status} />
                 <div className="flex items-end">
                     <CheckboxField label="Featured" checked={data.is_featured} onChange={(v) => setData('is_featured', v)} error={errors.is_featured} />
-                </div>
-                <div className="flex items-end text-sm">
-                    <span className="text-muted-foreground">
-                        Floor plan: {plan.floor_plan_image ? 'uploaded' : 'none'} · {pricingStatusLabels[plan.status] ?? plan.status}
-                    </span>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2 sm:col-span-3">

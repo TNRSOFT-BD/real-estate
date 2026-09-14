@@ -86,12 +86,12 @@ export interface AdminProjectItem {
     amenities?: (AmenityItem | string)[] | null;
     hero_banner?: string | null;
     hero_banner_alt?: string | null;
+    at_a_glance_image?: string | null;
+    at_a_glance_image_alt?: string | null;
     brochure_pdf?: string | null;
     promo_video_url?: string | null;
     legal_approval_no?: string | null;
     legal_approval_document?: string | null;
-    developer_name?: string | null;
-    developer_website?: string | null;
     meta_title?: string | null;
     meta_description?: string | null;
     meta_keywords?: string | null;
@@ -108,6 +108,8 @@ export interface AdminProjectItem {
     status?: { id: number; name: string; color?: string | null } | null;
     galleries_count?: number;
     pricing_plans_count?: number;
+    floor_plans_count?: number;
+    reviews_count?: number;
     created_at: string;
     updated_at: string;
 }
@@ -135,12 +137,44 @@ export interface ProjectPricingPlanItem {
     booking_money?: string | null;
     down_payment_percentage?: string | null;
     installment_plan?: string | null;
-    floor_plan_image?: string | null;
     status: string;
     sort_order: number;
     is_featured: boolean;
     created_at: string;
     updated_at: string;
+}
+
+export interface ProjectFloorPlanItem {
+    id: number;
+    project_id: number;
+    title: string;
+    description?: string | null;
+    image_path: string;
+    total_area?: string | null;
+    bedrooms?: string | null;
+    bathrooms?: string | null;
+    balcony?: string | null;
+    lounge?: string | null;
+    sort_order: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ProjectReviewItem {
+    id: number;
+    project_id: number;
+    name: string;
+    email: string;
+    rating: number;
+    comment: string;
+    is_approved: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ProjectReviewSummary {
+    count: number;
+    average: number;
 }
 
 export interface ProjectSeoData {
@@ -161,7 +195,6 @@ export interface ProjectSeoData {
 export const galleryTypeLabels: Record<string, string> = {
     interior: 'Interior',
     exterior: 'Exterior',
-    floor_plan: 'Floor Plan',
 };
 
 export const pricingStatusLabels: Record<string, string> = {

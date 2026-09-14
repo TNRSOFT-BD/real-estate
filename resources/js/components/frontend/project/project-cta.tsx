@@ -7,7 +7,7 @@ export default function ProjectCta() {
     const { name } = usePage<SharedData>().props;
 
     return (
-        <section className="mx-auto w-full max-w-7xl px-4 pb-16 sm:pb-20 lg:px-8 lg:pb-24" aria-labelledby="project-cta-title">
+        <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:py-9 lg:px-8 lg:py-12" aria-labelledby="project-cta-title">
             <Reveal>
                 <div className="bg-ink text-canvas rounded-3xl px-8 py-16 text-center sm:px-16 sm:py-20">
                     <span className="text-canvas/60 inline-flex items-center gap-3 text-[11px] font-medium tracking-[0.28em] uppercase">
@@ -19,11 +19,11 @@ export default function ProjectCta() {
                         id="project-cta-title"
                         className="text-canvas mx-auto mt-6 max-w-3xl text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance sm:text-4xl lg:text-5xl"
                     >
-                        Your next address awaits
+                        Looking for a dream home?
                     </h2>
 
                     <p className="text-canvas/70 mx-auto mt-5 max-w-xl text-base leading-relaxed">
-                        Explore the project in detail or speak with the {name} team for a private consultation.
+                        We can help you realize your dream of a new home. Speak with the {name} team for a private consultation.
                     </p>
 
                     <Link

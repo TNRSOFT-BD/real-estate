@@ -1,11 +1,10 @@
-import Reveal from '@/components/frontend/glass/reveal';
-import SectionLabel from '@/components/frontend/glass/section-label';
 import { humanizeLabel } from '@/lib/format';
 import { mediaUrl } from '@/lib/media';
 import { cn } from '@/lib/utils';
 import { type ProjectGalleryImage } from '@/types/project';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import ProjectSectionHeading from './project-section-heading';
 
 export default function ProjectGallery({ images }: { images: ProjectGalleryImage[] }) {
     const validImages = useMemo(() => (images ?? []).filter((image) => Boolean(image.image_path)), [images]);
@@ -29,6 +28,31 @@ export default function ProjectGallery({ images }: { images: ProjectGalleryImage
         () => (filter === 'all' ? validImages : validImages.filter((image) => image.type === filter)),
         [validImages, filter],
     );
+
+    // Pack the bento with square tiles. A 4-column grid only fills when
+    // (count + 3 * large) is divisible by 4, so the number of 2x2 tiles is
+    // count % 4 (and count % 2 for the 2-column grid). Tiles are picked in a
+    // stable pseudo-random order so it looks random but never shifts on re-render.
+    const { rankOf, largeDesktop, largeMobile, single } = useMemo(() => {
+        const count = filtered.length;
+
+        if (count === 0) {
+            return { rankOf: new Map<number, number>(), largeDesktop: 0, largeMobile: 0, single: false };
+        }
+
+        const order = [...filtered].sort((a, b) => ((a.id * 9301 + 49297) % 233280) - ((b.id * 9301 + 49297) % 233280));
+        const rankMap = new Map<number, number>();
+        order.forEach((image, index) => rankMap.set(image.id, index));
+
+        const cap = Math.max(0, Math.floor(count / 2));
+
+        return {
+            rankOf: rankMap,
+            largeDesktop: Math.min(count % 4, cap),
+            largeMobile: Math.min(count % 2, cap),
+            single: count === 1,
+        };
+    }, [filtered]);
 
     const close = useCallback(() => setActiveIndex(null), []);
     const previous = useCallback(
@@ -64,18 +88,11 @@ export default function ProjectGallery({ images }: { images: ProjectGalleryImage
     const active = activeIndex !== null ? filtered[activeIndex] : null;
 
     return (
-        <section className="mx-auto w-full max-w-7xl px-4 py-16 sm:py-20 lg:px-8 lg:py-24" aria-labelledby="project-gallery-title">
+        <div>
             <div className="flex flex-wrap items-end justify-between gap-6">
-                <div>
-                    <Reveal>
-                        <SectionLabel>Gallery</SectionLabel>
-                    </Reveal>
-                    <Reveal delay={80}>
-                        <h2 id="project-gallery-title" className="text-ink mt-6 text-3xl leading-[1.08] font-medium tracking-[-0.02em] sm:text-4xl">
-                            A closer look
-                        </h2>
-                    </Reveal>
-                </div>
+                <ProjectSectionHeading id="project-gallery-title" className="mb-0">
+                    From Our Gallery
+                </ProjectSectionHeading>
 
                 {types.length > 1 && (
                     <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter gallery">
@@ -100,31 +117,45 @@ export default function ProjectGallery({ images }: { images: ProjectGalleryImage
                 )}
             </div>
 
-            <div className="mt-12 grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[220px] sm:gap-4 lg:grid-cols-4">
-                {filtered.map((image, index) => (
-                    <button
-                        key={image.id}
-                        type="button"
-                        onClick={() => setActiveIndex(index)}
-                        className={cn(
-                            'group border-line relative overflow-hidden rounded-xl border focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
-                            index === 0 && 'col-span-2 row-span-2',
-                        )}
-                        aria-label={image.caption ?? `Open image ${index + 1}`}
-                    >
-                        <img
-                            src={mediaUrl(image.image_path) ?? ''}
-                            alt={image.alt_text ?? image.caption ?? ''}
-                            loading="lazy"
-                            className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                        />
-                        {image.caption && (
-                            <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-left text-xs font-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
-                                {image.caption}
-                            </span>
-                        )}
-                    </button>
-                ))}
+            <div className="mt-12 grid grid-flow-row-dense grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+                {filtered.map((image, index) => {
+                    const rank = rankOf.get(image.id) ?? 0;
+                    const largeMobileTile = !single && rank < largeMobile;
+                    const largeDesktopTile = !single && rank < largeDesktop;
+                    const isLarge = largeMobileTile || largeDesktopTile;
+
+                    return (
+                        <button
+                            key={image.id}
+                            type="button"
+                            onClick={() => setActiveIndex(index)}
+                            className={cn(
+                                'group border-line relative aspect-square overflow-hidden rounded-2xl border focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+                                single && 'col-span-full',
+                                largeMobileTile && 'col-span-2 row-span-2 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2',
+                                !largeMobileTile && largeDesktopTile && 'lg:col-span-2 lg:row-span-2',
+                            )}
+                            aria-label={image.caption ?? `Open image ${index + 1}`}
+                        >
+                            <img
+                                src={mediaUrl(image.image_path) ?? ''}
+                                alt={image.alt_text ?? image.caption ?? ''}
+                                loading="lazy"
+                                className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                            />
+                            {image.caption && (
+                                <span
+                                    className={cn(
+                                        'absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-left text-xs font-medium text-white transition-opacity',
+                                        isLarge ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+                                    )}
+                                >
+                                    {image.caption}
+                                </span>
+                            )}
+                        </button>
+                    );
+                })}
             </div>
 
             {active && (
@@ -174,6 +205,6 @@ export default function ProjectGallery({ images }: { images: ProjectGalleryImage
                     </button>
                 </div>
             )}
-        </section>
+        </div>
     );
 }

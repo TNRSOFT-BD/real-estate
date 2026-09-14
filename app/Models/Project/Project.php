@@ -47,12 +47,12 @@ class Project extends Model
         'amenities',
         'hero_banner',
         'hero_banner_alt',
+        'at_a_glance_image',
+        'at_a_glance_image_alt',
         'brochure_pdf',
         'promo_video_url',
         'legal_approval_no',
         'legal_approval_document',
-        'developer_name',
-        'developer_website',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -102,6 +102,21 @@ class Project extends Model
     public function pricingPlans(): HasMany
     {
         return $this->hasMany(ProjectPricingPlan::class);
+    }
+
+    public function floorPlans(): HasMany
+    {
+        return $this->hasMany(ProjectFloorPlan::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProjectReview::class);
+    }
+
+    public function approvedReviews(): HasMany
+    {
+        return $this->hasMany(ProjectReview::class)->where('is_approved', true);
     }
 
     public function scopePublished(Builder $query): Builder

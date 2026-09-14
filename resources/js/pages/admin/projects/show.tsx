@@ -7,7 +7,7 @@ import { mediaUrl } from '@/lib/media';
 import { type BreadcrumbItem } from '@/types';
 import { type AdminProjectItem, type ProjectSeoData } from '@/types/project-admin';
 import { Link } from '@inertiajs/react';
-import { Image as ImageIcon, Pencil, Wallet } from 'lucide-react';
+import { Image as ImageIcon, Layers, MessageSquare, Pencil, Wallet } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -37,6 +37,18 @@ export default function ProjectShow({ project, seo }: { project: AdminProjectIte
                                     Pricing
                                 </Link>
                             </Button>
+                            <Button variant="outline" asChild>
+                                <Link href={route('admin.projects.floor-plans.index', { project: project.id })}>
+                                    <Layers />
+                                    Floor plans
+                                </Link>
+                            </Button>
+                            <Button variant="outline" asChild>
+                                <Link href={route('admin.projects.reviews.index', { project: project.id })}>
+                                    <MessageSquare />
+                                    Reviews
+                                </Link>
+                            </Button>
                             <Button asChild>
                                 <Link href={route('admin.projects.edit', { project: project.id })}>
                                     <Pencil />
@@ -64,6 +76,8 @@ export default function ProjectShow({ project, seo }: { project: AdminProjectIte
                             <Info label="Handover" value={project.handover_date ? project.handover_date.substring(0, 10) : null} />
                             <Info label="Gallery images" value={String(project.galleries_count ?? 0)} />
                             <Info label="Pricing plans" value={String(project.pricing_plans_count ?? 0)} />
+                            <Info label="Floor plans" value={String(project.floor_plans_count ?? 0)} />
+                            <Info label="Reviews" value={String(project.reviews_count ?? 0)} />
                         </CardContent>
                     </Card>
 

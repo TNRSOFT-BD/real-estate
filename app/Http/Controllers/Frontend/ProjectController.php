@@ -28,7 +28,11 @@ class ProjectController extends Controller
             'status:id,name,slug,color',
             'galleries' => fn ($query) => $query->ordered(),
             'pricingPlans' => fn ($query) => $query->ordered(),
+            'floorPlans' => fn ($query) => $query->ordered(),
+            'approvedReviews' => fn ($query) => $query->ordered(),
         ]);
+
+        $reviews = $project->approvedReviews;
 
         $relatedProjects = $this->repository
             ->featuredExcept($project->id, 3)
@@ -47,6 +51,11 @@ class ProjectController extends Controller
             'project' => $project,
             'seo' => $this->seo->build($project),
             'relatedProjects' => $relatedProjects,
+            'reviews' => $reviews,
+            'reviewSummary' => [
+                'count' => $reviews->count(),
+                'average' => round((float) $reviews->avg('rating'), 1),
+            ],
             'currency' => config('projects.currency'),
         ]);
     }

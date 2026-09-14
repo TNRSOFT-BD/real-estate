@@ -8,7 +8,6 @@ enum ProjectGalleryType: string
 {
     case Interior = 'interior';
     case Exterior = 'exterior';
-    case FloorPlan = 'floor_plan';
 
     public static function all(): array
     {
@@ -20,7 +19,6 @@ enum ProjectGalleryType: string
         return match ($this) {
             self::Interior => 'Interior',
             self::Exterior => 'Exterior',
-            self::FloorPlan => 'Floor Plan',
         };
     }
 }

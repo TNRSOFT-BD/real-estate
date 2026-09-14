@@ -7,6 +7,7 @@ namespace App\Http\Requests\Project;
 use App\Models\Project\ProjectStatus;
 use App\Models\Project\ProjectType;
 use App\Rules\GoogleMapsUrl;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
@@ -41,7 +42,7 @@ abstract class ProjectRequest extends FormRequest
             'location_area' => ['nullable', 'string', 'max:255'],
             'location_city' => ['nullable', 'string', 'max:255'],
             'location_country' => ['nullable', 'string', 'max:255'],
-            'google_map_url' => ['nullable', 'string', 'max:500', new GoogleMapsUrl()],
+            'google_map_url' => ['nullable', 'string', 'max:500', new GoogleMapsUrl],
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
 
@@ -63,6 +64,9 @@ abstract class ProjectRequest extends FormRequest
             'hero_banner' => $this->imageRules(),
             'hero_banner_alt' => ['nullable', 'string', 'max:255'],
             'remove_hero_banner' => ['sometimes', 'boolean'],
+            'at_a_glance_image' => $this->imageRules(),
+            'at_a_glance_image_alt' => ['nullable', 'string', 'max:255'],
+            'remove_at_a_glance_image' => ['sometimes', 'boolean'],
             'brochure_pdf' => $this->documentRules(),
             'remove_brochure_pdf' => ['sometimes', 'boolean'],
             'promo_video_url' => ['nullable', 'url', 'max:500'],
@@ -70,9 +74,6 @@ abstract class ProjectRequest extends FormRequest
             'legal_approval_no' => ['nullable', 'string', 'max:100'],
             'legal_approval_document' => $this->documentRules(),
             'remove_legal_approval_document' => ['sometimes', 'boolean'],
-
-            'developer_name' => ['nullable', 'string', 'max:200'],
-            'developer_website' => ['nullable', 'url', 'max:500'],
 
             'meta_title' => ['nullable', 'string', 'max:70'],
             'meta_description' => ['nullable', 'string', 'max:160'],
@@ -101,7 +102,7 @@ abstract class ProjectRequest extends FormRequest
             $this->ensureSelectable($validator, 'project_type_id', ProjectType::class, $project?->project_type_id);
             $this->ensureSelectable($validator, 'project_status_id', ProjectStatus::class, $project?->project_status_id);
 
-            foreach (['hero_banner', 'brochure_pdf', 'legal_approval_document', 'og_image', 'twitter_image'] as $field) {
+            foreach (['hero_banner', 'at_a_glance_image', 'brochure_pdf', 'legal_approval_document', 'og_image', 'twitter_image'] as $field) {
                 $file = $this->file($field);
 
                 if ($file instanceof UploadedFile && ! $file->isValid()) {
@@ -144,7 +145,7 @@ abstract class ProjectRequest extends FormRequest
      * An inactive type/status may stay assigned to an existing project, but a new
      * selection must point at an active record.
      *
-     * @param  class-string<\Illuminate\Database\Eloquent\Model>  $modelClass
+     * @param  class-string<Model>  $modelClass
      */
     private function ensureSelectable(Validator $validator, string $field, string $modelClass, ?int $currentId): void
     {

@@ -37,7 +37,7 @@ class ProjectPricingPlanController extends Controller
 
     public function store(StoreProjectPricingPlanRequest $request, Project $project)
     {
-        $this->service->create($project, $request->validated(), $request->file('floor_plan_image'));
+        $this->service->create($project, $request->validated());
 
         return back()->with('success', 'Pricing plan added successfully.');
     }
@@ -47,12 +47,7 @@ class ProjectPricingPlanController extends Controller
         $this->authorize('update', $pricing);
         $this->ensureBelongsToProject($project, $pricing);
 
-        $this->service->update(
-            $pricing,
-            $request->validated(),
-            $request->file('floor_plan_image'),
-            $request->boolean('remove_floor_plan_image'),
-        );
+        $this->service->update($pricing, $request->validated());
 
         return back()->with('success', 'Pricing plan updated successfully.');
     }

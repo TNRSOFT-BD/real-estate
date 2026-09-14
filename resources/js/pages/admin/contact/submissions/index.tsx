@@ -209,6 +209,11 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                                             </td>
                                             <td className="max-w-xs px-4 py-3 text-sm text-muted-foreground">
                                                 <div className="truncate">{item.subject || item.message || '—'}</div>
+                                                {item.project && (
+                                                    <Link href={`/projects/${item.project.slug}`} target="_blank" rel="noopener noreferrer" className="text-primary mt-0.5 block truncate text-xs underline underline-offset-2">
+                                                        {item.project.title}
+                                                    </Link>
+                                                )}
                                             </td>
                                             <td className="px-4 py-3 text-sm"><StatusBadge value={item.status} /></td>
                                             <td className="px-4 py-3 text-sm"><PriorityBadge value={item.priority} /></td>

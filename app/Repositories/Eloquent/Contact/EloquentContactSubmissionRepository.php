@@ -14,7 +14,7 @@ class EloquentContactSubmissionRepository implements ContactSubmissionRepository
     public function paginate(array $filters = [], int $perPage = 20): LengthAwarePaginator
     {
         return ContactSubmission::query()
-            ->with('assignee:id,name')
+            ->with(['assignee:id,name', 'project:id,title,slug'])
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('name', 'like', "%{$search}%")
@@ -46,7 +46,7 @@ class EloquentContactSubmissionRepository implements ContactSubmissionRepository
 
     public function findWithNotes(int $id): ?ContactSubmission
     {
-        return ContactSubmission::with(['notes.user:id,name,email', 'assignee:id,name,email'])->find($id);
+        return ContactSubmission::with(['notes.user:id,name,email', 'assignee:id,name,email', 'project:id,title,slug'])->find($id);
     }
 
     public function create(array $data): ContactSubmission

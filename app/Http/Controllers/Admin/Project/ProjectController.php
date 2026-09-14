@@ -13,6 +13,7 @@ use App\Models\Project\ProjectType;
 use App\Repositories\Contracts\Project\ProjectRepositoryInterface;
 use App\Services\Project\ProjectService;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -22,7 +23,7 @@ class ProjectController extends Controller
     /**
      * @var list<string>
      */
-    private const IMAGE_FIELDS = ['hero_banner', 'og_image', 'twitter_image'];
+    private const IMAGE_FIELDS = ['hero_banner', 'at_a_glance_image', 'og_image', 'twitter_image'];
 
     /**
      * @var list<string>
@@ -71,7 +72,7 @@ class ProjectController extends Controller
     {
         $this->authorize('view', Project::class);
 
-        $project->load(['type', 'status'])->loadCount(['galleries', 'pricingPlans']);
+        $project->load(['type', 'status'])->loadCount(['galleries', 'pricingPlans', 'floorPlans', 'reviews']);
 
         return Inertia::render('admin/projects/show', [
             'project' => $project,
@@ -158,7 +159,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @return array<string, \Illuminate\Http\UploadedFile>
+     * @return array<string, UploadedFile>
      */
     private function uploadedFiles(Request $request): array
     {

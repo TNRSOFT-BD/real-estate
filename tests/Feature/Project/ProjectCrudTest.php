@@ -220,6 +220,54 @@ class ProjectCrudTest extends ProjectTestCase
         Storage::disk('public')->assertExists($project->hero_banner);
     }
 
+    public function test_at_a_glance_image_can_be_uploaded_replaced_and_removed(): void
+    {
+        Storage::fake('public');
+
+        $admin = $this->admin();
+        $type = $this->makeType();
+        $status = $this->makeStatus();
+
+        $this->actingAs($admin)
+            ->post(route('admin.projects.store'), [
+                'title' => 'Glance Image',
+                'project_type_id' => $type->id,
+                'project_status_id' => $status->id,
+                'at_a_glance_image' => UploadedFile::fake()->image('glance.jpg', 200, 120),
+                'at_a_glance_image_alt' => 'At a glance',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $project = Project::where('slug', 'glance-image')->firstOrFail();
+        $first = $project->at_a_glance_image;
+        Storage::disk('public')->assertExists($first);
+
+        $this->actingAs($admin)
+            ->put(route('admin.projects.update', $project), [
+                'title' => 'Glance Image',
+                'project_type_id' => $type->id,
+                'project_status_id' => $status->id,
+                'at_a_glance_image' => UploadedFile::fake()->image('glance-2.jpg', 200, 120),
+            ])
+            ->assertSessionHasNoErrors();
+
+        $project->refresh();
+        $this->assertNotSame($first, $project->at_a_glance_image);
+        Storage::disk('public')->assertMissing($first);
+        Storage::disk('public')->assertExists($project->at_a_glance_image);
+
+        $this->actingAs($admin)
+            ->put(route('admin.projects.update', $project), [
+                'title' => 'Glance Image',
+                'project_type_id' => $type->id,
+                'project_status_id' => $status->id,
+                'remove_at_a_glance_image' => true,
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertNull($project->fresh()->at_a_glance_image);
+    }
+
     public function test_admin_can_soft_delete_a_project(): void
     {
         $admin = $this->admin();

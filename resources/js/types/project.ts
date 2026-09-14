@@ -41,10 +41,38 @@ export interface ProjectPricingPlan {
     booking_money?: string | null;
     down_payment_percentage?: string | null;
     installment_plan?: string | null;
-    floor_plan_image?: string | null;
     status: string;
     sort_order: number;
     is_featured: boolean;
+}
+
+export interface ProjectFloorPlan {
+    id: number;
+    project_id: number;
+    title: string;
+    description?: string | null;
+    image_path: string;
+    total_area?: string | null;
+    bedrooms?: string | null;
+    bathrooms?: string | null;
+    balcony?: string | null;
+    lounge?: string | null;
+    sort_order: number;
+}
+
+export interface ProjectReview {
+    id: number;
+    project_id: number;
+    name: string;
+    rating: number;
+    comment: string;
+    is_approved: boolean;
+    created_at: string;
+}
+
+export interface ProjectReviewSummary {
+    count: number;
+    average: number;
 }
 
 export interface PublicProject {
@@ -75,14 +103,15 @@ export interface PublicProject {
     amenities?: (ProjectAmenity | string)[] | null;
     hero_banner?: string | null;
     hero_banner_alt?: string | null;
+    at_a_glance_image?: string | null;
+    at_a_glance_image_alt?: string | null;
     brochure_pdf?: string | null;
     promo_video_url?: string | null;
     legal_approval_no?: string | null;
     legal_approval_document?: string | null;
-    developer_name?: string | null;
-    developer_website?: string | null;
     galleries?: ProjectGalleryImage[];
     pricing_plans?: ProjectPricingPlan[];
+    floor_plans?: ProjectFloorPlan[];
 }
 
 export interface RelatedProject {
@@ -119,6 +148,8 @@ export interface ProjectShowProps {
     project: PublicProject;
     seo: ProjectSeoData;
     relatedProjects: RelatedProject[];
+    reviews: ProjectReview[];
+    reviewSummary: ProjectReviewSummary;
     currency: CurrencyConfig;
     [key: string]: unknown;
 }
