@@ -109,7 +109,6 @@ export interface AdminProjectItem {
     galleries_count?: number;
     pricing_plans_count?: number;
     floor_plans_count?: number;
-    reviews_count?: number;
     created_at: string;
     updated_at: string;
 }
@@ -158,23 +157,6 @@ export interface ProjectFloorPlanItem {
     sort_order: number;
     created_at: string;
     updated_at: string;
-}
-
-export interface ProjectReviewItem {
-    id: number;
-    project_id: number;
-    name: string;
-    email: string;
-    rating: number;
-    comment: string;
-    is_approved: boolean;
-    created_at: string;
-    updated_at: string;
-}
-
-export interface ProjectReviewSummary {
-    count: number;
-    average: number;
 }
 
 export interface ProjectSeoData {

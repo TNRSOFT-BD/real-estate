@@ -109,16 +109,6 @@ class Project extends Model
         return $this->hasMany(ProjectFloorPlan::class);
     }
 
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(ProjectReview::class);
-    }
-
-    public function approvedReviews(): HasMany
-    {
-        return $this->hasMany(ProjectReview::class)->where('is_approved', true);
-    }
-
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('is_published', true);

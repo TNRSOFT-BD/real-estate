@@ -15,7 +15,6 @@ enum ProjectPermission: string
     case ManageGallery = 'projects.manage_gallery';
     case ManagePricing = 'projects.manage_pricing';
     case ManageFloorPlans = 'projects.manage_floor_plans';
-    case ManageReviews = 'projects.manage_reviews';
 
     case TypesView = 'project_types.view';
     case TypesCreate = 'project_types.create';

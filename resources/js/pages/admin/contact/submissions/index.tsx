@@ -4,6 +4,7 @@ import { PriorityBadge, StatusBadge } from '@/components/admin/contact/status-ba
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { type Assignee, type ContactSubmissionItem, type Filters, type FlashAlert, type Paginator, type SubmissionOverview } from '@/types/contact-admin';
 import { Link, router } from '@inertiajs/react';
@@ -153,6 +154,11 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                                 </select>
                                 <ChevronDown className="pointer-events-none absolute top-1/2 right-2 size-3.5 -translate-y-1/2 text-muted-foreground" />
                             </div>
+
+                            <span className="text-muted-foreground ml-auto inline-flex items-center gap-2 text-xs">
+                                <span className="border-amber-300 bg-amber-100 inline-block size-3 rounded-sm border" aria-hidden />
+                                Project enquiry
+                            </span>
                         </div>
 
                         {selected.length > 0 && (
@@ -193,7 +199,14 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                                 </thead>
                                 <tbody>
                                     {items.data.map((item) => (
-                                        <tr key={item.id} className="border-b last:border-0 hover:bg-muted/40">
+                                        <tr
+                                            key={item.id}
+                                            className={cn(
+                                                'border-b last:border-0 hover:bg-muted/40',
+                                                item.project &&
+                                                    'border-l-2 border-l-amber-500 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/30 dark:hover:bg-amber-950/50',
+                                            )}
+                                        >
                                             <td className="px-4 py-3">
                                                 <input
                                                     type="checkbox"
@@ -210,7 +223,12 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                                             <td className="max-w-xs px-4 py-3 text-sm text-muted-foreground">
                                                 <div className="truncate">{item.subject || item.message || '—'}</div>
                                                 {item.project && (
-                                                    <Link href={`/projects/${item.project.slug}`} target="_blank" rel="noopener noreferrer" className="text-primary mt-0.5 block truncate text-xs underline underline-offset-2">
+                                                    <Link
+                                                        href={`/projects/${item.project.slug}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="border-amber-300 bg-amber-100 text-amber-800 hover:bg-amber-200 mt-1 inline-flex max-w-full items-center gap-1 truncate rounded-full border px-2 py-0.5 text-[11px] font-medium dark:border-amber-900 dark:bg-amber-950/60 dark:text-amber-300 dark:hover:bg-amber-950"
+                                                    >
                                                         {item.project.title}
                                                     </Link>
                                                 )}

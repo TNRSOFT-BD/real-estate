@@ -57,6 +57,26 @@ class EloquentProjectRepository implements ProjectRepositoryInterface
         return Project::query()->published()->where('slug', $slug)->first();
     }
 
+    public function paginatePublic(array $filters = [], int $perPage = 12): LengthAwarePaginator
+    {
+        return Project::query()
+            ->published()
+            ->with(['type:id,name,slug', 'status:id,name,slug,color'])
+            ->when($filters['project_type'] ?? null, fn ($query, $slug) => $query->whereHas('type', fn ($type) => $type->where('slug', $slug)))
+            ->when($filters['project_status'] ?? null, fn ($query, $slug) => $query->whereHas('status', fn ($status) => $status->where('slug', $slug)))
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('location_area', 'like', "%{$search}%")
+                        ->orWhere('location_city', 'like', "%{$search}%");
+                });
+            })
+            ->orderByDesc('is_featured')
+            ->ordered()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
     public function featuredExcept(int $excludeId, int $limit = 3): Collection
     {
         return Project::query()

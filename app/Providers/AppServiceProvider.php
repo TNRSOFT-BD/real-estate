@@ -16,7 +16,6 @@ use App\Models\Project\Project;
 use App\Models\Project\ProjectFloorPlan;
 use App\Models\Project\ProjectGallery;
 use App\Models\Project\ProjectPricingPlan;
-use App\Models\Project\ProjectReview;
 use App\Models\Project\ProjectStatus;
 use App\Models\Project\ProjectType;
 use App\Models\Site\SiteSetting;
@@ -29,7 +28,6 @@ use App\Policies\ProjectFloorPlanPolicy;
 use App\Policies\ProjectGalleryPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\ProjectPricingPlanPolicy;
-use App\Policies\ProjectReviewPolicy;
 use App\Policies\ProjectStatusPolicy;
 use App\Policies\ProjectTypePolicy;
 use App\Policies\SiteThemePolicy;
@@ -50,7 +48,6 @@ use App\Repositories\Contracts\Project\ProjectFloorPlanRepositoryInterface;
 use App\Repositories\Contracts\Project\ProjectGalleryRepositoryInterface;
 use App\Repositories\Contracts\Project\ProjectPricingPlanRepositoryInterface;
 use App\Repositories\Contracts\Project\ProjectRepositoryInterface;
-use App\Repositories\Contracts\Project\ProjectReviewRepositoryInterface;
 use App\Repositories\Contracts\Project\ProjectStatusRepositoryInterface;
 use App\Repositories\Contracts\Project\ProjectTypeRepositoryInterface;
 use App\Repositories\Contracts\Site\SiteSettingRepositoryInterface;
@@ -71,7 +68,6 @@ use App\Repositories\Eloquent\Project\EloquentProjectFloorPlanRepository;
 use App\Repositories\Eloquent\Project\EloquentProjectGalleryRepository;
 use App\Repositories\Eloquent\Project\EloquentProjectPricingPlanRepository;
 use App\Repositories\Eloquent\Project\EloquentProjectRepository;
-use App\Repositories\Eloquent\Project\EloquentProjectReviewRepository;
 use App\Repositories\Eloquent\Project\EloquentProjectStatusRepository;
 use App\Repositories\Eloquent\Project\EloquentProjectTypeRepository;
 use App\Repositories\Eloquent\Site\EloquentSiteSettingRepository;
@@ -110,7 +106,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectGalleryRepositoryInterface::class, EloquentProjectGalleryRepository::class);
         $this->app->bind(ProjectPricingPlanRepositoryInterface::class, EloquentProjectPricingPlanRepository::class);
         $this->app->bind(ProjectFloorPlanRepositoryInterface::class, EloquentProjectFloorPlanRepository::class);
-        $this->app->bind(ProjectReviewRepositoryInterface::class, EloquentProjectReviewRepository::class);
 
         $this->app->bind(SiteSettingRepositoryInterface::class, EloquentSiteSettingRepository::class);
     }
@@ -131,7 +126,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ProjectGallery::class, ProjectGalleryPolicy::class);
         Gate::policy(ProjectPricingPlan::class, ProjectPricingPlanPolicy::class);
         Gate::policy(ProjectFloorPlan::class, ProjectFloorPlanPolicy::class);
-        Gate::policy(ProjectReview::class, ProjectReviewPolicy::class);
 
         Gate::before(function (User $user) {
             if ($user->isAdministrator()) {

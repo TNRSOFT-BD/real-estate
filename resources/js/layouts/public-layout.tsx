@@ -1,4 +1,3 @@
-import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import ContactSocialLinks from '@/components/frontend/contact/contact-social-links';
 import { mediaUrl } from '@/lib/media';
@@ -14,6 +13,7 @@ interface PublicLayoutProps {
 
 const navItems = [
     { title: 'Home', href: '/' },
+    { title: 'Projects', href: '/projects' },
     { title: 'About', href: '/about' },
     { title: 'Contact', href: '/contact' },
 ];
@@ -127,8 +127,14 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 <div className="mx-auto w-full max-w-7xl px-4 py-14 lg:px-8 lg:py-16">
                     <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
                         <div className="lg:col-span-4">
-                            <Link href="/" className="flex items-center gap-2.5">
-                                <AppLogo />
+                            <Link href="/" aria-label={name} className="inline-flex items-center">
+                                {company?.logo ? (
+                                    <img src={mediaUrl(company.logo) ?? undefined} alt={name} className="h-14 w-auto max-w-[240px] object-contain" />
+                                ) : (
+                                    <span className="bg-ink text-canvas flex size-14 items-center justify-center">
+                                        <AppLogoIcon className="size-7 fill-current" />
+                                    </span>
+                                )}
                             </Link>
 
                             <p className="text-ink-soft mt-5 max-w-xs text-sm leading-relaxed">

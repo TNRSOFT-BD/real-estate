@@ -12,6 +12,8 @@ interface ProjectRepositoryInterface
 {
     public function paginate(array $filters = [], int $perPage = 15): LengthAwarePaginator;
 
+    public function paginatePublic(array $filters = [], int $perPage = 12): LengthAwarePaginator;
+
     public function findById(int $id): ?Project;
 
     public function findBySlug(string $slug): ?Project;

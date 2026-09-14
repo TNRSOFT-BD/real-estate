@@ -72,7 +72,7 @@ class ProjectController extends Controller
     {
         $this->authorize('view', Project::class);
 
-        $project->load(['type', 'status'])->loadCount(['galleries', 'pricingPlans', 'floorPlans', 'reviews']);
+        $project->load(['type', 'status'])->loadCount(['galleries', 'pricingPlans', 'floorPlans']);
 
         return Inertia::render('admin/projects/show', [
             'project' => $project,

@@ -1,8 +1,8 @@
 import { formatDate } from '@/lib/format';
 import { type PublicProject } from '@/types/project';
-import { Calendar, MessageSquare } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
-export default function ProjectMeta({ project, reviewCount = 0 }: { project: PublicProject; reviewCount?: number }) {
+export default function ProjectMeta({ project }: { project: PublicProject }) {
     const published = formatDate(project.published_at);
 
     return (
@@ -32,11 +32,6 @@ export default function ProjectMeta({ project, reviewCount = 0 }: { project: Pub
                     {published}
                 </span>
             )}
-
-            <span className="inline-flex items-center gap-2">
-                <MessageSquare className="size-3.5" aria-hidden />
-                {reviewCount} {reviewCount === 1 ? 'Review' : 'Reviews'}
-            </span>
         </div>
     );
 }

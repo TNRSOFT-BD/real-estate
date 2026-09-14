@@ -10,7 +10,6 @@ import ProjectLocation, { mapEmbedUrl } from '@/components/frontend/project/proj
 import ProjectMeta from '@/components/frontend/project/project-meta';
 import ProjectOverview from '@/components/frontend/project/project-overview';
 import ProjectPricing from '@/components/frontend/project/project-pricing';
-import ProjectReviews from '@/components/frontend/project/project-reviews';
 import ProjectSectionHeading from '@/components/frontend/project/project-section-heading';
 import ProjectSidebar from '@/components/frontend/project/project-sidebar';
 import ProjectSpecs from '@/components/frontend/project/project-specs';
@@ -23,7 +22,7 @@ import { type ProjectShowProps } from '@/types/project';
 import { Head, usePage } from '@inertiajs/react';
 import { MapPin } from 'lucide-react';
 
-export default function ProjectShow({ project, seo, relatedProjects, reviews, reviewSummary, currency }: ProjectShowProps) {
+export default function ProjectShow({ project, seo, relatedProjects, currency }: ProjectShowProps) {
     const { name } = usePage<SharedData>().props;
 
     const galleries = project.galleries ?? [];
@@ -85,14 +84,18 @@ export default function ProjectShow({ project, seo, relatedProjects, reviews, re
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
             </Head>
 
-            <ProjectBreadcrumb project={project} />
-            {slides.length > 0 && <ProjectImageSlider slides={slides} />}
+            {slides.length > 0 && (
+                <div className="relative">
+                    <ProjectImageSlider slides={slides} />
+                    <ProjectBreadcrumb project={project} />
+                </div>
+            )}
 
             <div className="mx-auto w-full max-w-7xl px-4 py-10 lg:px-8 lg:py-16">
                 <div className="grid gap-12 lg:grid-cols-12 lg:gap-14">
                     <div className="space-y-12 lg:col-span-8">
                         <div>
-                            <ProjectMeta project={project} reviewCount={reviewSummary?.count ?? 0} />
+                            <ProjectMeta project={project} />
 
                             <h1 className="text-ink mt-6 text-3xl leading-[1.08] font-semibold tracking-[-0.02em] text-balance sm:text-4xl lg:text-5xl">
                                 {project.title}
@@ -141,11 +144,6 @@ export default function ProjectShow({ project, seo, relatedProjects, reviews, re
                         )}
 
                         <ProjectVideo project={project} />
-
-                        <section aria-labelledby="project-reviews-title">
-                            <ProjectSectionHeading id="project-reviews-title">Customer Reviews</ProjectSectionHeading>
-                            <ProjectReviews slug={project.slug} reviews={reviews ?? []} summary={reviewSummary ?? { count: 0, average: 0 }} />
-                        </section>
 
                         <ProjectLegal project={project} />
                     </div>

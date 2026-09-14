@@ -44,7 +44,7 @@ export default function ProjectImageSlider({ slides }: { slides: ProjectSlide[] 
 
     return (
         <section aria-label="Project images" className="border-line border-b">
-            <div className="group relative aspect-[16/9] max-h-[640px] w-full overflow-hidden sm:aspect-[21/9]">
+            <div className="group relative aspect-[3/2] max-h-[820px] w-full overflow-hidden sm:aspect-[16/9]">
                 <button type="button" onClick={() => setLightbox(true)} className="block size-full cursor-zoom-in" aria-label="Open image viewer">
                     <img src={active.src} alt={active.alt} className="size-full object-cover" />
                 </button>

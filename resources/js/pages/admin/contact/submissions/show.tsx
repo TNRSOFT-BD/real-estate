@@ -218,7 +218,12 @@ export default function SubmissionShow({ submission, assignees = [] }: Submissio
                                     <>
                                         <div className="text-muted-foreground">Project</div>
                                         <div className="break-all">
-                                            <Link href={`/projects/${submission.project.slug}`} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                                            <Link
+                                                href={`/projects/${submission.project.slug}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="border-amber-300 bg-amber-100 text-amber-800 hover:bg-amber-200 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium dark:border-amber-900 dark:bg-amber-950/60 dark:text-amber-300 dark:hover:bg-amber-950"
+                                            >
                                                 {submission.project.title}
                                             </Link>
                                         </div>

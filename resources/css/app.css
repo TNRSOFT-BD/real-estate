@@ -217,3 +217,20 @@
         @apply bg-background text-foreground;
     }
 }
+
+/*
+ * Public site design: sharp (square) corners on every element.
+ * Scoped to the public shell (`.site-light` / `.site-dark` is only applied by
+ * the public layout), so the admin UI keeps its default rounding.
+ * Remove this block to restore the rounded public design.
+ */
+.site-light,
+.site-light *,
+.site-light *::before,
+.site-light *::after,
+.site-dark,
+.site-dark *,
+.site-dark *::before,
+.site-dark *::after {
+    border-radius: 0 !important;
+}

@@ -60,21 +60,6 @@ export interface ProjectFloorPlan {
     sort_order: number;
 }
 
-export interface ProjectReview {
-    id: number;
-    project_id: number;
-    name: string;
-    rating: number;
-    comment: string;
-    is_approved: boolean;
-    created_at: string;
-}
-
-export interface ProjectReviewSummary {
-    count: number;
-    average: number;
-}
-
 export interface PublicProject {
     id: number;
     title: string;
@@ -148,8 +133,67 @@ export interface ProjectShowProps {
     project: PublicProject;
     seo: ProjectSeoData;
     relatedProjects: RelatedProject[];
-    reviews: ProjectReview[];
-    reviewSummary: ProjectReviewSummary;
     currency: CurrencyConfig;
+    [key: string]: unknown;
+}
+
+export interface PublicProjectCard {
+    id: number;
+    title: string;
+    slug: string;
+    hero_banner?: string | null;
+    hero_banner_alt?: string | null;
+    short_description?: string | null;
+    location_area?: string | null;
+    location_city?: string | null;
+    location_country?: string | null;
+    is_featured: boolean;
+    type?: ProjectTypeRef | null;
+    status?: ProjectStatusRef | null;
+}
+
+export interface ProjectFilterOption {
+    slug: string;
+    name: string;
+}
+
+export interface ProjectStatusFilterOption extends ProjectFilterOption {
+    color?: string | null;
+}
+
+export interface ProjectsIndexFilters {
+    project_type?: string | null;
+    project_status?: string | null;
+    search?: string | null;
+}
+
+export interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+export interface ProjectPaginator<T> {
+    data: T[];
+    current_page: number;
+    first_page_url: string | null;
+    from: number | null;
+    last_page: number;
+    last_page_url: string | null;
+    links: PaginationLink[];
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number | null;
+    total: number;
+}
+
+export interface ProjectsIndexProps {
+    projects: ProjectPaginator<PublicProjectCard>;
+    types: ProjectFilterOption[];
+    statuses: ProjectStatusFilterOption[];
+    filters: ProjectsIndexFilters;
+    seo: ProjectSeoData;
     [key: string]: unknown;
 }
