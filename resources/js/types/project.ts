@@ -1,5 +1,6 @@
 import { type HomeAboutData } from './home-about';
 import { type HeroVideoQuality, type HeroVideoSource } from './site';
+import { type WhyChooseUsData } from './why-choose-us';
 
 export interface ProjectTypeRef {
     id: number;
@@ -219,6 +220,7 @@ export interface HomePageProps {
     featuredProjects: PublicProjectCard[];
     hero: HomeHeroData;
     about: HomeAboutData;
+    whyChooseUs: WhyChooseUsData;
     seo: ProjectSeoData;
     [key: string]: unknown;
 }

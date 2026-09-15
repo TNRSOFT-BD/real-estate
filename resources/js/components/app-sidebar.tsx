@@ -20,6 +20,7 @@ import {
     Scale,
     Settings,
     Share2,
+    Sparkles,
     Users,
 } from 'lucide-react';
 import AppLogo from './app-logo';
@@ -108,6 +109,11 @@ const homepageNavItems: NavItem[] = [
         title: 'About Section',
         url: '/admin/home-about',
         icon: Info,
+    },
+    {
+        title: 'Why Choose Us',
+        url: '/admin/why-choose-us',
+        icon: Sparkles,
     },
 ];
 

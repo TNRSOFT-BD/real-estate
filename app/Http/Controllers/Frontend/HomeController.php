@@ -10,6 +10,8 @@ use App\Http\Resources\ProjectCardResource;
 use App\Repositories\Contracts\Project\ProjectRepositoryInterface;
 use App\Services\Home\HomeAboutService;
 use App\Services\Home\HomeAboutStatService;
+use App\Services\Home\WhyChooseUsFeatureService;
+use App\Services\Home\WhyChooseUsService;
 use App\Services\Site\SiteThemeService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,6 +23,8 @@ class HomeController extends Controller
         private readonly SiteThemeService $siteSettings,
         private readonly HomeAboutService $homeAbout,
         private readonly HomeAboutStatService $homeAboutStats,
+        private readonly WhyChooseUsService $whyChooseUs,
+        private readonly WhyChooseUsFeatureService $whyChooseUsFeatures,
     ) {}
 
     public function index(): Response
@@ -34,6 +38,16 @@ class HomeController extends Controller
                 ...$this->homeAbout->getSettings(),
                 'stats' => $this->homeAboutStats->all()
                     ->map(fn ($stat): array => ['figure' => $stat->figure, 'label' => $stat->label])
+                    ->all(),
+            ],
+            'whyChooseUs' => [
+                ...$this->whyChooseUs->getSettings(),
+                'features' => $this->whyChooseUsFeatures->active()
+                    ->map(fn ($feature): array => [
+                        'title' => $feature->title,
+                        'description' => $feature->description,
+                        'icon' => $feature->icon,
+                    ])
                     ->all(),
             ],
             'hero' => [

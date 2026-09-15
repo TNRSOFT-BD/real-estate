@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\Project\ProjectPricingPlanController;
 use App\Http\Controllers\Admin\Project\ProjectStatusController;
 use App\Http\Controllers\Admin\Project\ProjectTypeController;
 use App\Http\Controllers\Admin\Site\SiteThemeController;
+use App\Http\Controllers\Admin\WhyChooseUs\WhyChooseUsController;
+use App\Http\Controllers\Admin\WhyChooseUs\WhyChooseUsFeatureController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
@@ -46,6 +48,16 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::patch('stats/reorder', [HomeAboutStatController::class, 'reorder'])->name('stats.reorder');
         Route::put('stats/{stat}', [HomeAboutStatController::class, 'update'])->whereNumber('stat')->name('stats.update');
         Route::delete('stats/{stat}', [HomeAboutStatController::class, 'destroy'])->whereNumber('stat')->name('stats.destroy');
+    });
+
+    Route::prefix('why-choose-us')->name('admin.why-choose-us.')->group(function () {
+        Route::get('/', [WhyChooseUsController::class, 'edit'])->name('edit');
+        Route::put('/', [WhyChooseUsController::class, 'update'])->name('update');
+        Route::post('features', [WhyChooseUsFeatureController::class, 'store'])->name('features.store');
+        Route::patch('features/reorder', [WhyChooseUsFeatureController::class, 'reorder'])->name('features.reorder');
+        Route::put('features/{feature}', [WhyChooseUsFeatureController::class, 'update'])->whereNumber('feature')->name('features.update');
+        Route::delete('features/{feature}', [WhyChooseUsFeatureController::class, 'destroy'])->whereNumber('feature')->name('features.destroy');
+        Route::patch('features/{feature}/toggle', [WhyChooseUsFeatureController::class, 'toggle'])->whereNumber('feature')->name('features.toggle');
     });
 
     Route::prefix('legal')->name('admin.legal.')->group(function () {

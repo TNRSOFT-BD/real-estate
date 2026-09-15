@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             CompanyProfileSeeder::class,
             SiteSettingSeeder::class,
             HomeAboutSeeder::class,
+            WhyChooseUsSeeder::class,
             ContactSeeder::class,
             AboutSeeder::class,
             LegalPageSeeder::class,
