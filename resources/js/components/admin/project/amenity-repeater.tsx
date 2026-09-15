@@ -11,9 +11,10 @@ interface AmenityRepeaterProps {
     onChange: (value: AmenityItem[]) => void;
     error?: string;
     hint?: string;
+    labelClassName?: string;
 }
 
-export default function AmenityRepeater({ label, value, onChange, error, hint }: AmenityRepeaterProps) {
+export default function AmenityRepeater({ label, value, onChange, error, hint, labelClassName }: AmenityRepeaterProps) {
     const update = (index: number, field: keyof AmenityItem, fieldValue: string) => {
         onChange(value.map((row, rowIndex) => (rowIndex === index ? { ...row, [field]: fieldValue } : row)));
     };
@@ -21,7 +22,7 @@ export default function AmenityRepeater({ label, value, onChange, error, hint }:
     const remove = (index: number) => onChange(value.filter((_, rowIndex) => rowIndex !== index));
 
     return (
-        <Field label={label} error={error} hint={hint}>
+        <Field label={label} error={error} hint={hint} labelClassName={labelClassName}>
             <div className="space-y-2">
                 {value.map((row, index) => (
                     <div key={index} className="flex flex-wrap items-end gap-2">
@@ -29,7 +30,11 @@ export default function AmenityRepeater({ label, value, onChange, error, hint }:
                             <IconSelect value={row.icon ?? ''} onChange={(icon) => update(index, 'icon', icon)} />
                         </div>
                         <div className="min-w-40 flex-1">
-                            <Input value={row.name} onChange={(event) => update(index, 'name', event.target.value)} placeholder="e.g. Swimming Pool" />
+                            <Input
+                                value={row.name}
+                                onChange={(event) => update(index, 'name', event.target.value)}
+                                placeholder="e.g. Swimming Pool"
+                            />
                         </div>
                         <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} aria-label="Remove amenity">
                             <Trash2 className="size-4" />

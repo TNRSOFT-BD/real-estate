@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\About\AboutItemController;
 use App\Http\Controllers\Admin\About\AboutPageSettingsController;
 use App\Http\Controllers\Admin\About\CompanyProfileController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\Contact\ContactFaqController;
 use App\Http\Controllers\Admin\Contact\ContactFormFieldController;
 use App\Http\Controllers\Admin\Contact\ContactInformationController;
@@ -224,5 +225,15 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::delete('{projectStatus}', [ProjectStatusController::class, 'destroy'])->whereNumber('projectStatus')->name('destroy');
         Route::patch('{projectStatus}/toggle', [ProjectStatusController::class, 'toggle'])->whereNumber('projectStatus')->name('toggle');
         Route::patch('{projectStatus}/reassign', [ProjectStatusController::class, 'reassign'])->whereNumber('projectStatus')->name('reassign');
+    });
+
+    Route::prefix('admins')->name('admin.admins.')->group(function () {
+        Route::get('/', [AdminUserController::class, 'index'])->name('index');
+        Route::get('create', [AdminUserController::class, 'create'])->name('create');
+        Route::post('/', [AdminUserController::class, 'store'])->name('store');
+        Route::get('{admin}/edit', [AdminUserController::class, 'edit'])->whereNumber('admin')->name('edit');
+        Route::put('{admin}', [AdminUserController::class, 'update'])->whereNumber('admin')->name('update');
+        Route::put('{admin}/password', [AdminUserController::class, 'updatePassword'])->whereNumber('admin')->name('password.update');
+        Route::delete('{admin}', [AdminUserController::class, 'destroy'])->whereNumber('admin')->name('destroy');
     });
 });

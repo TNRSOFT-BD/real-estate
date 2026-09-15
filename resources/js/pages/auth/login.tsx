@@ -1,48 +1,48 @@
-import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
-
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
-
-interface LoginForm {
-    email: string;
-    password: string;
-    remember: boolean;
-}
+import AuthGlassLayout from '@/layouts/auth/auth-glass-layout';
+import { Head, useForm } from '@inertiajs/react';
+import { ArrowRight, CheckCircle2, Eye, EyeOff, LoaderCircle, Lock, Mail } from 'lucide-react';
+import { type FormEventHandler, useState } from 'react';
 
 interface LoginProps {
     status?: string;
-    canResetPassword: boolean;
 }
 
-export default function Login({ status, canResetPassword }: LoginProps) {
-    const { data, setData, post, processing, errors, reset } = useForm<LoginForm>({
+export default function Login({ status }: LoginProps) {
+    const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
-        remember: false,
+        remember: false as boolean,
     });
+    const [showPassword, setShowPassword] = useState(false);
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+    const submit: FormEventHandler = (event) => {
+        event.preventDefault();
         post(route('login'), {
             onFinish: () => reset('password'),
         });
     };
 
     return (
-        <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
+        <AuthGlassLayout title="Welcome back" description="Sign in to your account to continue to the admin console.">
             <Head title="Log in" />
 
-            <form className="flex flex-col gap-6" onSubmit={submit}>
-                <div className="grid gap-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email address</Label>
+            {status && (
+                <div className="mb-6 flex items-start gap-2 rounded-xl border border-green-600/30 bg-green-50/90 p-3 text-sm text-green-800">
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
+                    <span>{status}</span>
+                </div>
+            )}
+
+            <form className="grid gap-5" onSubmit={submit}>
+                <div className="grid gap-2">
+                    <Label htmlFor="email">Email address</Label>
+                    <div className="relative">
+                        <Mail className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                         <Input
                             id="email"
                             type="email"
@@ -51,54 +51,62 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             tabIndex={1}
                             autoComplete="email"
                             value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
+                            onChange={(event) => setData('email', event.target.value)}
                             placeholder="email@example.com"
+                            className="pl-9"
+                            aria-invalid={Boolean(errors.email)}
                         />
-                        <InputError message={errors.email} />
                     </div>
+                    <InputError message={errors.email} />
+                </div>
 
-                    <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                            {canResetPassword && (
-                                <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={5}>
-                                    Forgot password?
-                                </TextLink>
-                            )}
-                        </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <div className="relative">
+                        <Lock className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                         <Input
                             id="password"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             required
                             tabIndex={2}
                             autoComplete="current-password"
                             value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            placeholder="Password"
+                            onChange={(event) => setData('password', event.target.value)}
+                            placeholder="••••••••"
+                            className="pr-10 pl-9"
+                            aria-invalid={Boolean(errors.password)}
                         />
-                        <InputError message={errors.password} />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword((visible) => !visible)}
+                            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
+                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            tabIndex={-1}
+                        >
+                            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                        </button>
                     </div>
-
-                    <div className="flex items-center space-x-3">
-                        <Checkbox id="remember" name="remember" tabIndex={3} />
-                        <Label htmlFor="remember">Remember me</Label>
-                    </div>
-
-                    <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Log in
-                    </Button>
+                    <InputError message={errors.password} />
                 </div>
 
-                <div className="text-muted-foreground text-center text-sm">
-                    Don't have an account?{' '}
-                    <TextLink href={route('register')} tabIndex={5}>
-                        Sign up
-                    </TextLink>
+                <div className="flex items-center gap-2">
+                    <Checkbox
+                        id="remember"
+                        checked={data.remember}
+                        onCheckedChange={(checked) => setData('remember', checked === true)}
+                        tabIndex={3}
+                    />
+                    <Label htmlFor="remember" className="cursor-pointer text-sm font-normal">
+                        Remember me
+                    </Label>
                 </div>
+
+                <Button type="submit" size="lg" className="mt-2 w-full" tabIndex={4} disabled={processing}>
+                    {processing ? <LoaderCircle className="animate-spin" /> : null}
+                    {processing ? 'Signing in…' : 'Sign in'}
+                    {!processing && <ArrowRight />}
+                </Button>
             </form>
-
-            {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
-        </AuthLayout>
+        </AuthGlassLayout>
     );
 }

@@ -42,4 +42,13 @@ interface ProjectRepositoryInterface
     public function delete(Project $project): bool;
 
     public function count(): int;
+
+    public function countPublished(): int;
+
+    public function countFeatured(): int;
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function recent(int $limit = 5): Collection;
 }

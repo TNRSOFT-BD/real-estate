@@ -1,11 +1,11 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import ContactSocialLinks from '@/components/frontend/contact/contact-social-links';
 import { mediaUrl } from '@/lib/media';
+import { cn } from '@/lib/utils';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
 
 interface PublicLayoutProps {
     children: React.ReactNode;
@@ -42,10 +42,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
     const hours = firstOfType(['business_hours']);
 
     return (
-        <div
-            style={shellStyle}
-            className={cn('bg-canvas text-ink flex min-h-screen flex-col', theme?.mode === 'dark' ? 'site-dark' : 'site-light')}
-        >
+        <div style={shellStyle} className={cn('bg-canvas text-ink flex min-h-screen flex-col', theme?.mode === 'dark' ? 'site-dark' : 'site-light')}>
             <header className="border-glass-border bg-glass sticky top-0 z-40 w-full border-b backdrop-blur-xl">
                 <div className="mx-auto flex h-[4.5rem] w-full max-w-7xl items-center justify-between gap-4 lg:h-16">
                     <Link href="/" aria-label={name} className="flex items-center">
@@ -68,18 +65,16 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
                     <div className="hidden items-center gap-2 md:flex">
                         {auth.user ? (
-                            <Link href="/dashboard" className="bg-ink text-canvas hover:opacity-90 rounded-full px-4 py-2 text-sm font-medium transition-opacity">
+                            <Link
+                                href="/dashboard"
+                                className="bg-ink text-canvas rounded-full px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90"
+                            >
                                 Dashboard
                             </Link>
                         ) : (
-                            <>
-                                <Link href="/login" className={navLinkClass}>
-                                    Log in
-                                </Link>
-                                <Link href="/register" className="bg-ink text-canvas hover:opacity-90 rounded-full px-4 py-2 text-sm font-medium transition-opacity">
-                                    Register
-                                </Link>
-                            </>
+                            <Link href="/login" className={navLinkClass}>
+                                Log in
+                            </Link>
                         )}
                     </div>
 
@@ -103,18 +98,16 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         ))}
                         <div className="border-glass-border mt-2 flex items-center gap-2 border-t pt-3">
                             {auth.user ? (
-                                <Link href="/dashboard" className="bg-ink text-canvas hover:opacity-90 flex-1 rounded-full px-4 py-2 text-center text-sm font-medium transition-opacity">
+                                <Link
+                                    href="/dashboard"
+                                    className="bg-ink text-canvas flex-1 rounded-full px-4 py-2 text-center text-sm font-medium transition-opacity hover:opacity-90"
+                                >
                                     Dashboard
                                 </Link>
                             ) : (
-                                <>
-                                    <Link href="/login" className={cn(navLinkClass, 'border-glass-border flex-1 border text-center')}>
-                                        Log in
-                                    </Link>
-                                    <Link href="/register" className="bg-ink text-canvas hover:opacity-90 flex-1 rounded-full px-4 py-2 text-center text-sm font-medium transition-opacity">
-                                        Register
-                                    </Link>
-                                </>
+                                <Link href="/login" className={cn(navLinkClass, 'border-glass-border flex-1 border text-center')}>
+                                    Log in
+                                </Link>
                             )}
                         </div>
                     </nav>
@@ -123,9 +116,9 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
             <main className="flex-1">{children}</main>
 
-            <footer className="border-line mt-16 border-t">
-                <div className="mx-auto w-full max-w-7xl px-4 py-14 lg:px-8 lg:py-16">
-                    <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
+            <footer className="border-line mt-16 border-t bg-white">
+                <div className="mx-auto w-full max-w-7xl px-4 py-4 lg:px-8 lg:py-6">
+                    <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
                         <div className="lg:col-span-4">
                             <Link href="/" aria-label={name} className="inline-flex items-center">
                                 {company?.logo ? (
@@ -193,7 +186,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
                             <Link
                                 href="/contact"
-                                className="group bg-ink text-canvas hover:opacity-90 mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-opacity"
+                                className="group bg-ink text-canvas mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-opacity hover:opacity-90"
                             >
                                 Contact our team
                                 <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -201,7 +194,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         </div>
                     </div>
 
-                    <div className="border-line mt-14 flex flex-col items-center justify-between gap-3 border-t pt-6 text-xs sm:flex-row">
+                    <div className="border-line mt-8 flex flex-col items-center justify-between gap-3 border-t pt-5 text-xs sm:flex-row">
                         <p className="text-ink-soft">
                             &copy; {new Date().getFullYear()} {name}. All rights reserved.
                         </p>

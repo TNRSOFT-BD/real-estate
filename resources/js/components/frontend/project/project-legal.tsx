@@ -4,11 +4,12 @@ import { FileText } from 'lucide-react';
 import ProjectSectionHeading from './project-section-heading';
 
 export default function ProjectLegal({ project }: { project: PublicProject }) {
-    if (!project.legal_approval_no && !project.legal_approval_document) {
+    const approvalNo = project.legal_approval_no?.trim() || null;
+    const documentUrl = project.legal_approval_document ? mediaUrl(project.legal_approval_document) : null;
+
+    if (!approvalNo && !documentUrl) {
         return null;
     }
-
-    const documentUrl = project.legal_approval_document ? mediaUrl(project.legal_approval_document) : null;
 
     return (
         <div>
@@ -16,8 +17,8 @@ export default function ProjectLegal({ project }: { project: PublicProject }) {
 
             <div className="border-line bg-glass/40 flex flex-wrap items-center justify-between gap-6 rounded-2xl border p-6 sm:p-8">
                 <div>
-                    {project.legal_approval_no ? (
-                        <p className="text-ink text-lg font-medium">Approval no. {project.legal_approval_no}</p>
+                    {approvalNo ? (
+                        <p className="text-ink text-lg font-medium">Approval no. {approvalNo}</p>
                     ) : (
                         <p className="text-ink text-lg font-medium">Approval information</p>
                     )}

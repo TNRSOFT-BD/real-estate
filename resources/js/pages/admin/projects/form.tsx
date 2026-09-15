@@ -1,15 +1,22 @@
-import { CheckboxField, Field, SelectField, TextAreaField, TextField } from '@/components/admin/contact/form-fields';
 import AdminPageHeader from '@/components/admin/contact/admin-page-header';
+import { CheckboxField, Field, SelectField, TextAreaField, TextField } from '@/components/admin/contact/form-fields';
+import RichTextEditor from '@/components/admin/legal/rich-text-editor';
+import AmenityRepeater from '@/components/admin/project/amenity-repeater';
 import FileUploadField from '@/components/admin/project/file-upload-field';
 import ImageUploadField from '@/components/admin/project/image-upload-field';
 import KeyValueRepeater from '@/components/admin/project/key-value-repeater';
-import AmenityRepeater from '@/components/admin/project/amenity-repeater';
-import RichTextEditor from '@/components/admin/legal/rich-text-editor';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type SharedData } from '@/types';
-import { type AdminProjectItem, type AmenityItem, type CurrencyConfig, type MediaLimits, type ProjectFeature, type SelectOption } from '@/types/project-admin';
+import {
+    type AdminProjectItem,
+    type AmenityItem,
+    type CurrencyConfig,
+    type MediaLimits,
+    type ProjectFeature,
+    type SelectOption,
+} from '@/types/project-admin';
 import { Link, router, useForm, usePage } from '@inertiajs/react';
 import { ArrowLeft, Image as ImageIcon, Loader2, Save, Wallet } from 'lucide-react';
 
@@ -156,17 +163,59 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                         </CardHeader>
                         <CardContent className="grid gap-5 sm:grid-cols-2">
                             <TextField label="Title" value={data.title} onChange={(v) => setData('title', v)} error={errors.title} required />
-                            <TextField label="Project code" value={data.project_code} onChange={(v) => setData('project_code', v)} error={errors.project_code} hint="Optional unique identifier." />
-                            <TextField label="Slug" value={data.slug} onChange={(v) => setData('slug', v)} error={errors.slug} hint="Leave blank to generate from the title." />
-                            <TextField label="Sort order" type="number" value={String(data.sort_order)} onChange={(v) => setData('sort_order', Number(v) || 0)} error={errors.sort_order} />
-                            <SelectField label="Project type" value={data.project_type_id} onChange={(v) => setData('project_type_id', v)} options={types} error={errors.project_type_id} required />
-                            <SelectField label="Project status" value={data.project_status_id} onChange={(v) => setData('project_status_id', v)} options={statuses} error={errors.project_status_id} required />
+                            <TextField
+                                label="Project code"
+                                value={data.project_code}
+                                onChange={(v) => setData('project_code', v)}
+                                error={errors.project_code}
+                                hint="Optional unique identifier."
+                            />
+                            <TextField
+                                label="Slug"
+                                value={data.slug}
+                                onChange={(v) => setData('slug', v)}
+                                error={errors.slug}
+                                hint="Leave blank to generate from the title."
+                            />
+                            <TextField
+                                label="Sort order"
+                                type="number"
+                                value={String(data.sort_order)}
+                                onChange={(v) => setData('sort_order', Number(v) || 0)}
+                                error={errors.sort_order}
+                            />
+                            <SelectField
+                                label="Project type"
+                                value={data.project_type_id}
+                                onChange={(v) => setData('project_type_id', v)}
+                                options={types}
+                                error={errors.project_type_id}
+                                required
+                            />
+                            <SelectField
+                                label="Project status"
+                                value={data.project_status_id}
+                                onChange={(v) => setData('project_status_id', v)}
+                                options={statuses}
+                                error={errors.project_status_id}
+                                required
+                            />
                             <div className="sm:col-span-2">
-                                <TextAreaField label="Short description" value={data.short_description} onChange={(v) => setData('short_description', v)} error={errors.short_description} rows={3} />
+                                <TextAreaField
+                                    label="Short description"
+                                    value={data.short_description}
+                                    onChange={(v) => setData('short_description', v)}
+                                    error={errors.short_description}
+                                    rows={3}
+                                />
                             </div>
                             <div className="sm:col-span-2">
                                 <Field label="Overview" error={errors.overview}>
-                                    <RichTextEditor value={data.overview} onChange={(html) => setData('overview', html)} error={Boolean(errors.overview)} />
+                                    <RichTextEditor
+                                        value={data.overview}
+                                        onChange={(html) => setData('overview', html)}
+                                        error={Boolean(errors.overview)}
+                                    />
                                 </Field>
                             </div>
                         </CardContent>
@@ -178,10 +227,30 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                             <CardDescription>Address and Google Maps share link.</CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-5 sm:grid-cols-2">
-                            <TextField label="Address" value={data.location_address} onChange={(v) => setData('location_address', v)} error={errors.location_address} />
-                            <TextField label="Area" value={data.location_area} onChange={(v) => setData('location_area', v)} error={errors.location_area} />
-                            <TextField label="City" value={data.location_city} onChange={(v) => setData('location_city', v)} error={errors.location_city} />
-                            <TextField label="Country" value={data.location_country} onChange={(v) => setData('location_country', v)} error={errors.location_country} />
+                            <TextField
+                                label="Address"
+                                value={data.location_address}
+                                onChange={(v) => setData('location_address', v)}
+                                error={errors.location_address}
+                            />
+                            <TextField
+                                label="Area"
+                                value={data.location_area}
+                                onChange={(v) => setData('location_area', v)}
+                                error={errors.location_area}
+                            />
+                            <TextField
+                                label="City"
+                                value={data.location_city}
+                                onChange={(v) => setData('location_city', v)}
+                                error={errors.location_city}
+                            />
+                            <TextField
+                                label="Country"
+                                value={data.location_country}
+                                onChange={(v) => setData('location_country', v)}
+                                error={errors.location_country}
+                            />
                             <div className="sm:col-span-2">
                                 <TextField
                                     label="Google Maps URL"
@@ -191,7 +260,12 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                                     hint="Paste a share link, e.g. https://maps.app.goo.gl/..."
                                 />
                                 {data.google_map_url && (
-                                    <a href={data.google_map_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground mt-1 inline-block text-xs underline">
+                                    <a
+                                        href={data.google_map_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-muted-foreground mt-1 inline-block text-xs underline"
+                                    >
                                         Open in Google Maps ↗
                                     </a>
                                 )}
@@ -207,12 +281,49 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                             <CardDescription>Areas, units and handover.</CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-5 sm:grid-cols-3">
-                            <TextField label="Total land area" value={data.total_land_area} onChange={(v) => setData('total_land_area', v)} error={errors.total_land_area} />
-                            <TextField label="Total units" type="number" value={data.total_units} onChange={(v) => setData('total_units', v)} error={errors.total_units} />
-                            <TextField label="Floors" type="number" value={data.number_of_floors} onChange={(v) => setData('number_of_floors', v)} error={errors.number_of_floors} />
-                            <TextField label="Buildings" type="number" value={data.number_of_buildings} onChange={(v) => setData('number_of_buildings', v)} error={errors.number_of_buildings} />
-                            <TextField label="Units per floor" type="number" value={data.units_per_floor} onChange={(v) => setData('units_per_floor', v)} error={errors.units_per_floor} />
-                            <TextField label="Handover date" type="date" value={data.handover_date} onChange={(v) => setData('handover_date', v)} error={errors.handover_date} />
+                            <TextField
+                                label="Total land area"
+                                value={data.total_land_area}
+                                onChange={(v) => setData('total_land_area', v)}
+                                error={errors.total_land_area}
+                                placeholder="e.g. 5 Katha, 2 Bigha, 33,000 sqft, 2 acres"
+                                hint="Free text — include the unit (Katha, Bigha, sqft, acres…)."
+                            />
+                            <TextField
+                                label="Total units"
+                                type="number"
+                                value={data.total_units}
+                                onChange={(v) => setData('total_units', v)}
+                                error={errors.total_units}
+                            />
+                            <TextField
+                                label="Floors"
+                                type="number"
+                                value={data.number_of_floors}
+                                onChange={(v) => setData('number_of_floors', v)}
+                                error={errors.number_of_floors}
+                            />
+                            <TextField
+                                label="Buildings"
+                                type="number"
+                                value={data.number_of_buildings}
+                                onChange={(v) => setData('number_of_buildings', v)}
+                                error={errors.number_of_buildings}
+                            />
+                            <TextField
+                                label="Units per floor"
+                                type="number"
+                                value={data.units_per_floor}
+                                onChange={(v) => setData('units_per_floor', v)}
+                                error={errors.units_per_floor}
+                            />
+                            <TextField
+                                label="Handover date"
+                                type="date"
+                                value={data.handover_date}
+                                onChange={(v) => setData('handover_date', v)}
+                                error={errors.handover_date}
+                            />
                         </CardContent>
                     </Card>
 
@@ -221,23 +332,29 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                             <CardTitle>Features &amp; Amenities</CardTitle>
                             <CardDescription>Flexible key/value features and a list of amenities.</CardDescription>
                         </CardHeader>
-                        <CardContent className="grid gap-5">
-                            <KeyValueRepeater
-                                label="Property features"
-                                value={data.property_features}
-                                onChange={(rows) => setData('property_features', rows)}
-                                error={errors.property_features}
-                                keyLabel="e.g. Building height"
-                                valueLabel="e.g. G+10"
-                                withIcon
-                            />
-                            <AmenityRepeater
-                                label="Amenities"
-                                value={data.amenities}
-                                onChange={(items) => setData('amenities', items)}
-                                error={errors.amenities}
-                                hint="Add a name and pick an optional icon. Legacy plain amenities are upgraded automatically."
-                            />
+                        <CardContent className="grid gap-5 lg:grid-cols-2 lg:items-start">
+                            <div className="rounded-lg border p-4">
+                                <KeyValueRepeater
+                                    label="Property features"
+                                    value={data.property_features}
+                                    onChange={(rows) => setData('property_features', rows)}
+                                    error={errors.property_features}
+                                    keyLabel="e.g. Building height"
+                                    valueLabel="e.g. G+10"
+                                    withIcon
+                                    labelClassName="text-base font-semibold"
+                                />
+                            </div>
+                            <div className="rounded-lg border p-4">
+                                <AmenityRepeater
+                                    label="Amenities"
+                                    value={data.amenities}
+                                    onChange={(items) => setData('amenities', items)}
+                                    error={errors.amenities}
+                                    hint="Add a name and pick an optional icon. Legacy plain amenities are upgraded automatically."
+                                    labelClassName="text-base font-semibold"
+                                />
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -257,7 +374,12 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                                 onToggleRemove={() => setData('remove_hero_banner', !data.remove_hero_banner)}
                                 onChange={(file) => setData('hero_banner', file)}
                             />
-                            <TextField label="Hero banner alt text" value={data.hero_banner_alt} onChange={(v) => setData('hero_banner_alt', v)} error={errors.hero_banner_alt} />
+                            <TextField
+                                label="Hero banner alt text"
+                                value={data.hero_banner_alt}
+                                onChange={(v) => setData('hero_banner_alt', v)}
+                                error={errors.hero_banner_alt}
+                            />
                             <ImageUploadField
                                 label="At a glance image"
                                 currentSrc={project?.at_a_glance_image}
@@ -284,7 +406,12 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                                 onToggleRemove={() => setData('remove_brochure_pdf', !data.remove_brochure_pdf)}
                                 onChange={(file) => setData('brochure_pdf', file)}
                             />
-                            <TextField label="Promo video URL" value={data.promo_video_url} onChange={(v) => setData('promo_video_url', v)} error={errors.promo_video_url} />
+                            <TextField
+                                label="Promo video URL"
+                                value={data.promo_video_url}
+                                onChange={(v) => setData('promo_video_url', v)}
+                                error={errors.promo_video_url}
+                            />
                         </CardContent>
                     </Card>
 
@@ -294,7 +421,12 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                             <CardDescription>Approval number and document.</CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-5 sm:grid-cols-2">
-                            <TextField label="Approval number" value={data.legal_approval_no} onChange={(v) => setData('legal_approval_no', v)} error={errors.legal_approval_no} />
+                            <TextField
+                                label="Approval number"
+                                value={data.legal_approval_no}
+                                onChange={(v) => setData('legal_approval_no', v)}
+                                error={errors.legal_approval_no}
+                            />
                             <FileUploadField
                                 label="Approval document (PDF)"
                                 currentSrc={project?.legal_approval_document}
@@ -314,12 +446,33 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                             <CardDescription>Optional metadata with sensible fallbacks.</CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-5 sm:grid-cols-2">
-                            <TextField label="Meta title" value={data.meta_title} onChange={(v) => setData('meta_title', v)} error={errors.meta_title} />
-                            <TextField label="Meta keywords" value={data.meta_keywords} onChange={(v) => setData('meta_keywords', v)} error={errors.meta_keywords} />
+                            <TextField
+                                label="Meta title"
+                                value={data.meta_title}
+                                onChange={(v) => setData('meta_title', v)}
+                                error={errors.meta_title}
+                            />
+                            <TextField
+                                label="Meta keywords"
+                                value={data.meta_keywords}
+                                onChange={(v) => setData('meta_keywords', v)}
+                                error={errors.meta_keywords}
+                            />
                             <div className="sm:col-span-2">
-                                <TextAreaField label="Meta description" value={data.meta_description} onChange={(v) => setData('meta_description', v)} error={errors.meta_description} rows={2} />
+                                <TextAreaField
+                                    label="Meta description"
+                                    value={data.meta_description}
+                                    onChange={(v) => setData('meta_description', v)}
+                                    error={errors.meta_description}
+                                    rows={2}
+                                />
                             </div>
-                            <TextField label="Canonical URL" value={data.canonical_url} onChange={(v) => setData('canonical_url', v)} error={errors.canonical_url} />
+                            <TextField
+                                label="Canonical URL"
+                                value={data.canonical_url}
+                                onChange={(v) => setData('canonical_url', v)}
+                                error={errors.canonical_url}
+                            />
                             <SelectField
                                 label="Robots"
                                 value={data.robots}
@@ -334,9 +487,21 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                                 error={errors.robots}
                             />
                             <TextField label="OG title" value={data.og_title} onChange={(v) => setData('og_title', v)} error={errors.og_title} />
-                            <TextField label="Twitter card" value={data.twitter_card} onChange={(v) => setData('twitter_card', v)} error={errors.twitter_card} hint="summary or summary_large_image" />
+                            <TextField
+                                label="Twitter card"
+                                value={data.twitter_card}
+                                onChange={(v) => setData('twitter_card', v)}
+                                error={errors.twitter_card}
+                                hint="summary or summary_large_image"
+                            />
                             <div className="sm:col-span-2">
-                                <TextAreaField label="OG description" value={data.og_description} onChange={(v) => setData('og_description', v)} error={errors.og_description} rows={2} />
+                                <TextAreaField
+                                    label="OG description"
+                                    value={data.og_description}
+                                    onChange={(v) => setData('og_description', v)}
+                                    error={errors.og_description}
+                                    rows={2}
+                                />
                             </div>
                             <ImageUploadField
                                 label="OG image"
@@ -358,8 +523,18 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                                 onToggleRemove={() => setData('remove_twitter_image', !data.remove_twitter_image)}
                                 onChange={(file) => setData('twitter_image', file)}
                             />
-                            <TextField label="Twitter title" value={data.twitter_title} onChange={(v) => setData('twitter_title', v)} error={errors.twitter_title} />
-                            <TextField label="Twitter description" value={data.twitter_description} onChange={(v) => setData('twitter_description', v)} error={errors.twitter_description} />
+                            <TextField
+                                label="Twitter title"
+                                value={data.twitter_title}
+                                onChange={(v) => setData('twitter_title', v)}
+                                error={errors.twitter_title}
+                            />
+                            <TextField
+                                label="Twitter description"
+                                value={data.twitter_description}
+                                onChange={(v) => setData('twitter_description', v)}
+                                error={errors.twitter_description}
+                            />
                         </CardContent>
                     </Card>
 
@@ -369,8 +544,18 @@ export default function ProjectForm({ project, types, statuses, currency, mediaL
                             <CardDescription>Visibility and featured placement. Currency: {currency.code}.</CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-5 sm:grid-cols-2">
-                            <CheckboxField label="Published" checked={data.is_published} onChange={(v) => setData('is_published', v)} error={errors.is_published} />
-                            <CheckboxField label="Featured" checked={data.is_featured} onChange={(v) => setData('is_featured', v)} error={errors.is_featured} />
+                            <CheckboxField
+                                label="Published"
+                                checked={data.is_published}
+                                onChange={(v) => setData('is_published', v)}
+                                error={errors.is_published}
+                            />
+                            <CheckboxField
+                                label="Featured"
+                                checked={data.is_featured}
+                                onChange={(v) => setData('is_featured', v)}
+                                error={errors.is_featured}
+                            />
                         </CardContent>
                     </Card>
                 </div>

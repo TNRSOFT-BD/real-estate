@@ -46,7 +46,7 @@ abstract class ProjectRequest extends FormRequest
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
 
-            'total_land_area' => ['nullable', 'numeric', 'min:0'],
+            'total_land_area' => ['nullable', 'string', 'max:100'],
             'total_units' => ['nullable', 'integer', 'min:0'],
             'number_of_floors' => ['nullable', 'integer', 'min:0'],
             'number_of_buildings' => ['nullable', 'integer', 'min:0'],

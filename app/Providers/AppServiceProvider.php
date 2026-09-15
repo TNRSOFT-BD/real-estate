@@ -36,9 +36,11 @@ use App\Policies\ProjectPricingPlanPolicy;
 use App\Policies\ProjectStatusPolicy;
 use App\Policies\ProjectTypePolicy;
 use App\Policies\SiteThemePolicy;
+use App\Policies\UserPolicy;
 use App\Policies\WhyChooseUsPolicy;
 use App\Repositories\Contracts\About\AboutItemRepositoryInterface;
 use App\Repositories\Contracts\About\AboutPageSettingRepositoryInterface;
+use App\Repositories\Contracts\Admin\AdminRepositoryInterface;
 use App\Repositories\Contracts\Company\CompanyProfileRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactFaqRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactFormFieldRepositoryInterface;
@@ -63,6 +65,7 @@ use App\Repositories\Contracts\Project\ProjectTypeRepositoryInterface;
 use App\Repositories\Contracts\Site\SiteSettingRepositoryInterface;
 use App\Repositories\Eloquent\About\EloquentAboutItemRepository;
 use App\Repositories\Eloquent\About\EloquentAboutPageSettingRepository;
+use App\Repositories\Eloquent\Admin\EloquentAdminRepository;
 use App\Repositories\Eloquent\Company\EloquentCompanyProfileRepository;
 use App\Repositories\Eloquent\Contact\EloquentContactFaqRepository;
 use App\Repositories\Eloquent\Contact\EloquentContactFormFieldRepository;
@@ -128,6 +131,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectFloorPlanRepositoryInterface::class, EloquentProjectFloorPlanRepository::class);
 
         $this->app->bind(SiteSettingRepositoryInterface::class, EloquentSiteSettingRepository::class);
+
+        $this->app->bind(AdminRepositoryInterface::class, EloquentAdminRepository::class);
     }
 
     /**
@@ -148,6 +153,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ProjectGallery::class, ProjectGalleryPolicy::class);
         Gate::policy(ProjectPricingPlan::class, ProjectPricingPlanPolicy::class);
         Gate::policy(ProjectFloorPlan::class, ProjectFloorPlanPolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
 
         Gate::before(function (User $user) {
             if ($user->isAdministrator()) {

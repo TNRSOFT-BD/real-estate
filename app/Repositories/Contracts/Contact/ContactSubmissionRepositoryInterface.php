@@ -6,6 +6,7 @@ namespace App\Repositories\Contracts\Contact;
 
 use App\Enums\SubmissionStatus;
 use App\Models\Contact\ContactSubmission;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ContactSubmissionRepositoryInterface
@@ -33,4 +34,9 @@ interface ContactSubmissionRepositoryInterface
     public function restoreSpam(ContactSubmission $submission): void;
 
     public function countsOverview(): array;
+
+    /**
+     * @return Collection<int, ContactSubmission>
+     */
+    public function recent(int $limit = 5): Collection;
 }

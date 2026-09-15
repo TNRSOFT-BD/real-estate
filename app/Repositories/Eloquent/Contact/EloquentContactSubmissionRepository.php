@@ -7,6 +7,7 @@ namespace App\Repositories\Eloquent\Contact;
 use App\Enums\SubmissionStatus;
 use App\Models\Contact\ContactSubmission;
 use App\Repositories\Contracts\Contact\ContactSubmissionRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class EloquentContactSubmissionRepository implements ContactSubmissionRepositoryInterface
@@ -102,5 +103,14 @@ class EloquentContactSubmissionRepository implements ContactSubmissionRepository
             'spam' => $this->countByStatus(SubmissionStatus::Spam),
             'total' => $this->countByStatus(),
         ];
+    }
+
+    public function recent(int $limit = 5): Collection
+    {
+        return ContactSubmission::query()
+            ->with('project:id,title,slug')
+            ->latest()
+            ->limit($limit)
+            ->get(['id', 'name', 'email', 'subject', 'status', 'project_id', 'created_at']);
     }
 }

@@ -24,10 +24,6 @@ class LegalPageService
     private const RESERVED_SLUGS = [
         'up',
         'login',
-        'register',
-        'forgot-password',
-        'verify-email',
-        'confirm-password',
         'dashboard',
         'about',
         'contact',

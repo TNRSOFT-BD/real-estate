@@ -69,6 +69,44 @@ function prefersStillMedia(): boolean {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches || connection?.saveData === true;
 }
 
+function parseYouTubeId(url: string | null | undefined): string | null {
+    if (!url) return null;
+    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+}
+
+/**
+ * Compute the poster (first-frame) URL for a given video source.  This must
+ * be a pure function so it can be called both from the useState initializer
+ * (first render, synchronously) and from the useEffect (prop changes).
+ */
+function computePoster(
+    source: string,
+    videoLink: string | null,
+    videoUrl: string | null,
+    tier: VideoTier,
+    firstImage: string | null,
+): string | null {
+    if (source === 'url' && videoLink) {
+        const youtubeId = parseYouTubeId(videoLink);
+        if (youtubeId) {
+            return `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+        }
+        return cloudinaryVideoPoster(videoLink, tier.desktopWidth) ?? firstImage ?? null;
+    }
+
+    if (source === 'upload' && videoUrl) {
+        return cloudinaryVideoPoster(videoUrl, tier.desktopWidth) ?? firstImage ?? null;
+    }
+
+    if (source === 'default') {
+        return demoPosterUrl(tier);
+    }
+
+    return firstImage ?? null;
+}
+
 interface HomeHeroProps {
     hero: HomeHeroData;
 }
@@ -80,11 +118,8 @@ export default function HomeHero({ hero }: HomeHeroProps) {
 
     const imageUrls = (hero.images ?? []).map((path) => mediaUrl(path)).filter((src): src is string => Boolean(src));
     const imageCount = imageUrls.length;
-
-    // While an enabled video loads we show the video's OWN first frame.
-    // Hero images are only used when the video is off.
-    const videoPoster = resolveVideoPoster();
-    const imageFallback = imageUrls[0] ?? demoPosterUrl(tier);
+    const firstImage = imageUrls[0] ?? null;
+    const imageFallback = firstImage ?? demoPosterUrl(tier);
 
     const eyebrow = hero.eyebrow?.trim() || DEFAULT_EYEBROW;
     const title = hero.title?.trim() || DEFAULT_TITLE;
@@ -92,39 +127,66 @@ export default function HomeHero({ hero }: HomeHeroProps) {
 
     const [ready, setReady] = useState(false);
     const [slide, setSlide] = useState(0);
+    const [posterSrc, setPosterSrc] = useState<string | null>(() =>
+        computePoster(source, hero.video_link, hero.video_url, tier, firstImage),
+    );
+
+    const youtubeEmbedUrl = resolveYouTubeEmbedUrl();
     const videoSrc = resolveVideoSrc();
 
     useEffect(() => {
-        if (hero.video_enabled || imageCount <= 1) {
-            return;
-        }
+        setReady(false);
+    }, [source, hero.video_link, hero.video_url, hero.video_enabled]);
 
-        if (prefersStillMedia()) {
+    useEffect(() => {
+        setPosterSrc(computePoster(source, hero.video_link, hero.video_url, tier, firstImage));
+    }, [source, hero.video_link, hero.video_url, tier, firstImage]);
+
+    useEffect(() => {
+        if (!youtubeEmbedUrl) return;
+
+        const handleMessage = (event: MessageEvent) => {
+            try {
+                const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                if (data?.event === 'infoDelivery' && (data?.info?.playerState === 1 || data?.info?.currentTime > 0)) {
+                    setReady(true);
+                }
+            } catch {}
+        };
+
+        window.addEventListener('message', handleMessage);
+
+        const timer = setTimeout(() => {
+            setReady(true);
+        }, 1200);
+
+        return () => {
+            window.removeEventListener('message', handleMessage);
+            clearTimeout(timer);
+        };
+    }, [youtubeEmbedUrl]);
+
+    useEffect(() => {
+        if (imageCount <= 1 || prefersStillMedia()) {
             return;
         }
 
         const id = window.setInterval(() => setSlide((current) => (current + 1) % imageCount), SLIDESHOW_INTERVAL_MS);
 
         return () => window.clearInterval(id);
-    }, [hero.video_enabled, imageCount]);
+    }, [imageCount]);
 
-    function resolveVideoPoster(): string | null {
-        // An uploaded Cloudinary video can be turned into its own first-frame poster.
-        if (source === 'upload' && hero.video_url) {
-            return cloudinaryVideoPoster(hero.video_url, tier.desktopWidth);
+    function resolveYouTubeEmbedUrl(): string | null {
+        if (!hero.video_enabled || source !== 'url' || !hero.video_link) {
+            return null;
         }
 
-        // A Cloudinary link provided as a URL can be turned into a poster too.
-        if (source === 'url' && hero.video_link) {
-            return cloudinaryVideoPoster(hero.video_link, tier.desktopWidth);
+        const videoId = parseYouTubeId(hero.video_link);
+        if (!videoId) {
+            return null;
         }
 
-        // The built-in demo always has a Cloudinary poster frame.
-        if (source === 'default') {
-            return demoPosterUrl(tier);
-        }
-
-        return null;
+        return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&autohide=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1`;
     }
 
     function resolveVideoSrc(): string | null {
@@ -132,13 +194,16 @@ export default function HomeHero({ hero }: HomeHeroProps) {
             return null;
         }
 
-        const width = window.innerWidth < 768 ? tier.mobileWidth : tier.desktopWidth;
+        const width = typeof window !== 'undefined' && window.innerWidth < 768 ? tier.mobileWidth : tier.desktopWidth;
 
         if (source === 'upload' && hero.video_url) {
             return isCloudinary(hero.video_url) ? withCloudinaryTransform(hero.video_url, `${tier.quality},w_${width},c_limit`) : hero.video_url;
         }
 
         if (source === 'url' && hero.video_link) {
+            if (parseYouTubeId(hero.video_link)) {
+                return null;
+            }
             return isCloudinary(hero.video_link) ? withCloudinaryTransform(hero.video_link, `${tier.quality},w_${width},c_limit`) : hero.video_link;
         }
 
@@ -150,6 +215,7 @@ export default function HomeHero({ hero }: HomeHeroProps) {
     }
 
     const activeSlide = imageCount > 0 ? slide % imageCount : 0;
+    const activeVideoPoster = posterSrc ?? firstImage ?? null;
 
     return (
         <section
@@ -157,30 +223,24 @@ export default function HomeHero({ hero }: HomeHeroProps) {
             aria-labelledby="home-hero-title"
         >
             <div className="absolute inset-0 z-0">
+                {/* When video is enabled, show the specific video's own initial poster image as backdrop */}
                 {hero.video_enabled ? (
-                    <>
-                        {/* While the video loads, show the video's own first frame. */}
-                        {videoPoster && <img src={videoPoster} alt="" aria-hidden className="absolute inset-0 size-full object-cover" />}
-
-                        {videoSrc && (
-                            <video
-                                key={videoSrc}
-                                src={videoSrc}
-                                className={cn(
-                                    'absolute inset-0 size-full object-cover transition-opacity duration-500 ease-out',
-                                    ready ? 'opacity-100' : 'opacity-0',
-                                )}
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                preload="auto"
-                                poster={videoPoster ?? undefined}
-                                onLoadedData={() => setReady(true)}
-                                onPlaying={() => setReady(true)}
-                            />
-                        )}
-                    </>
+                    activeVideoPoster ? (
+                        <img
+                            src={activeVideoPoster}
+                            alt=""
+                            aria-hidden
+                            onError={(e) => {
+                                const target = e.currentTarget;
+                                if (target.src.includes('maxresdefault.jpg')) {
+                                    target.src = target.src.replace('maxresdefault.jpg', 'sddefault.jpg');
+                                } else if (target.src.includes('sddefault.jpg')) {
+                                    target.src = target.src.replace('sddefault.jpg', 'hqdefault.jpg');
+                                }
+                            }}
+                            className="absolute inset-0 size-full object-cover"
+                        />
+                    ) : null
                 ) : imageCount > 1 ? (
                     <div className="absolute inset-0" aria-hidden>
                         {imageUrls.map((src, index) => {
@@ -205,6 +265,43 @@ export default function HomeHero({ hero }: HomeHeroProps) {
                     </div>
                 ) : (
                     <img src={imageFallback} alt="" aria-hidden className="absolute inset-0 size-full object-cover" />
+                )}
+
+                {/* Video backdrop when enabled */}
+                {hero.video_enabled && (
+                    <>
+                        {youtubeEmbedUrl && (
+                            <iframe
+                                key={youtubeEmbedUrl}
+                                src={youtubeEmbedUrl}
+                                title="Hero background video"
+                                className={cn(
+                                    'pointer-events-none absolute inset-0 size-full border-0 object-cover scale-125 transition-opacity duration-700 ease-out',
+                                    ready ? 'opacity-100' : 'opacity-0',
+                                )}
+                                allow="autoplay; encrypted-media"
+                            />
+                        )}
+
+                        {videoSrc && (
+                            <video
+                                key={videoSrc}
+                                src={videoSrc}
+                                className={cn(
+                                    'absolute inset-0 size-full object-cover transition-opacity duration-700 ease-out',
+                                    ready ? 'opacity-100' : 'opacity-0',
+                                )}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="auto"
+                                poster={posterSrc ?? undefined}
+                                onLoadedData={() => setReady(true)}
+                                onPlaying={() => setReady(true)}
+                            />
+                        )}
+                    </>
                 )}
 
                 <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/30 to-black/15" />

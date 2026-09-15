@@ -97,6 +97,36 @@ class ProjectCrudTest extends ProjectTestCase
         $this->assertDatabaseHas('projects', ['id' => $project->id, 'title' => 'Skyline Tower Updated']);
     }
 
+    public function test_land_area_accepts_free_text_units(): void
+    {
+        $type = $this->makeType();
+        $status = $this->makeStatus();
+
+        $this->actingAs($this->admin())
+            ->post(route('admin.projects.store'), [
+                'title' => 'Unit Project',
+                'project_type_id' => $type->id,
+                'project_status_id' => $status->id,
+                'total_land_area' => '5 Katha',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('projects', ['slug' => 'unit-project', 'total_land_area' => '5 Katha']);
+
+        $project = Project::where('slug', 'unit-project')->firstOrFail();
+
+        $this->actingAs($this->admin())
+            ->put(route('admin.projects.update', $project), [
+                'title' => 'Unit Project',
+                'project_type_id' => $type->id,
+                'project_status_id' => $status->id,
+                'total_land_area' => '2 Bigha 5 Katha (33,000 sqft)',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('2 Bigha 5 Katha (33,000 sqft)', $project->fresh()->total_land_area);
+    }
+
     public function test_publish_unpublish_and_feature_toggle(): void
     {
         $admin = $this->admin();

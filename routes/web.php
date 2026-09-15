@@ -1,23 +1,18 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\LegalPageController;
 use App\Http\Controllers\Frontend\ProjectController;
 use App\Http\Controllers\Frontend\ProjectEnquiryController;
-use App\Repositories\Contracts\Contact\ContactSubmissionRepositoryInterface;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', function (ContactSubmissionRepositoryInterface $submissions) {
-        return Inertia::render('dashboard', [
-            'overview' => (object) $submissions->countsOverview(),
-        ]);
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::get('about', [AboutController::class, 'show'])->name('about.show');
@@ -35,7 +30,6 @@ Route::post('projects/{slug}/enquiry', [ProjectEnquiryController::class, 'store'
     ->middleware('throttle:contact-submit')
     ->name('projects.enquiry');
 
-require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
 

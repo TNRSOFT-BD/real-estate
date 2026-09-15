@@ -76,7 +76,6 @@ class Project extends Model
         'amenities' => 'array',
         'latitude' => 'decimal:7',
         'longitude' => 'decimal:7',
-        'total_land_area' => 'decimal:2',
         'total_units' => 'integer',
         'number_of_floors' => 'integer',
         'number_of_buildings' => 'integer',

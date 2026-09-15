@@ -41,7 +41,7 @@ export default function Home({ featuredProjects, hero, about, whyChooseUs, seo }
             <HomeHero hero={hero} />
 
             {featuredProjects.length > 0 && (
-                <section className="mx-auto w-full max-w-7xl px-4 py-20 lg:px-8 lg:py-28" aria-labelledby="home-projects-title">
+                <section className="mx-auto w-full max-w-7xl px-4 py-12 min-[900px]:py-16 lg:px-8" aria-labelledby="home-projects-title">
                     <div className="flex flex-wrap items-end justify-between gap-6">
                         <div>
                             <SectionLabel>Selected work</SectionLabel>

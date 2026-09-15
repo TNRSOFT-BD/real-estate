@@ -93,7 +93,7 @@ export default function WhyChooseUs({ eyebrow, title, description, features }: W
     const copy = description?.trim() || DEFAULT_DESCRIPTION;
 
     return (
-        <section className="mx-auto w-full max-w-7xl px-4 pt-12 pb-2 sm:pt-16 sm:pb-3 lg:px-8 lg:pt-20 lg:pb-4" aria-labelledby="why-choose-us-title">
+        <section className="mx-auto w-full max-w-7xl px-4 pt-12 pb-0 min-[900px]:pt-16 lg:px-8" aria-labelledby="why-choose-us-title">
             <div className="border-line border-t pt-12 lg:pt-16">
                 <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
                     <div className="max-w-2xl">

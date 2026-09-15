@@ -135,6 +135,25 @@ class EloquentProjectRepository implements ProjectRepositoryInterface
         return Project::query()->count();
     }
 
+    public function countPublished(): int
+    {
+        return Project::query()->published()->count();
+    }
+
+    public function countFeatured(): int
+    {
+        return Project::query()->featured()->count();
+    }
+
+    public function recent(int $limit = 5): Collection
+    {
+        return Project::query()
+            ->with(['type:id,name', 'status:id,name,color'])
+            ->latest()
+            ->limit($limit)
+            ->get(['id', 'title', 'slug', 'is_published', 'is_featured', 'project_type_id', 'project_status_id', 'created_at']);
+    }
+
     private function applySort(Builder $query, ?string $sort): void
     {
         match ($sort) {

@@ -1,8 +1,7 @@
 import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { type NavItem, type SharedData } from '@/types';
+import { Link, router, usePage } from '@inertiajs/react';
 import {
     Activity,
     Building2,
@@ -20,8 +19,11 @@ import {
     Scale,
     Settings,
     Share2,
+    ShieldCheck,
     Sparkles,
     Users,
+    LogOut,
+    User,
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -33,7 +35,15 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const realEstateNavItems: NavItem[] = [
+const adminNavItems: NavItem[] = [
+    {
+        title: 'Administrators',
+        url: '/admin/admins',
+        icon: ShieldCheck,
+    },
+];
+
+const projectNavItems: NavItem[] = [
     {
         title: 'Projects',
         url: '/admin/projects',
@@ -167,6 +177,12 @@ const aboutNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage<SharedData>().props;
+
+    const handleLogout = () => {
+        router.post(route('logout'));
+    };
+
     return (
         <Sidebar collapsible="offcanvas" variant="inset">
             <SidebarHeader className="border-sidebar-border/60 h-16 justify-center border-b px-4">
@@ -177,16 +193,32 @@ export function AppSidebar() {
 
             <SidebarContent className="pt-2">
                 <NavMain label="Platform" items={mainNavItems} collapsible={false} />
-                <NavMain label="Real Estate" items={realEstateNavItems} />
-                <NavMain label="Homepage" items={homepageNavItems} collapsible={false} />
-                <NavMain label="About Us" items={aboutNavItems} />
-                <NavMain label="Website Settings" items={siteNavItems} collapsible={false} />
-                <NavMain label="Legal" items={legalNavItems} collapsible={false} />
+                <NavMain label="Homepage" items={homepageNavItems} />
+                <NavMain label="About" items={aboutNavItems} />
+                <NavMain label="Projects" items={projectNavItems} />
                 <NavMain label="Contact Module" items={contactNavItems} />
+                <NavMain label="Legal" items={legalNavItems} collapsible={false} />
+                <NavMain label="Website Config" items={siteNavItems} collapsible={false} />
+                <NavMain label="Access Control" items={adminNavItems} collapsible={false} />
             </SidebarContent>
 
-            <SidebarFooter>
-                <NavUser />
+            <SidebarFooter className="border-sidebar-border/60 border-t p-3">
+                <div className="flex items-center gap-3 px-2 py-2">
+                    <div className="bg-sidebar-accent flex size-9 items-center justify-center rounded-full">
+                        <User className="size-5 text-sidebar-foreground" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <p className="text-sidebar-foreground truncate text-sm font-medium">{auth.user?.name}</p>
+                        <p className="text-sidebar-foreground/60 truncate text-xs">{auth.user?.email}</p>
+                    </div>
+                </div>
+                <button
+                    onClick={handleLogout}
+                    className="hover:bg-sidebar-accent flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors"
+                >
+                    <LogOut className="size-4" />
+                    Log out
+                </button>
             </SidebarFooter>
 
             <SidebarRail />

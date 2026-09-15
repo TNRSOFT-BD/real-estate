@@ -19,6 +19,7 @@ interface KeyValueRepeaterProps {
     keyLabel?: string;
     valueLabel?: string;
     withIcon?: boolean;
+    labelClassName?: string;
 }
 
 export default function KeyValueRepeater({
@@ -30,6 +31,7 @@ export default function KeyValueRepeater({
     keyLabel = 'Key',
     valueLabel = 'Value',
     withIcon = false,
+    labelClassName,
 }: KeyValueRepeaterProps) {
     const update = (index: number, field: keyof Row, fieldValue: string) => {
         onChange(value.map((row, rowIndex) => (rowIndex === index ? { ...row, [field]: fieldValue } : row)));
@@ -38,7 +40,7 @@ export default function KeyValueRepeater({
     const remove = (index: number) => onChange(value.filter((_, rowIndex) => rowIndex !== index));
 
     return (
-        <Field label={label} error={error} hint={hint}>
+        <Field label={label} error={error} hint={hint} labelClassName={labelClassName}>
             <div className="space-y-2">
                 {value.map((row, index) => (
                     <div key={index} className="flex flex-wrap items-end gap-2">

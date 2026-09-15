@@ -79,11 +79,8 @@ class SiteThemeController extends Controller
         $link = $data['hero_video_link'] ?? null;
         $requested = $data['hero_video_source'] ?? ($current['hero_video_source'] ?? 'default');
 
-        if ($requested === 'url' && filled($link)) {
-            $update['hero_video_source'] = 'url';
-            $update['hero_video_link'] = $link;
-        } elseif ($requested === 'upload' && ! empty($current['hero_video_url'])) {
-            $update['hero_video_source'] = 'upload';
+        if (in_array($requested, ['default', 'upload', 'url'], true)) {
+            $update['hero_video_source'] = $requested;
             $update['hero_video_link'] = $link;
         } else {
             $update['hero_video_source'] = 'default';

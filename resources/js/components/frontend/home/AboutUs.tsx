@@ -68,18 +68,15 @@ export default function AboutUs({ about }: AboutUsProps) {
           --au-panel-text: #F3EFE6;
           --au-line: #DCD6C7;
 
-          padding: 2.5rem 0 5rem;
+          padding: 3rem 0;
           overflow: hidden;
-        }
-
-        @media (min-width: 900px) {
-          .au-section { padding: 3.5rem 0 7rem; }
         }
 
         .au-container {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 4.5rem;
+          gap: 3.5rem;
+          padding-inline: 1rem;
           opacity: 0;
           transform: translateY(28px);
           transition: opacity 0.9s ease, transform 0.9s ease;
@@ -90,21 +87,9 @@ export default function AboutUs({ about }: AboutUsProps) {
           transform: translateY(0);
         }
 
-        @media (min-width: 900px) {
-          .au-container {
-            grid-template-columns: 0.95fr 1fr;
-            align-items: center;
-            gap: 5.5rem;
-          }
-        }
-
         .au-visual {
           position: relative;
-          margin-bottom: 3.5rem;
-        }
-
-        @media (min-width: 900px) {
-          .au-visual { margin-bottom: 0; }
+          margin-bottom: 3rem;
         }
 
         .au-frame {
@@ -125,37 +110,34 @@ export default function AboutUs({ about }: AboutUsProps) {
           box-shadow: 0 24px 48px -24px rgba(35, 34, 30, 0.35);
         }
 
+        /* Accent starts flush with the main image on narrow screens so it can
+           never be clipped by the section edge. */
         .au-frame--accent {
           position: absolute;
-          width: 46%;
+          width: 44%;
           aspect-ratio: 1 / 1;
-          left: -7%;
-          bottom: -12%;
-          border: 6px solid var(--canvas);
+          left: 0;
+          bottom: -8%;
+          border: 5px solid var(--canvas);
           box-shadow: 0 18px 32px -16px rgba(35, 34, 30, 0.4);
         }
 
         .au-badge {
           position: absolute;
-          top: -6%;
-          right: -4%;
-          max-width: 200px;
+          top: -4%;
+          right: 0;
+          max-width: 168px;
           background: var(--au-panel);
           color: var(--au-panel-text);
-          padding: 1.4rem 1.5rem;
+          padding: 1.1rem 1.2rem;
           border-radius: 4px;
           box-shadow: 0 20px 32px -18px rgba(20, 26, 21, 0.55);
-        }
-
-        @media (max-width: 640px) {
-          .au-badge { right: 0; top: -5%; max-width: 168px; padding: 1.1rem 1.2rem; }
-          .au-frame--accent { width: 50%; left: -5%; bottom: -10%; }
         }
 
         .au-badge-figure {
           display: block;
           font-family: var(--font-sans);
-          font-size: 2rem;
+          font-size: 1.75rem;
           font-weight: 500;
           line-height: 1;
         }
@@ -164,7 +146,7 @@ export default function AboutUs({ about }: AboutUsProps) {
           display: block;
           margin-top: 0.5rem;
           font-family: var(--font-sans);
-          font-size: 0.8rem;
+          font-size: 0.78rem;
           line-height: 1.45;
           color: rgba(243, 239, 230, 0.8);
         }
@@ -183,7 +165,7 @@ export default function AboutUs({ about }: AboutUsProps) {
           font-size: 1.05rem;
           line-height: 1.75;
           color: var(--au-ink-soft);
-          text-align: justify;
+          text-align: left;
           margin: 0;
         }
 
@@ -193,31 +175,26 @@ export default function AboutUs({ about }: AboutUsProps) {
         .au-copy a { color: var(--au-ink); text-decoration: underline; }
         .au-copy strong { color: var(--au-ink); }
 
+        /* Two-column stat grid on phones so figures never squeeze. */
         .au-stats {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 2rem 0;
-          margin: 2.75rem 0 0;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1.5rem 1.25rem;
+          margin: 2.5rem 0 0;
           padding: 1.75rem 0;
           border-top: 1px solid var(--au-line);
           border-bottom: 1px solid var(--au-line);
         }
 
         .au-stat {
-          padding-right: 2rem;
-          margin-right: 2rem;
-          border-right: 1px solid var(--au-line);
-        }
-
-        .au-stat:last-child {
-          border-right: none;
-          margin-right: 0;
-          padding-right: 0;
+          padding: 0;
+          margin: 0;
+          border: 0;
         }
 
         .au-stat-figure {
           font-family: var(--font-sans);
-          font-size: 1.9rem;
+          font-size: 1.75rem;
           font-weight: 500;
           color: var(--au-ink);
           margin: 0;
@@ -230,6 +207,60 @@ export default function AboutUs({ about }: AboutUsProps) {
           color: var(--au-ink-soft);
           margin: 0.5rem 0 0;
           line-height: 1.4;
+        }
+
+        /* Breakpoint 1 — large phones */
+        @media (min-width: 480px) {
+          .au-container { gap: 4rem; padding-inline: 1.25rem; }
+          .au-frame--accent { width: 42%; bottom: -9%; }
+          .au-badge { top: -5%; max-width: 180px; }
+        }
+
+        /* Breakpoint 2 — small tablets */
+        @media (min-width: 640px) {
+          .au-container { padding-inline: 1.5rem; }
+          .au-visual { margin-bottom: 3.25rem; }
+          .au-frame--accent { width: 40%; bottom: -10%; border-width: 6px; }
+          .au-badge { top: -6%; right: -2%; max-width: 200px; }
+
+          .au-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.75rem 0;
+          }
+
+          .au-stat {
+            padding-right: 1.75rem;
+            margin-right: 1.75rem;
+            border-right: 1px solid var(--au-line);
+          }
+
+          .au-stat:last-child {
+            border-right: none;
+            margin-right: 0;
+            padding-right: 0;
+          }
+        }
+
+        /* Breakpoint 3 — desktop: two columns */
+        @media (min-width: 900px) {
+          .au-section { padding: 4rem 0; }
+          .au-container {
+            grid-template-columns: 0.95fr 1fr;
+            align-items: center;
+            gap: 4.5rem;
+            padding-inline: 2rem;
+          }
+          .au-visual { margin-bottom: 0; }
+          .au-copy { text-align: justify; }
+          .au-frame--accent { width: 46%; left: -4%; bottom: -12%; }
+          .au-badge { top: -6%; right: -4%; }
+        }
+
+        /* Breakpoint 4 — large desktop */
+        @media (min-width: 1200px) {
+          .au-container { gap: 5.5rem; }
+          .au-frame--accent { left: -5%; }
         }
 
         @media (prefers-reduced-motion: reduce) {
