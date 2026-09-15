@@ -11,7 +11,7 @@ import { type ProjectsIndexProps } from '@/types/project';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
-export default function ProjectsIndex({ projects, types, statuses, filters, seo }: ProjectsIndexProps) {
+export default function ProjectsIndex({ projects, types, statuses, locations, filters, seo }: ProjectsIndexProps) {
     const { name } = usePage<SharedData>().props;
     const [loading, setLoading] = useState(false);
 
@@ -25,7 +25,7 @@ export default function ProjectsIndex({ projects, types, statuses, filters, seo 
         };
     }, []);
 
-    const filtered = Boolean(filters.project_type || filters.project_status || filters.search);
+    const filtered = Boolean(filters.project_type || filters.project_status || filters.location_city || filters.search);
     const canonical = seo.canonical_url ?? '/projects';
     const ogImage = seo.og_image ? mediaUrl(seo.og_image) : null;
     const twitterImage = seo.twitter_image ? mediaUrl(seo.twitter_image) : ogImage;
@@ -53,7 +53,7 @@ export default function ProjectsIndex({ projects, types, statuses, filters, seo 
 
             <div className="flex min-h-screen flex-col">
                 <ProjectsHero />
-                <ProjectsFilters types={types} statuses={statuses} filters={filters} />
+                <ProjectsFilters types={types} statuses={statuses} locations={locations} filters={filters} />
 
                 {projects.data.length > 0 ? (
                     <section className="mx-auto w-full max-w-7xl px-4 pb-10 lg:px-8" aria-label="Projects">

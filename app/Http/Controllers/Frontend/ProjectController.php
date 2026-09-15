@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProjectCardResource;
 use App\Models\Project\Project;
 use App\Repositories\Contracts\Project\ProjectRepositoryInterface;
 use App\Repositories\Contracts\Project\ProjectStatusRepositoryInterface;
@@ -28,34 +29,13 @@ class ProjectController extends Controller
         $filters = array_filter([
             'project_type' => $request->query('project_type'),
             'project_status' => $request->query('project_status'),
+            'location_city' => $request->query('location_city'),
             'search' => $request->query('search'),
         ], fn ($value): bool => is_string($value) && $value !== '');
 
         $projects = $this->repository
             ->paginatePublic($filters, 12)
-            ->through(fn (Project $project): array => [
-                'id' => $project->id,
-                'title' => $project->title,
-                'slug' => $project->slug,
-                'hero_banner' => $project->hero_banner,
-                'hero_banner_alt' => $project->hero_banner_alt,
-                'short_description' => $project->short_description,
-                'location_area' => $project->location_area,
-                'location_city' => $project->location_city,
-                'location_country' => $project->location_country,
-                'is_featured' => $project->is_featured,
-                'type' => $project->type ? [
-                    'id' => $project->type->id,
-                    'name' => $project->type->name,
-                    'slug' => $project->type->slug,
-                ] : null,
-                'status' => $project->status ? [
-                    'id' => $project->status->id,
-                    'name' => $project->status->name,
-                    'slug' => $project->status->slug,
-                    'color' => $project->status->color,
-                ] : null,
-            ]);
+            ->through(fn (Project $project): array => (new ProjectCardResource($project))->resolve());
 
         $description = 'Discover our latest developments and thoughtfully designed properties.';
 
@@ -69,9 +49,11 @@ class ProjectController extends Controller
                 ->map(fn ($status): array => ['slug' => $status->slug, 'name' => $status->name, 'color' => $status->color])
                 ->values()
                 ->all(),
+            'locations' => $this->repository->publishedLocations(),
             'filters' => [
                 'project_type' => $filters['project_type'] ?? null,
                 'project_status' => $filters['project_status'] ?? null,
+                'location_city' => $filters['location_city'] ?? null,
                 'search' => $filters['search'] ?? null,
             ],
             'seo' => [

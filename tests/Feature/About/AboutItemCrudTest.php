@@ -5,6 +5,8 @@ namespace Tests\Feature\About;
 use App\Models\About\AboutItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AboutItemCrudTest extends TestCase
@@ -134,5 +136,49 @@ class AboutItemCrudTest extends TestCase
 
         $this->actingAs($admin)->delete(route('admin.about.items.destroy', $item))->assertRedirect(route('admin.about.items.index'));
         $this->assertSoftDeleted('about_items', ['id' => $item->id]);
+    }
+
+    public function test_deleting_an_item_removes_its_image_file(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('about/items/a.jpg', 'x');
+
+        $item = AboutItem::create([
+            'type' => 'value',
+            'title' => 'With image',
+            'image' => 'about/items/a.jpg',
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($this->admin())
+            ->delete(route('admin.about.items.destroy', $item))
+            ->assertRedirect(route('admin.about.items.index'));
+
+        Storage::disk('public')->assertMissing('about/items/a.jpg');
+    }
+
+    public function test_replacing_an_item_image_deletes_the_previous_file(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('about/items/old.jpg', 'x');
+
+        $item = AboutItem::create([
+            'type' => 'partner',
+            'title' => 'Partner',
+            'image' => 'about/items/old.jpg',
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($this->admin())
+            ->put(route('admin.about.items.update', $item), [
+                'type' => 'partner',
+                'title' => 'Partner',
+                'image' => UploadedFile::fake()->image('new.jpg', 300, 200),
+                'is_active' => true,
+            ])
+            ->assertRedirect(route('admin.about.items.index'));
+
+        Storage::disk('public')->assertMissing('about/items/old.jpg');
+        Storage::disk('public')->assertExists($item->fresh()->image);
     }
 }

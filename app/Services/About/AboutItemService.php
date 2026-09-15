@@ -47,6 +47,8 @@ class AboutItemService
 
     public function delete(AboutItem $item): void
     {
+        $this->mediaService->delete($item->image);
+
         $this->repository->delete($item);
         $this->pageService->invalidatePublicCache();
     }

@@ -157,7 +157,7 @@ function FloorPlanCard({
     onMoveUp: () => void;
     onMoveDown: () => void;
 }) {
-    const { data, setData, put, processing, errors } = useForm<{
+    const { data, setData, post, transform, processing, errors } = useForm<{
         title: string;
         description: string;
         image: File | null;
@@ -179,7 +179,18 @@ function FloorPlanCard({
 
     const [preview, setPreview] = useState<string | null>(null);
 
-    const save = () => put(route('admin.projects.floor-plans.update', { project: projectId, floorPlan: plan.id }), { forceFormData: true, preserveScroll: true });
+    const save = () => {
+        transform((formData) => {
+            const clean: Record<string, unknown> = { ...formData, _method: 'put' };
+
+            if (!(clean.image instanceof File)) {
+                delete clean.image;
+            }
+
+            return clean;
+        });
+        post(route('admin.projects.floor-plans.update', { project: projectId, floorPlan: plan.id }), { forceFormData: true, preserveScroll: true });
+    };
 
     return (
         <Card>

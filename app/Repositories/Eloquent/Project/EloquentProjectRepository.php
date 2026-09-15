@@ -64,6 +64,7 @@ class EloquentProjectRepository implements ProjectRepositoryInterface
             ->with(['type:id,name,slug', 'status:id,name,slug,color'])
             ->when($filters['project_type'] ?? null, fn ($query, $slug) => $query->whereHas('type', fn ($type) => $type->where('slug', $slug)))
             ->when($filters['project_status'] ?? null, fn ($query, $slug) => $query->whereHas('status', fn ($status) => $status->where('slug', $slug)))
+            ->when($filters['location_city'] ?? null, fn ($query, $city) => $query->where('location_city', $city))
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('title', 'like', "%{$search}%")
@@ -87,6 +88,29 @@ class EloquentProjectRepository implements ProjectRepositoryInterface
             ->ordered()
             ->limit($limit)
             ->get();
+    }
+
+    public function latestPublished(int $limit = 6): Collection
+    {
+        return Project::query()
+            ->published()
+            ->with(['type:id,name,slug', 'status:id,name,slug,color'])
+            ->orderByDesc('is_featured')
+            ->ordered()
+            ->limit($limit)
+            ->get();
+    }
+
+    public function publishedLocations(): array
+    {
+        return Project::query()
+            ->published()
+            ->whereNotNull('location_city')
+            ->where('location_city', '!=', '')
+            ->distinct()
+            ->orderBy('location_city')
+            ->pluck('location_city')
+            ->all();
     }
 
     public function create(array $data): Project

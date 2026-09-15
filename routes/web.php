@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\LegalPageController;
 use App\Http\Controllers\Frontend\ProjectController;
 use App\Http\Controllers\Frontend\ProjectEnquiryController;
@@ -9,9 +10,7 @@ use App\Repositories\Contracts\Contact\ContactSubmissionRepositoryInterface;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function (ContactSubmissionRepositoryInterface $submissions) {

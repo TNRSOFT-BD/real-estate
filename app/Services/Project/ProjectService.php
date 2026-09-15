@@ -71,6 +71,10 @@ class ProjectService
             $this->media->delete($gallery->image_path);
         }
 
+        foreach ($project->floorPlans as $floorPlan) {
+            $this->media->delete($floorPlan->image_path);
+        }
+
         $slug = $project->slug;
 
         DB::transaction(fn (): bool => $this->repository->delete($project));

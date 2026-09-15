@@ -1,3 +1,6 @@
+import { type HomeAboutData } from './home-about';
+import { type HeroVideoQuality, type HeroVideoSource } from './site';
+
 export interface ProjectTypeRef {
     id: number;
     name: string;
@@ -164,6 +167,7 @@ export interface ProjectStatusFilterOption extends ProjectFilterOption {
 export interface ProjectsIndexFilters {
     project_type?: string | null;
     project_status?: string | null;
+    location_city?: string | null;
     search?: string | null;
 }
 
@@ -193,7 +197,28 @@ export interface ProjectsIndexProps {
     projects: ProjectPaginator<PublicProjectCard>;
     types: ProjectFilterOption[];
     statuses: ProjectStatusFilterOption[];
+    locations: string[];
     filters: ProjectsIndexFilters;
+    seo: ProjectSeoData;
+    [key: string]: unknown;
+}
+
+export interface HomeHeroData {
+    eyebrow: string | null;
+    title: string | null;
+    description: string | null;
+    images: string[];
+    video_quality: HeroVideoQuality;
+    video_enabled: boolean;
+    video_source: HeroVideoSource;
+    video_url: string | null;
+    video_link: string | null;
+}
+
+export interface HomePageProps {
+    featuredProjects: PublicProjectCard[];
+    hero: HomeHeroData;
+    about: HomeAboutData;
     seo: ProjectSeoData;
     [key: string]: unknown;
 }

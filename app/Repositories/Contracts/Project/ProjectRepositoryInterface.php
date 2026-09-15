@@ -25,6 +25,16 @@ interface ProjectRepositoryInterface
      */
     public function featuredExcept(int $excludeId, int $limit = 3): Collection;
 
+    /**
+     * @return Collection<int, Project>
+     */
+    public function latestPublished(int $limit = 6): Collection;
+
+    /**
+     * @return array<int, string>
+     */
+    public function publishedLocations(): array;
+
     public function create(array $data): Project;
 
     public function update(Project $project, array $data): Project;

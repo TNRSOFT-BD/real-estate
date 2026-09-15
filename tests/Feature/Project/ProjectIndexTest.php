@@ -60,6 +60,23 @@ class ProjectIndexTest extends ProjectTestCase
             );
     }
 
+    public function test_projects_can_be_filtered_by_location_city(): void
+    {
+        $type = $this->makeType();
+        $status = $this->makeStatus();
+
+        $this->makeProject(['title' => 'Dhaka Project', 'slug' => 'dhaka-project', 'is_published' => true, 'location_city' => 'Dhaka', 'project_type_id' => $type->id, 'project_status_id' => $status->id]);
+        $this->makeProject(['title' => 'Sylhet Project', 'slug' => 'sylhet-project', 'is_published' => true, 'location_city' => 'Sylhet', 'project_type_id' => $type->id, 'project_status_id' => $status->id]);
+
+        $this->get(route('projects.index', ['location_city' => 'Dhaka']))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('projects.data', 1)
+                ->where('projects.data.0.slug', 'dhaka-project')
+                ->where('filters.location_city', 'Dhaka')
+            );
+    }
+
     public function test_featured_projects_are_listed_first(): void
     {
         $type = $this->makeType();

@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\Contact\ContactSocialLinkController;
 use App\Http\Controllers\Admin\Contact\ContactSubmissionController;
 use App\Http\Controllers\Admin\Contact\ContactSubmissionNoteController;
 use App\Http\Controllers\Admin\Contact\ContactTeamController;
+use App\Http\Controllers\Admin\HomeAbout\HomeAboutController;
+use App\Http\Controllers\Admin\HomeAbout\HomeAboutStatController;
 use App\Http\Controllers\Admin\Legal\LegalPageController as AdminLegalPageController;
 use App\Http\Controllers\Admin\Project\ProjectController;
 use App\Http\Controllers\Admin\Project\ProjectFloorPlanController;
@@ -27,6 +29,23 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::prefix('site')->name('admin.site.')->group(function () {
         Route::get('appearance', [SiteThemeController::class, 'edit'])->name('appearance.edit');
         Route::put('appearance', [SiteThemeController::class, 'update'])->name('appearance.update');
+
+        Route::get('homepage', [SiteThemeController::class, 'homepageEdit'])->name('homepage.edit');
+        Route::put('homepage', [SiteThemeController::class, 'homepageUpdate'])->name('homepage.update');
+        Route::post('homepage/images', [SiteThemeController::class, 'homepageImagesStore'])->name('homepage.images.store');
+        Route::delete('homepage/images', [SiteThemeController::class, 'homepageImagesDestroy'])->name('homepage.images.destroy');
+        Route::patch('homepage/images/reorder', [SiteThemeController::class, 'homepageImagesReorder'])->name('homepage.images.reorder');
+        Route::get('homepage/video/signature', [SiteThemeController::class, 'homepageVideoSignature'])->name('homepage.video.signature');
+        Route::post('homepage/video', [SiteThemeController::class, 'homepageVideoStore'])->name('homepage.video.store');
+    });
+
+    Route::prefix('home-about')->name('admin.home-about.')->group(function () {
+        Route::get('/', [HomeAboutController::class, 'edit'])->name('edit');
+        Route::put('/', [HomeAboutController::class, 'update'])->name('update');
+        Route::post('stats', [HomeAboutStatController::class, 'store'])->name('stats.store');
+        Route::patch('stats/reorder', [HomeAboutStatController::class, 'reorder'])->name('stats.reorder');
+        Route::put('stats/{stat}', [HomeAboutStatController::class, 'update'])->whereNumber('stat')->name('stats.update');
+        Route::delete('stats/{stat}', [HomeAboutStatController::class, 'destroy'])->whereNumber('stat')->name('stats.destroy');
     });
 
     Route::prefix('legal')->name('admin.legal.')->group(function () {

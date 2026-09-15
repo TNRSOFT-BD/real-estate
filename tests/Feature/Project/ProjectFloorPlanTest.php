@@ -71,6 +71,21 @@ class ProjectFloorPlanTest extends ProjectTestCase
         $this->assertDatabaseMissing('project_floor_plans', ['id' => $second->id]);
     }
 
+    public function test_deleting_a_project_removes_its_floor_plan_images(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('projects/floor-plans/a.jpg', 'x');
+
+        $project = $this->makeProject();
+        ProjectFloorPlan::create(['project_id' => $project->id, 'title' => 'A', 'image_path' => 'projects/floor-plans/a.jpg', 'sort_order' => 1]);
+
+        $this->actingAs($this->admin())
+            ->delete(route('admin.projects.destroy', $project))
+            ->assertRedirect();
+
+        Storage::disk('public')->assertMissing('projects/floor-plans/a.jpg');
+    }
+
     public function test_floor_plan_of_another_project_is_not_accessible(): void
     {
         $type = $this->makeType();

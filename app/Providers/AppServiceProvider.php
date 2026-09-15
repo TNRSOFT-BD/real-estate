@@ -5,12 +5,14 @@ namespace App\Providers;
 use App\Enums\AboutPermission;
 use App\Enums\CompanyPermission;
 use App\Enums\ContactPermission;
+use App\Enums\HomeAboutPermission;
 use App\Enums\LegalPermission;
 use App\Enums\ProjectPermission;
 use App\Enums\SitePermission;
 use App\Models\About\AboutItem;
 use App\Models\About\AboutPageSetting;
 use App\Models\Company\CompanyProfile;
+use App\Models\Home\HomeAboutSetting;
 use App\Models\Legal\LegalPage;
 use App\Models\Project\Project;
 use App\Models\Project\ProjectFloorPlan;
@@ -23,6 +25,7 @@ use App\Models\User;
 use App\Policies\AboutItemPolicy;
 use App\Policies\AboutPageSettingsPolicy;
 use App\Policies\CompanyProfilePolicy;
+use App\Policies\HomeAboutPolicy;
 use App\Policies\LegalPagePolicy;
 use App\Policies\ProjectFloorPlanPolicy;
 use App\Policies\ProjectGalleryPolicy;
@@ -43,6 +46,8 @@ use App\Repositories\Contracts\Contact\ContactPageSettingRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactSocialLinkRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactSubmissionRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactTeamMemberRepositoryInterface;
+use App\Repositories\Contracts\Home\HomeAboutSettingRepositoryInterface;
+use App\Repositories\Contracts\Home\HomeAboutStatRepositoryInterface;
 use App\Repositories\Contracts\Legal\LegalPageRepositoryInterface;
 use App\Repositories\Contracts\Project\ProjectFloorPlanRepositoryInterface;
 use App\Repositories\Contracts\Project\ProjectGalleryRepositoryInterface;
@@ -63,6 +68,8 @@ use App\Repositories\Eloquent\Contact\EloquentContactPageSettingRepository;
 use App\Repositories\Eloquent\Contact\EloquentContactSocialLinkRepository;
 use App\Repositories\Eloquent\Contact\EloquentContactSubmissionRepository;
 use App\Repositories\Eloquent\Contact\EloquentContactTeamMemberRepository;
+use App\Repositories\Eloquent\Home\EloquentHomeAboutSettingRepository;
+use App\Repositories\Eloquent\Home\EloquentHomeAboutStatRepository;
 use App\Repositories\Eloquent\Legal\EloquentLegalPageRepository;
 use App\Repositories\Eloquent\Project\EloquentProjectFloorPlanRepository;
 use App\Repositories\Eloquent\Project\EloquentProjectGalleryRepository;
@@ -98,6 +105,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(CompanyProfileRepositoryInterface::class, EloquentCompanyProfileRepository::class);
 
+        $this->app->bind(HomeAboutSettingRepositoryInterface::class, EloquentHomeAboutSettingRepository::class);
+        $this->app->bind(HomeAboutStatRepositoryInterface::class, EloquentHomeAboutStatRepository::class);
+
         $this->app->bind(LegalPageRepositoryInterface::class, EloquentLegalPageRepository::class);
 
         $this->app->bind(ProjectRepositoryInterface::class, EloquentProjectRepository::class);
@@ -119,6 +129,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(AboutPageSetting::class, AboutPageSettingsPolicy::class);
         Gate::policy(AboutItem::class, AboutItemPolicy::class);
         Gate::policy(CompanyProfile::class, CompanyProfilePolicy::class);
+        Gate::policy(HomeAboutSetting::class, HomeAboutPolicy::class);
         Gate::policy(LegalPage::class, LegalPagePolicy::class);
         Gate::policy(Project::class, ProjectPolicy::class);
         Gate::policy(ProjectType::class, ProjectTypePolicy::class);
@@ -140,6 +151,10 @@ class AppServiceProvider extends ServiceProvider
         }
 
         foreach (AboutPermission::all() as $permission) {
+            Gate::define($permission, fn (User $user) => $user->hasPermission($permission));
+        }
+
+        foreach (HomeAboutPermission::all() as $permission) {
             Gate::define($permission, fn (User $user) => $user->hasPermission($permission));
         }
 

@@ -7,6 +7,7 @@ import {
     Activity,
     Building2,
     HelpCircle,
+    Home,
     Inbox,
     Info,
     Landmark,
@@ -97,6 +98,19 @@ const contactNavItems: NavItem[] = [
     },
 ];
 
+const homepageNavItems: NavItem[] = [
+    {
+        title: 'Hero Section',
+        url: '/admin/site/homepage',
+        icon: Home,
+    },
+    {
+        title: 'About Section',
+        url: '/admin/home-about',
+        icon: Info,
+    },
+];
+
 const siteNavItems: NavItem[] = [
     {
         title: 'Appearance',
@@ -149,7 +163,7 @@ const aboutNavItems: NavItem[] = [
 export function AppSidebar() {
     return (
         <Sidebar collapsible="offcanvas" variant="inset">
-            <SidebarHeader className="h-16 justify-center border-b border-sidebar-border/60 px-4">
+            <SidebarHeader className="border-sidebar-border/60 h-16 justify-center border-b px-4">
                 <Link href="/dashboard" prefetch className="flex items-center">
                     <AppLogo showName={false} className="h-11 w-auto" />
                 </Link>
@@ -158,6 +172,7 @@ export function AppSidebar() {
             <SidebarContent className="pt-2">
                 <NavMain label="Platform" items={mainNavItems} collapsible={false} />
                 <NavMain label="Real Estate" items={realEstateNavItems} />
+                <NavMain label="Homepage" items={homepageNavItems} collapsible={false} />
                 <NavMain label="About Us" items={aboutNavItems} />
                 <NavMain label="Website Settings" items={siteNavItems} collapsible={false} />
                 <NavMain label="Legal" items={legalNavItems} collapsible={false} />

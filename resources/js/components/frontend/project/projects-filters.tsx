@@ -6,13 +6,15 @@ import { ChevronDown, X } from 'lucide-react';
 interface ProjectsFiltersProps {
     types: ProjectFilterOption[];
     statuses: ProjectStatusFilterOption[];
+    locations: string[];
     filters: ProjectsIndexFilters;
 }
 
-export default function ProjectsFilters({ types, statuses, filters }: ProjectsFiltersProps) {
+export default function ProjectsFilters({ types, statuses, locations, filters }: ProjectsFiltersProps) {
     const apply = (next: Partial<ProjectsIndexFilters>) => {
         const projectType = next.project_type !== undefined ? next.project_type : filters.project_type;
         const projectStatus = next.project_status !== undefined ? next.project_status : filters.project_status;
+        const locationCity = next.location_city !== undefined ? next.location_city : filters.location_city;
         const search = next.search !== undefined ? next.search : filters.search;
 
         const params: Record<string, string> = {};
@@ -25,6 +27,10 @@ export default function ProjectsFilters({ types, statuses, filters }: ProjectsFi
             params.project_status = projectStatus;
         }
 
+        if (locationCity) {
+            params.location_city = locationCity;
+        }
+
         if (search) {
             params.search = search;
         }
@@ -32,13 +38,16 @@ export default function ProjectsFilters({ types, statuses, filters }: ProjectsFi
         router.get('/projects', params, { preserveScroll: true, preserveState: true, replace: true });
     };
 
-    const isFiltered = Boolean(filters.project_type || filters.project_status || filters.search);
+    const isFiltered = Boolean(filters.project_type || filters.project_status || filters.location_city || filters.search);
 
-    if (types.length === 0 && statuses.length === 0) {
+    if (types.length === 0 && statuses.length === 0 && locations.length === 0) {
         return null;
     }
 
     const typeOptions: ProjectFilterOption[] = [{ slug: '', name: 'All Projects' }, ...types];
+
+    const selectClass =
+        'border-line text-ink-soft hover:border-ink/35 focus-visible:border-ink h-10 w-full appearance-none border bg-transparent pr-9 pl-3.5 text-sm transition-colors focus-visible:outline-none';
 
     return (
         <section className="mx-auto w-full max-w-7xl px-4 pb-10 lg:px-8" aria-label="Project filters">
@@ -70,14 +79,33 @@ export default function ProjectsFilters({ types, statuses, filters }: ProjectsFi
                         })}
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-3">
+                        {locations.length > 0 && (
+                            <div className="relative shrink-0">
+                                <select
+                                    value={filters.location_city ?? ''}
+                                    onChange={(event) => apply({ location_city: event.target.value || null })}
+                                    aria-label="Filter by location"
+                                    className={cn(selectClass, 'sm:w-48')}
+                                >
+                                    <option value="">All Locations</option>
+                                    {locations.map((location) => (
+                                        <option key={location} value={location}>
+                                            {location}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown className="text-ink-soft pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" aria-hidden />
+                            </div>
+                        )}
+
                         {statuses.length > 0 && (
                             <div className="relative shrink-0">
                                 <select
                                     value={filters.project_status ?? ''}
                                     onChange={(event) => apply({ project_status: event.target.value || null })}
                                     aria-label="Filter by status"
-                                    className="border-line text-ink-soft hover:border-ink/35 focus-visible:border-ink h-10 w-full appearance-none border bg-transparent pr-9 pl-3.5 text-sm transition-colors focus-visible:outline-none sm:w-56"
+                                    className={cn(selectClass, 'sm:w-52')}
                                 >
                                     <option value="">Any Status</option>
                                     {statuses.map((status) => (
@@ -93,7 +121,7 @@ export default function ProjectsFilters({ types, statuses, filters }: ProjectsFi
                         {isFiltered && (
                             <button
                                 type="button"
-                                onClick={() => apply({ project_type: null, project_status: null, search: null })}
+                                onClick={() => apply({ project_type: null, project_status: null, location_city: null, search: null })}
                                 className="text-ink-soft hover:text-ink inline-flex shrink-0 items-center gap-1.5 text-[11px] font-medium tracking-[0.16em] uppercase transition-colors"
                             >
                                 <X className="size-3.5" aria-hidden />

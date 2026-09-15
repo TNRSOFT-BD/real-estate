@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Test User',
                 'email_verified_at' => now(),
-                                'password' => Hash::make('password'),
+                'password' => Hash::make('password'),
 
             ]
         );
@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CompanyProfileSeeder::class,
             SiteSettingSeeder::class,
+            HomeAboutSeeder::class,
             ContactSeeder::class,
             AboutSeeder::class,
             LegalPageSeeder::class,
