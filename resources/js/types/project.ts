@@ -122,10 +122,12 @@ export interface ProjectSeoData {
     og_title?: string | null;
     og_description?: string | null;
     og_image?: string | null;
+    og_type?: string | null;
     twitter_card?: string | null;
     twitter_title?: string | null;
     twitter_description?: string | null;
     twitter_image?: string | null;
+    json_ld?: Array<Record<string, unknown>> | null;
 }
 
 export interface CurrencyConfig {

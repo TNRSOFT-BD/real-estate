@@ -31,6 +31,13 @@ interface ProjectRepositoryInterface
     public function latestPublished(int $limit = 6): Collection;
 
     /**
+     * All published projects, used for the sitemap.
+     *
+     * @return Collection<int, Project>
+     */
+    public function allPublished(): Collection;
+
+    /**
      * @return array<int, string>
      */
     public function publishedLocations(): array;

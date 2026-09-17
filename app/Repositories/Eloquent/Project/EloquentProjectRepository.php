@@ -101,6 +101,14 @@ class EloquentProjectRepository implements ProjectRepositoryInterface
             ->get();
     }
 
+    public function allPublished(): Collection
+    {
+        return Project::query()
+            ->published()
+            ->ordered()
+            ->get(['id', 'title', 'slug', 'updated_at']);
+    }
+
     public function publishedLocations(): array
     {
         return Project::query()

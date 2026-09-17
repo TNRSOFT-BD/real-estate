@@ -74,6 +74,45 @@ class SiteHomepageTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_update_seo_fields(): void
+    {
+        $this->actingAs($this->admin())
+            ->put(route('admin.site.homepage.update'), [
+                'seo_title' => 'Best Homes',
+                'seo_description' => 'Find your dream home.',
+                'seo_keywords' => 'homes, property',
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('site_settings', [
+            'seo_title' => 'Best Homes',
+            'seo_description' => 'Find your dream home.',
+            'seo_keywords' => 'homes, property',
+        ]);
+    }
+
+    public function test_admin_can_upload_and_remove_an_og_image(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->admin())
+            ->post(route('admin.site.homepage.og-image.store'), [
+                'image' => UploadedFile::fake()->image('share.jpg', 1200, 630),
+            ])
+            ->assertRedirect();
+
+        $path = SiteSetting::query()->first()?->og_image;
+        $this->assertNotNull($path);
+        Storage::disk('public')->assertExists($path);
+
+        $this->actingAs($this->admin())
+            ->delete(route('admin.site.homepage.og-image.destroy'))
+            ->assertRedirect();
+
+        $this->assertNull(SiteSetting::query()->first()?->og_image);
+        Storage::disk('public')->assertMissing($path);
+    }
+
     public function test_admin_can_upload_multiple_hero_images(): void
     {
         Storage::fake('public');

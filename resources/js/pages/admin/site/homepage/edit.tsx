@@ -4,11 +4,12 @@ import HeroImagesManager from '@/components/admin/site/hero-images-manager';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
+import { mediaUrl } from '@/lib/media';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { type HeroVideoQuality, type HeroVideoSource, type SiteHomepageProps } from '@/types/site';
 import { router, useForm } from '@inertiajs/react';
-import { Loader2, Save, Upload } from 'lucide-react';
+import { Loader2, Save, Trash2, Upload } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -33,7 +34,9 @@ const videoSources: Array<{ value: HeroVideoSource; label: string; hint: string 
 export default function HomepageEdit({ settings, flash }: SiteHomepageProps) {
     const [uploading, setUploading] = useState(false);
     const [uploadError, setUploadError] = useState<string | null>(null);
+    const [ogUploading, setOgUploading] = useState(false);
     const videoInputRef = useRef<HTMLInputElement>(null);
+    const ogInputRef = useRef<HTMLInputElement>(null);
 
     const { data, setData, put, processing, errors, recentlySuccessful } = useForm({
         hero_eyebrow: settings.hero_eyebrow ?? '',
@@ -43,11 +46,37 @@ export default function HomepageEdit({ settings, flash }: SiteHomepageProps) {
         hero_video_enabled: settings.hero_video_enabled ?? true,
         hero_video_source: (settings.hero_video_source ?? 'default') as HeroVideoSource,
         hero_video_link: settings.hero_video_link ?? '',
+        seo_title: settings.seo_title ?? '',
+        seo_description: settings.seo_description ?? '',
+        seo_keywords: settings.seo_keywords ?? '',
     });
 
     const submit = (event: React.FormEvent) => {
         event.preventDefault();
         put(route('admin.site.homepage.update'), { preserveScroll: true });
+    };
+
+    const uploadOgImage = (file: File) => {
+        setOgUploading(true);
+
+        router.post(
+            route('admin.site.homepage.og-image.store'),
+            { image: file },
+            {
+                forceFormData: true,
+                preserveScroll: true,
+                onFinish: () => {
+                    setOgUploading(false);
+                    if (ogInputRef.current) {
+                        ogInputRef.current.value = '';
+                    }
+                },
+            },
+        );
+    };
+
+    const removeOgImage = () => {
+        router.delete(route('admin.site.homepage.og-image.destroy'), { preserveScroll: true });
     };
 
     const uploadVideo = async (file: File) => {
@@ -175,7 +204,11 @@ export default function HomepageEdit({ settings, flash }: SiteHomepageProps) {
                             <Field
                                 label="Video source"
                                 error={errors.hero_video_source}
-                                hint={data.hero_video_enabled ? 'Choose one: the built-in video, an upload, or a link.' : 'Used only when the video is turned on.'}
+                                hint={
+                                    data.hero_video_enabled
+                                        ? 'Choose one: the built-in video, an upload, or a link.'
+                                        : 'Used only when the video is turned on.'
+                                }
                             >
                                 <div className={cn('grid gap-2 sm:grid-cols-3', !data.hero_video_enabled && 'opacity-50')}>
                                     {videoSources.map((option) => {
@@ -193,7 +226,12 @@ export default function HomepageEdit({ settings, flash }: SiteHomepageProps) {
                                                 )}
                                             >
                                                 <span className="block text-sm font-medium">{option.label}</span>
-                                                <span className={cn('mt-0.5 block text-xs', active ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
+                                                <span
+                                                    className={cn(
+                                                        'mt-0.5 block text-xs',
+                                                        active ? 'text-primary-foreground/80' : 'text-muted-foreground',
+                                                    )}
+                                                >
                                                     {option.hint}
                                                 </span>
                                             </button>
@@ -229,7 +267,12 @@ export default function HomepageEdit({ settings, flash }: SiteHomepageProps) {
 
                                     {!uploading &&
                                         (settings.hero_video_url ? (
-                                            <video src={settings.hero_video_url} controls preload="metadata" className="mt-3 w-full max-w-sm rounded-md border" />
+                                            <video
+                                                src={settings.hero_video_url}
+                                                controls
+                                                preload="metadata"
+                                                className="mt-3 w-full max-w-sm rounded-md border"
+                                            />
                                         ) : (
                                             <p className="text-muted-foreground mt-2 text-xs">No video uploaded yet.</p>
                                         ))}
@@ -256,7 +299,12 @@ export default function HomepageEdit({ settings, flash }: SiteHomepageProps) {
                                         : 'Applies to the homepage hero video.'
                                 }
                             >
-                                <div className={cn('grid gap-2 sm:grid-cols-2', (!data.hero_video_enabled || data.hero_video_source === 'url') && 'opacity-50')}>
+                                <div
+                                    className={cn(
+                                        'grid gap-2 sm:grid-cols-2',
+                                        (!data.hero_video_enabled || data.hero_video_source === 'url') && 'opacity-50',
+                                    )}
+                                >
                                     {heroQualities.map((option) => {
                                         const active = data.hero_video_quality === option.value;
 
@@ -272,13 +320,90 @@ export default function HomepageEdit({ settings, flash }: SiteHomepageProps) {
                                                 )}
                                             >
                                                 <span className="block text-sm font-medium">{option.label}</span>
-                                                <span className={cn('mt-0.5 block text-xs', active ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
+                                                <span
+                                                    className={cn(
+                                                        'mt-0.5 block text-xs',
+                                                        active ? 'text-primary-foreground/80' : 'text-muted-foreground',
+                                                    )}
+                                                >
                                                     {option.hint}
                                                 </span>
                                             </button>
                                         );
                                     })}
                                 </div>
+                            </Field>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>SEO & sharing</CardTitle>
+                            <CardDescription>
+                                Search engine metadata and the image shown when the homepage is shared on social media. Leave the title blank to use
+                                the default.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-5">
+                            <TextField
+                                label="SEO title"
+                                value={data.seo_title}
+                                onChange={(value) => setData('seo_title', value)}
+                                error={errors.seo_title}
+                                placeholder="Premium Real Estate Development"
+                            />
+                            <TextAreaField
+                                label="Meta description"
+                                value={data.seo_description}
+                                onChange={(value) => setData('seo_description', value)}
+                                error={errors.seo_description}
+                                rows={3}
+                                placeholder="Architectural excellence and modern living…"
+                            />
+                            <TextField
+                                label="Meta keywords"
+                                value={data.seo_keywords}
+                                onChange={(value) => setData('seo_keywords', value)}
+                                error={errors.seo_keywords}
+                                placeholder="real estate, property development, luxury homes"
+                            />
+
+                            <Field label="Open Graph image" hint="Recommended 1200×630px. Falls back to the first hero image, then the company logo.">
+                                <input
+                                    ref={ogInputRef}
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    className="hidden"
+                                    onChange={(event) => {
+                                        const file = event.target.files?.[0];
+
+                                        if (file) {
+                                            uploadOgImage(file);
+                                        }
+                                    }}
+                                />
+
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <Button type="button" variant="outline" onClick={() => ogInputRef.current?.click()} disabled={ogUploading}>
+                                        {ogUploading ? <Loader2 className="animate-spin" /> : <Upload />}
+                                        {ogUploading ? 'Uploading…' : 'Choose image'}
+                                    </Button>
+
+                                    {settings.og_image && (
+                                        <Button type="button" variant="outline" onClick={removeOgImage}>
+                                            <Trash2 />
+                                            Remove
+                                        </Button>
+                                    )}
+                                </div>
+
+                                {settings.og_image && (
+                                    <img
+                                        src={mediaUrl(settings.og_image) ?? undefined}
+                                        alt="Open Graph preview"
+                                        className="mt-3 w-full max-w-sm rounded-md border"
+                                    />
+                                )}
                             </Field>
                         </CardContent>
                     </Card>

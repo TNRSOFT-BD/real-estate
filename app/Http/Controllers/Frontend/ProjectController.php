@@ -65,10 +65,31 @@ class ProjectController extends Controller
                 'og_title' => 'Projects',
                 'og_description' => $description,
                 'og_image' => null,
+                'og_type' => 'website',
                 'twitter_card' => 'summary_large_image',
                 'twitter_title' => 'Projects',
                 'twitter_description' => $description,
                 'twitter_image' => null,
+                'json_ld' => [
+                    [
+                        '@context' => 'https://schema.org',
+                        '@type' => 'CollectionPage',
+                        'name' => 'Projects',
+                        'url' => route('projects.index'),
+                        'mainEntity' => [
+                            '@type' => 'ItemList',
+                            'itemListElement' => collect($projects->items())
+                                ->values()
+                                ->map(fn (array $project, int $index): array => [
+                                    '@type' => 'ListItem',
+                                    'position' => $index + 1,
+                                    'name' => $project['title'],
+                                    'url' => route('projects.show', $project['slug']),
+                                ])
+                                ->all(),
+                        ],
+                    ],
+                ],
             ],
         ]);
     }

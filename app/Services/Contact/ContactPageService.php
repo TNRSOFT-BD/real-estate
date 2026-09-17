@@ -12,6 +12,8 @@ use App\Repositories\Contracts\Contact\ContactLocationRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactPageSettingRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactSocialLinkRepositoryInterface;
 use App\Repositories\Contracts\Contact\ContactTeamMemberRepositoryInterface;
+use App\Services\Company\CompanyProfileService;
+use App\Support\Seo\StructuredData;
 use Illuminate\Support\Facades\Cache;
 
 class ContactPageService
@@ -172,17 +174,46 @@ class ContactPageService
     public function buildSeoData(): array
     {
         $settings = $this->getSettings();
+        $company = app(CompanyProfileService::class)->getProfile();
 
         return [
             'title' => $settings['seo_title'] ?? null,
+            'default_title' => 'Contact Us',
             'description' => $settings['seo_description'] ?? null,
             'keywords' => $settings['seo_keywords'] ?? null,
-            'canonical_url' => $settings['canonical_url'] ?? null,
+            'canonical_url' => ($settings['canonical_url'] ?? null) ?: route('contact.show'),
+            'robots' => null,
             'og_title' => $settings['og_title'] ?? null,
             'og_description' => $settings['og_description'] ?? null,
             'og_image' => $settings['og_image'] ?? null,
+            'og_type' => 'website',
             'twitter_card' => $settings['twitter_card'] ?? null,
+            'json_ld' => [
+                StructuredData::organization($company, $this->getActiveSocialLinks(), $this->contactValue(['email']), $this->contactValue(['hotline', 'phone'])),
+                StructuredData::breadcrumb([
+                    ['name' => 'Home', 'url' => url('/')],
+                    ['name' => 'Contact', 'url' => route('contact.show')],
+                ]),
+            ],
         ];
+    }
+
+    /**
+     * @param  array<int, string>  $types
+     */
+    private function contactValue(array $types): ?string
+    {
+        foreach ($this->getActiveInformation() as $item) {
+            $entry = is_array($item) ? $item : (array) $item;
+            $type = $entry['type'] ?? null;
+            $type = is_object($type) ? ($type->value ?? null) : $type;
+
+            if (in_array($type, $types, true) && is_string($entry['value'] ?? null) && $entry['value'] !== '') {
+                return $entry['value'];
+            }
+        }
+
+        return null;
     }
 
     public function invalidatePublicCache(): void

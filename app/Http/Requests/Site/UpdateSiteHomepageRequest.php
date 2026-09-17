@@ -25,6 +25,9 @@ class UpdateSiteHomepageRequest extends FormRequest
             'hero_video_enabled' => ['sometimes', 'boolean'],
             'hero_video_source' => ['sometimes', 'string', Rule::in(['default', 'upload', 'url'])],
             'hero_video_link' => ['nullable', 'url', 'max:500'],
+            'seo_title' => ['nullable', 'string', 'max:255'],
+            'seo_description' => ['nullable', 'string', 'max:500'],
+            'seo_keywords' => ['nullable', 'string', 'max:500'],
         ];
     }
 }

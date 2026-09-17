@@ -36,6 +36,10 @@ export interface SiteHomepageProps {
         hero_video_url: string | null;
         hero_video_public_id: string | null;
         hero_video_link: string | null;
+        seo_title: string | null;
+        seo_description: string | null;
+        seo_keywords: string | null;
+        og_image: string | null;
     };
     flash?: {
         success?: string;

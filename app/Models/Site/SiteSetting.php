@@ -26,6 +26,10 @@ class SiteSetting extends Model
         'hero_title',
         'hero_description',
         'hero_images',
+        'seo_title',
+        'seo_description',
+        'seo_keywords',
+        'og_image',
     ];
 
     protected $casts = [

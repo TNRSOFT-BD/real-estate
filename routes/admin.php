@@ -40,6 +40,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::patch('homepage/images/reorder', [SiteThemeController::class, 'homepageImagesReorder'])->name('homepage.images.reorder');
         Route::get('homepage/video/signature', [SiteThemeController::class, 'homepageVideoSignature'])->name('homepage.video.signature');
         Route::post('homepage/video', [SiteThemeController::class, 'homepageVideoStore'])->name('homepage.video.store');
+        Route::post('homepage/og-image', [SiteThemeController::class, 'homepageOgImageStore'])->name('homepage.og-image.store');
+        Route::delete('homepage/og-image', [SiteThemeController::class, 'homepageOgImageDestroy'])->name('homepage.og-image.destroy');
     });
 
     Route::prefix('home-about')->name('admin.home-about.')->group(function () {

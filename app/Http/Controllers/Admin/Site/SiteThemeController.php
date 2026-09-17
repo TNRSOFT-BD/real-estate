@@ -74,6 +74,9 @@ class SiteThemeController extends Controller
             'hero_video_enabled' => $request->has('hero_video_enabled')
                 ? $request->boolean('hero_video_enabled')
                 : (bool) ($current['hero_video_enabled'] ?? true),
+            'seo_title' => $data['seo_title'] ?? null,
+            'seo_description' => $data['seo_description'] ?? null,
+            'seo_keywords' => $data['seo_keywords'] ?? null,
         ];
 
         $link = $data['hero_video_link'] ?? null;
@@ -224,6 +227,49 @@ class SiteThemeController extends Controller
         $this->themeService->update(['hero_images' => $ordered]);
 
         return back()->with('success', 'Images reordered.');
+    }
+
+    /**
+     * Upload the Open Graph share image used for the homepage.
+     */
+    public function homepageOgImageStore(Request $request): RedirectResponse
+    {
+        $this->authorize('update', SiteSetting::class);
+
+        $request->validate([
+            'image' => ['required', 'image', 'mimes:jpeg,png,webp', 'max:4096'],
+        ]);
+
+        $current = $this->themeService->getSettings()['og_image'] ?? null;
+
+        $path = $this->mediaService->upload($request->file('image'), 'site/og');
+
+        if ($path === null) {
+            return back()->with('error', 'The image could not be stored.');
+        }
+
+        if (is_string($current) && $current !== '' && $current !== $path) {
+            $this->mediaService->delete($current);
+        }
+
+        $this->themeService->update(['og_image' => $path]);
+
+        return back()->with('success', 'Open Graph image updated.');
+    }
+
+    public function homepageOgImageDestroy(): RedirectResponse
+    {
+        $this->authorize('update', SiteSetting::class);
+
+        $current = $this->themeService->getSettings()['og_image'] ?? null;
+
+        if (is_string($current) && $current !== '') {
+            $this->mediaService->delete($current);
+        }
+
+        $this->themeService->update(['og_image' => null]);
+
+        return back()->with('success', 'Open Graph image removed.');
     }
 
     /**

@@ -9,26 +9,40 @@ import LiveChatWidget from '@/components/frontend/contact/live-chat-widget';
 import Reveal from '@/components/frontend/glass/reveal';
 import SectionLabel from '@/components/frontend/glass/section-label';
 import PublicLayout from '@/layouts/public-layout';
+import { mediaUrl } from '@/lib/media';
+import { absoluteUrl, pageTitle } from '@/lib/seo';
+import { type SharedData } from '@/types';
 import { type ContactPageProps } from '@/types/contact';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 
 export default function ContactIndex(props: ContactPageProps) {
     const { hero, contactInformation, form, faqs, teamMembers, locations, socialLinks, liveChat, seo } = props;
+    const { name } = usePage<SharedData>().props;
 
-    const seoImage = seo.og_image;
+    const canonical = seo.canonical_url ?? '/contact';
+    const seoImage = absoluteUrl(seo.og_image ? mediaUrl(seo.og_image) : null);
+    const twitterImage = absoluteUrl(seo.twitter_image ? mediaUrl(seo.twitter_image) : null) ?? seoImage;
 
     return (
         <PublicLayout>
             <Head>
-                <title>{seo.title ?? 'Contact Us | Real Estate'}</title>
-                {seo.title && <meta name="title" content={seo.title} />}
+                <title>{pageTitle(seo.title, name, 'Contact Us')}</title>
                 {seo.description && <meta name="description" content={seo.description} />}
                 {seo.keywords && <meta name="keywords" content={seo.keywords} />}
-                {seo.canonical_url && <link rel="canonical" href={seo.canonical_url} />}
-                {seo.og_title && <meta property="og:title" content={seo.og_title} />}
+                <link rel="canonical" href={canonical} />
+                {seo.robots && <meta name="robots" content={seo.robots} />}
+
+                <meta property="og:type" content={seo.og_type ?? 'website'} />
+                <meta property="og:title" content={seo.og_title ?? seo.title ?? 'Contact Us'} />
                 {seo.og_description && <meta property="og:description" content={seo.og_description} />}
                 {seoImage && <meta property="og:image" content={seoImage} />}
-                {seo.twitter_card && <meta name="twitter:card" content={seo.twitter_card} />}
+                <meta property="og:url" content={canonical} />
+                <meta property="og:site_name" content={name} />
+
+                <meta name="twitter:card" content={seo.twitter_card ?? 'summary_large_image'} />
+                <meta name="twitter:title" content={seo.twitter_title ?? seo.title ?? 'Contact Us'} />
+                {seo.twitter_description && <meta name="twitter:description" content={seo.twitter_description} />}
+                {twitterImage && <meta name="twitter:image" content={twitterImage} />}
             </Head>
 
             <ContactHero hero={hero} />

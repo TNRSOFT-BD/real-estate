@@ -17,7 +17,7 @@ export default function ProjectBreadcrumb({ project }: { project: PublicProject 
             />
 
             <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:py-10 lg:px-8">
-                <h1 className="text-2xl font-semibold tracking-tight text-white drop-shadow-md sm:text-3xl">Property details</h1>
+                <p className="text-2xl font-semibold tracking-tight text-white drop-shadow-md sm:text-3xl">Property details</p>
 
                 <nav aria-label="Breadcrumb" className="mt-3">
                     <ol className="pointer-events-auto flex flex-wrap items-center gap-2 text-xs text-white/90 sm:text-sm">
@@ -30,7 +30,11 @@ export default function ProjectBreadcrumb({ project }: { project: PublicProject 
                         <li aria-hidden>
                             <ChevronRight className="size-3.5" />
                         </li>
-                        <li className="drop-shadow-md">Projects</li>
+                        <li>
+                            <Link href="/projects" className="drop-shadow-md transition-colors hover:text-white">
+                                Projects
+                            </Link>
+                        </li>
                         <li aria-hidden>
                             <ChevronRight className="size-3.5" />
                         </li>

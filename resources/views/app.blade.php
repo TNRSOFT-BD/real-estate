@@ -6,8 +6,6 @@
 
         @php($companyProfile = app(\App\Services\Company\CompanyProfileService::class)->getProfile() ?? [])
 
-        <title inertia>{{ $companyProfile['name'] ?? '' }}</title>
-
         @if (! empty($companyProfile['favicon']))
             <link rel="icon" href="{{ asset('storage/'.ltrim($companyProfile['favicon'], '/')) }}">
         @endif
@@ -18,7 +16,8 @@
         @routes
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
-        @inertiaHead
+
+        @include('partials.seo-meta', ['page' => $page])
     </head>
     <body class="font-sans antialiased">
         @inertia

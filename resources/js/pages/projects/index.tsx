@@ -5,6 +5,7 @@ import ProjectsHero from '@/components/frontend/project/projects-hero';
 import ProjectsPagination from '@/components/frontend/project/projects-pagination';
 import PublicLayout from '@/layouts/public-layout';
 import { mediaUrl } from '@/lib/media';
+import { absoluteUrl, pageTitle } from '@/lib/seo';
 import { cn } from '@/lib/utils';
 import { type SharedData } from '@/types';
 import { type ProjectsIndexProps } from '@/types/project';
@@ -27,23 +28,24 @@ export default function ProjectsIndex({ projects, types, statuses, locations, fi
 
     const filtered = Boolean(filters.project_type || filters.project_status || filters.location_city || filters.search);
     const canonical = seo.canonical_url ?? '/projects';
-    const ogImage = seo.og_image ? mediaUrl(seo.og_image) : null;
-    const twitterImage = seo.twitter_image ? mediaUrl(seo.twitter_image) : ogImage;
+    const ogImage = absoluteUrl(seo.og_image ? mediaUrl(seo.og_image) : null);
+    const twitterImage = absoluteUrl(seo.twitter_image ? mediaUrl(seo.twitter_image) : null) ?? ogImage;
 
     return (
         <PublicLayout>
             <Head>
-                <title>{seo.title ? `${seo.title} | ${name}` : `Our Projects | ${name}`}</title>
+                <title>{pageTitle(seo.title, name, 'Our Projects')}</title>
                 {seo.description && <meta name="description" content={seo.description} />}
                 {seo.keywords && <meta name="keywords" content={seo.keywords} />}
                 <link rel="canonical" href={canonical} />
                 {seo.robots && <meta name="robots" content={seo.robots} />}
 
-                <meta property="og:type" content="website" />
+                <meta property="og:type" content={seo.og_type ?? 'website'} />
                 <meta property="og:title" content={seo.og_title ?? seo.title ?? 'Our Projects'} />
                 {seo.og_description && <meta property="og:description" content={seo.og_description} />}
                 {ogImage && <meta property="og:image" content={ogImage} />}
                 <meta property="og:url" content={canonical} />
+                <meta property="og:site_name" content={name} />
 
                 <meta name="twitter:card" content={seo.twitter_card ?? 'summary_large_image'} />
                 <meta name="twitter:title" content={seo.twitter_title ?? seo.title ?? 'Our Projects'} />

@@ -1,13 +1,4 @@
-export type ContactInformationType =
-    | 'hotline'
-    | 'phone'
-    | 'email'
-    | 'address'
-    | 'business_hours'
-    | 'support'
-    | 'sales'
-    | 'whatsapp'
-    | 'other';
+export type ContactInformationType = 'hotline' | 'phone' | 'email' | 'address' | 'business_hours' | 'support' | 'sales' | 'whatsapp' | 'other';
 
 export type ContactFormFieldType = 'text' | 'email' | 'tel' | 'textarea' | 'select' | 'radio' | 'checkbox';
 
@@ -135,13 +126,20 @@ export interface ContactHero {
 
 export interface SeoData {
     title?: string | null;
+    default_title?: string | null;
     description?: string | null;
     keywords?: string | null;
     canonical_url?: string | null;
+    robots?: string | null;
     og_title?: string | null;
     og_description?: string | null;
     og_image?: string | null;
+    og_type?: string | null;
     twitter_card?: string | null;
+    twitter_title?: string | null;
+    twitter_description?: string | null;
+    twitter_image?: string | null;
+    json_ld?: Array<Record<string, unknown>> | null;
 }
 
 export interface ContactPageProps {
