@@ -26,13 +26,13 @@ function renderOptions(options?: ContactFormField['options']): Array<{ label: st
 
 const fieldClass = (hasError: boolean) =>
     cn(
-        'text-ink placeholder:text-ink-soft/50 bg-field border-line hover:border-ink/35 focus-visible:border-ink h-12 w-full rounded-xl border px-4 text-base shadow-sm transition-all duration-200 focus-visible:ring-4 focus-visible:ring-ink/10 focus-visible:outline-hidden md:text-base',
+        'text-ink placeholder:text-ink-soft/50 bg-field border-line hover:border-ink/35 focus-visible:border-ink focus-visible:ring-ink/10 h-12 w-full rounded-xl border px-4 text-base shadow-sm transition-all duration-200 focus-visible:ring-4 focus-visible:outline-hidden md:text-base',
         hasError && 'border-destructive hover:border-destructive focus-visible:border-destructive focus-visible:ring-destructive/15',
     );
 
 const textareaClass = (hasError: boolean) =>
     cn(
-        'text-ink placeholder:text-ink-soft/50 bg-field border-line hover:border-ink/35 focus-visible:border-ink min-h-36 w-full rounded-xl border px-4 py-3 text-base leading-relaxed shadow-sm transition-all duration-200 focus-visible:ring-4 focus-visible:ring-ink/10 focus-visible:outline-hidden md:text-base',
+        'text-ink placeholder:text-ink-soft/50 bg-field border-line hover:border-ink/35 focus-visible:border-ink focus-visible:ring-ink/10 min-h-36 w-full rounded-xl border px-4 py-3 text-base leading-relaxed shadow-sm transition-all duration-200 focus-visible:ring-4 focus-visible:outline-hidden md:text-base',
         hasError && 'border-destructive hover:border-destructive focus-visible:border-destructive focus-visible:ring-destructive/15',
     );
 
@@ -62,7 +62,7 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
         return (
             <GlassPanel strong className="p-8 sm:p-10">
                 <CheckCircle2 className="text-ink size-6" aria-hidden />
-                <h3 className="text-ink mt-6 text-2xl font-medium tracking-tight">Message sent</h3>
+                <h3 className="text-ink mt-6 text-2xl font-medium tracking-tight max-sm:text-xl">Message sent</h3>
                 <p className="text-ink-soft mt-3 max-w-md text-sm leading-relaxed">
                     {flash?.success ?? successMessage ?? 'Thank you. Your message has been received and we will get back to you shortly.'}
                 </p>
@@ -241,7 +241,7 @@ export default function ContactForm({ fields, successMessage }: ContactFormProps
                     <Button
                         type="submit"
                         size="lg"
-                        className="group bg-ink text-canvas hover:opacity-90 rounded-full border-0 px-7 shadow-sm hover:shadow-md"
+                        className="group bg-ink text-canvas rounded-full border-0 px-7 shadow-sm hover:opacity-90 hover:shadow-md"
                         disabled={processing}
                     >
                         {processing ? (

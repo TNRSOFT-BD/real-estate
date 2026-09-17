@@ -57,7 +57,7 @@ export default function AboutPartners({ hero }: AboutPartnersProps) {
     const loopPartners = Array.from({ length: repeats }, () => partners).flat();
 
     return (
-        <section className="w-full py-7 sm:py-9 lg:py-12" aria-label="Trusted partners">
+        <section className="w-full pt-7 pb-2 sm:pt-9 sm:pb-4 lg:pt-12 lg:pb-6" aria-label="Trusted partners">
             <Reveal>
                 <h2 className="text-ink-soft mx-auto w-full max-w-7xl px-3 text-center text-[11px] font-medium tracking-[0.28em] uppercase lg:px-6">
                     {hero.partners_title ?? 'Trusted by'}
@@ -65,7 +65,7 @@ export default function AboutPartners({ hero }: AboutPartnersProps) {
             </Reveal>
 
             <Reveal delay={80}>
-                <div className="group/marquee relative mt-10 w-full overflow-hidden">
+                <div className="group/marquee relative mt-5 w-full overflow-hidden sm:mt-8 lg:mt-10">
                     <div className="animate-marquee flex w-max group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none">
                         <ul className="flex">
                             {loopPartners.map((partner, index) => (

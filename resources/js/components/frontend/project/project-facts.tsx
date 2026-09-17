@@ -15,9 +15,7 @@ export default function ProjectFacts({ project }: { project: PublicProject }) {
     const facts: Fact[] = [
         project.type?.name ? { label: 'Project type', value: project.type.name } : null,
         project.status?.name ? { label: 'Status', value: project.status.name, dot: project.status.color ?? null } : null,
-        project.total_land_area
-            ? { label: 'Land area', value: formatNumber(project.total_land_area) ?? String(project.total_land_area) }
-            : null,
+        project.total_land_area ? { label: 'Land area', value: formatNumber(project.total_land_area) ?? String(project.total_land_area) } : null,
         project.total_units != null ? { label: 'Total units', value: String(project.total_units) } : null,
         project.number_of_floors != null ? { label: 'Floors', value: String(project.number_of_floors) } : null,
         project.number_of_buildings != null ? { label: 'Buildings', value: String(project.number_of_buildings) } : null,
@@ -55,7 +53,7 @@ export default function ProjectFacts({ project }: { project: PublicProject }) {
                         <p className="text-[11px] font-medium tracking-[0.28em] text-white/60 uppercase">At a glance</p>
 
                         {heading && (
-                            <h2 className="mt-4 max-w-2xl text-3xl leading-[1.06] font-medium tracking-[-0.02em] text-balance text-white sm:text-4xl">
+                            <h2 className="mt-4 max-w-2xl text-3xl leading-[1.06] font-medium tracking-[-0.02em] text-balance text-white max-sm:text-2xl sm:text-4xl">
                                 {heading}
                             </h2>
                         )}

@@ -17,7 +17,7 @@ export default function ProjectCta() {
 
                     <h2
                         id="project-cta-title"
-                        className="text-canvas mx-auto mt-6 max-w-3xl text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance sm:text-4xl lg:text-5xl"
+                        className="text-canvas mx-auto mt-6 max-w-3xl text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl lg:text-5xl"
                     >
                         Looking for a dream home?
                     </h2>

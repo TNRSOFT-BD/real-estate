@@ -31,7 +31,7 @@ export default function AboutDirection({ hero }: AboutDirectionProps) {
                 <SectionLabel>{hero.direction_badge ?? 'Our direction'}</SectionLabel>
                 <h2
                     id="about-direction-title"
-                    className="text-ink mt-7 text-xl leading-[1.08] font-medium tracking-[-0.02em] text-balance sm:text-4xl"
+                    className="text-ink mt-7 text-xl leading-[1.08] font-medium tracking-[-0.02em] text-balance max-sm:text-lg sm:text-4xl"
                 >
                     Mission and vision
                 </h2>
@@ -42,8 +42,12 @@ export default function AboutDirection({ hero }: AboutDirectionProps) {
                     <GlassPanel className="flex h-full flex-col p-8 sm:p-10">
                         <PanelLabel>Mission</PanelLabel>
 
-                        <h3 className="text-ink mt-7 max-w-md text-lg leading-snug font-medium tracking-[-0.01em] text-balance sm:text-2xl">{hero.mission_title}</h3>
-                        {hero.mission_description && <p className="text-ink-soft mt-5 max-w-md text-base leading-relaxed">{hero.mission_description}</p>}
+                        <h3 className="text-ink mt-7 max-w-md text-lg leading-snug font-medium tracking-[-0.01em] text-balance max-sm:text-base sm:text-2xl">
+                            {hero.mission_title}
+                        </h3>
+                        {hero.mission_description && (
+                            <p className="text-ink-soft mt-5 max-w-md text-base leading-relaxed">{hero.mission_description}</p>
+                        )}
 
                         {missionImage && (
                             <div className="bg-glass-strong border-glass-border mt-8 aspect-[4/3] w-full overflow-hidden rounded-xl border">
@@ -57,8 +61,12 @@ export default function AboutDirection({ hero }: AboutDirectionProps) {
                     <GlassPanel className="flex h-full flex-col p-8 sm:p-10">
                         <PanelLabel>Vision</PanelLabel>
 
-                        <h3 className="text-ink mt-7 max-w-md text-lg leading-snug font-medium tracking-[-0.01em] text-balance sm:text-2xl">{hero.vision_title}</h3>
-                        {hero.vision_description && <p className="text-ink-soft mt-5 max-w-md text-base leading-relaxed">{hero.vision_description}</p>}
+                        <h3 className="text-ink mt-7 max-w-md text-lg leading-snug font-medium tracking-[-0.01em] text-balance max-sm:text-base sm:text-2xl">
+                            {hero.vision_title}
+                        </h3>
+                        {hero.vision_description && (
+                            <p className="text-ink-soft mt-5 max-w-md text-base leading-relaxed">{hero.vision_description}</p>
+                        )}
 
                         {visionImage && (
                             <div className="bg-glass-strong border-glass-border mt-8 aspect-[4/3] w-full overflow-hidden rounded-xl border">

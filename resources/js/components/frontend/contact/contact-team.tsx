@@ -27,7 +27,10 @@ export default function ContactTeam({ members, hero }: ContactTeamProps) {
         <section id="team" aria-labelledby="team-title" className="mx-auto w-full max-w-7xl px-4 py-8 sm:py-12 lg:px-8 lg:py-16">
             <Reveal className="max-w-2xl">
                 <SectionLabel>{hero.team_badge ?? 'Our people'}</SectionLabel>
-                <h2 id="team-title" className="text-ink mt-7 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance sm:text-4xl">
+                <h2
+                    id="team-title"
+                    className="text-ink mt-7 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl"
+                >
                     {hero.team_title ?? 'The people behind the projects.'}
                 </h2>
                 {hero.team_description && <p className="text-ink-soft mt-5 max-w-xl text-sm leading-relaxed">{hero.team_description}</p>}

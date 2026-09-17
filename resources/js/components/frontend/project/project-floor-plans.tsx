@@ -40,7 +40,7 @@ export default function ProjectFloorPlans({ plans }: ProjectFloorPlansProps) {
                             onClick={() => setActiveId(plan.id)}
                             className={cn(
                                 'border-b-2 px-4 py-3 text-sm font-medium transition-colors',
-                                plan.id === active.id ? 'border-ink text-ink' : 'border-transparent text-ink-soft hover:text-ink',
+                                plan.id === active.id ? 'border-ink text-ink' : 'text-ink-soft hover:text-ink border-transparent',
                             )}
                         >
                             {plan.title}
@@ -57,7 +57,7 @@ export default function ProjectFloorPlans({ plans }: ProjectFloorPlansProps) {
                 </div>
 
                 <div className="lg:col-span-5">
-                    <h3 className="text-ink text-2xl font-medium tracking-tight">{active.title}</h3>
+                    <h3 className="text-ink text-2xl font-medium tracking-tight max-sm:text-xl">{active.title}</h3>
                     {active.description && <p className="text-ink-soft mt-4 text-sm leading-relaxed">{active.description}</p>}
 
                     {details.length > 0 && (

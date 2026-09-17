@@ -43,7 +43,7 @@ export default function AboutIndex(props: AboutPageProps) {
                 {twitterImage && <meta name="twitter:image" content={twitterImage} />}
             </Head>
 
-            <div className="max-sm:text-center [&_p]:text-justify max-sm:[&_p]:text-center">
+            <div className="max-sm:text-center [&_dd]:text-justify [&_p]:text-justify">
                 <AboutHero hero={hero} />
 
                 <AboutIntro hero={hero} />

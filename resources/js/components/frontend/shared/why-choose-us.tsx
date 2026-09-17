@@ -46,7 +46,7 @@ export default function WhyChooseUs({ eyebrow, title, description, features }: W
                     <Reveal>
                         <h2
                             id="why-choose-us-title"
-                            className="text-ink text-[clamp(2.1rem,3.9vw+1rem,3.5rem)] leading-[1.06] font-medium tracking-[-0.02em] text-balance"
+                            className="text-ink text-[clamp(2.1rem,3.9vw+1rem,3.5rem)] leading-[1.06] font-medium tracking-[-0.02em] text-balance max-sm:text-2xl"
                         >
                             {heading}
                         </h2>
@@ -55,7 +55,7 @@ export default function WhyChooseUs({ eyebrow, title, description, features }: W
 
                 <div className="lg:col-span-5 lg:pt-3">
                     <Reveal delay={120}>
-                        <p className="text-ink-soft max-w-md text-[1.05rem] leading-[1.75] lg:ml-auto">{copy}</p>
+                        <p className="text-ink-soft max-w-md text-justify text-[1.05rem] leading-[1.75] lg:ml-auto">{copy}</p>
                     </Reveal>
                 </div>
             </div>
@@ -81,10 +81,10 @@ export default function WhyChooseUs({ eyebrow, title, description, features }: W
                                         </span>
                                     </div>
 
-                                    <h3 className="text-ink mt-8 text-xl font-medium tracking-[-0.01em]">{feature.title}</h3>
+                                    <h3 className="text-ink mt-8 text-xl font-medium tracking-[-0.01em] max-sm:text-lg">{feature.title}</h3>
 
                                     {feature.description && (
-                                        <p className="text-ink-soft mt-3 max-w-sm text-sm leading-relaxed">{feature.description}</p>
+                                        <p className="text-ink-soft mt-3 max-w-sm text-justify text-sm leading-relaxed">{feature.description}</p>
                                     )}
                                 </div>
                             </Reveal>

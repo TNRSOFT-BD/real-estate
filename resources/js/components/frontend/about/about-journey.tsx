@@ -19,7 +19,7 @@ export default function AboutJourney({ hero }: AboutJourneyProps) {
                 <SectionLabel>{hero.journey_badge ?? 'Our journey'}</SectionLabel>
                 <h2
                     id="about-journey-title"
-                    className="text-ink mt-7 text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance sm:text-4xl"
+                    className="text-ink mt-7 text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl"
                 >
                     {hero.journey_title ?? 'Milestones that shaped us.'}
                 </h2>
@@ -38,15 +38,13 @@ export default function AboutJourney({ hero }: AboutJourneyProps) {
                                 />
                                 <span aria-hidden className="bg-ink mb-4 block size-2.5 rounded-full lg:hidden" />
 
-                                <GlassPanel className="flex h-full flex-col p-5 transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:bg-glass-strong group-hover:shadow-[0_18px_40px_-24px_rgba(24,21,16,0.5)] sm:p-6">
+                                <GlassPanel className="group-hover:bg-glass-strong flex h-full flex-col p-5 transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:shadow-[0_18px_40px_-24px_rgba(24,21,16,0.5)] sm:p-6">
                                     <div className="flex items-start justify-between gap-3">
                                         <p className="text-ink text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">{item.year}</p>
                                         <ArrowUpRight className="text-ink-soft size-4 shrink-0 -translate-y-1 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0 group-hover:opacity-100" />
                                     </div>
                                     <h3 className="text-ink mt-3 text-base font-medium tracking-[-0.01em] sm:text-lg">{item.title}</h3>
-                                    {item.description && (
-                                        <p className="text-ink-soft mt-2 text-sm leading-relaxed">{item.description}</p>
-                                    )}
+                                    {item.description && <p className="text-ink-soft mt-2 text-sm leading-relaxed">{item.description}</p>}
                                 </GlassPanel>
                             </li>
                         </Reveal>

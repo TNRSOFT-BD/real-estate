@@ -7,7 +7,7 @@ export default function ProjectsHero() {
                 <Reveal delay={80}>
                     <h1
                         id="projects-title"
-                        className="text-ink text-4xl leading-[1.04] font-medium tracking-[-0.02em] text-balance sm:text-5xl lg:text-6xl xl:text-7xl"
+                        className="text-ink text-4xl leading-[1.04] font-medium tracking-[-0.02em] text-balance max-sm:text-3xl sm:text-5xl lg:text-6xl xl:text-7xl"
                     >
                         Our Projects
                     </h1>

@@ -66,7 +66,7 @@ export default function AboutCompanyInfo({ items, socialLinks }: AboutCompanyInf
             <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
                 <Reveal className="max-w-xl">
                     <SectionLabel>Company details</SectionLabel>
-                    <h2 className="text-ink mt-7 text-2xl font-medium tracking-[-0.01em] text-balance sm:text-3xl">
+                    <h2 className="text-ink mt-7 text-2xl font-medium tracking-[-0.01em] text-balance max-sm:text-xl sm:text-3xl">
                         Visit us, write to us, call us.
                     </h2>
                 </Reveal>
@@ -87,7 +87,11 @@ export default function AboutCompanyInfo({ items, socialLinks }: AboutCompanyInf
                         <Reveal key={item.id} delay={index * 60} className="h-full">
                             <div className="border-line flex h-full flex-col gap-3 border-t py-7 sm:py-8">
                                 <dt className="text-ink-soft flex items-center gap-3 text-[11px] font-medium tracking-[0.24em] uppercase">
-                                    {icon ? <img src={icon} alt="" aria-hidden className="size-4 shrink-0" /> : <Icon className="size-4 shrink-0" aria-hidden />}
+                                    {icon ? (
+                                        <img src={icon} alt="" aria-hidden className="size-4 shrink-0" />
+                                    ) : (
+                                        <Icon className="size-4 shrink-0" aria-hidden />
+                                    )}
                                     {typeLabels[item.type] ?? item.title}
                                 </dt>
 

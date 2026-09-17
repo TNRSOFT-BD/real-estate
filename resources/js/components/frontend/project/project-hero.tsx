@@ -17,7 +17,7 @@ export default function ProjectHero({ project }: { project: PublicProject }) {
 
             <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/25" />
 
-            <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-12 pt-36 sm:pb-16 sm:pt-44 lg:px-8">
+            <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-36 pb-12 sm:pt-44 sm:pb-16 lg:px-8">
                 <div className="flex flex-wrap items-center gap-3">
                     {project.type && (
                         <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[11px] font-medium tracking-[0.22em] text-white uppercase backdrop-blur">
@@ -34,7 +34,7 @@ export default function ProjectHero({ project }: { project: PublicProject }) {
 
                 <h1
                     id="project-title"
-                    className="mt-6 max-w-5xl text-4xl leading-[1.03] font-medium tracking-[-0.02em] text-white text-balance sm:text-5xl lg:text-6xl xl:text-7xl"
+                    className="mt-6 max-w-5xl text-4xl leading-[1.03] font-medium tracking-[-0.02em] text-balance text-white max-sm:text-3xl sm:text-5xl lg:text-6xl xl:text-7xl"
                 >
                     {project.title}
                 </h1>
@@ -46,7 +46,9 @@ export default function ProjectHero({ project }: { project: PublicProject }) {
                     </p>
                 )}
 
-                {project.short_description && <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/75 sm:text-lg">{project.short_description}</p>}
+                {project.short_description && (
+                    <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/75 sm:text-lg">{project.short_description}</p>
+                )}
 
                 <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
                     <Link

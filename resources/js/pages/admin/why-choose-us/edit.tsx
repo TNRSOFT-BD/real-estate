@@ -16,7 +16,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function WhyChooseUsEdit({ settings, features, flash }: WhyChooseUsAdminProps) {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, processing, errors, recentlySuccessful } = useForm({
         eyebrow: settings.eyebrow ?? '',
         title: settings.title ?? '',
         description: settings.description ?? '',
@@ -70,6 +70,7 @@ export default function WhyChooseUsEdit({ settings, features, flash }: WhyChoose
                     </Card>
 
                     <div className="bg-card sticky bottom-4 z-10 flex items-center justify-end gap-3 rounded-lg border p-3 shadow-lg">
+                        {recentlySuccessful && <p className="text-muted-foreground text-sm">Saved.</p>}
                         <Button type="submit" size="lg" disabled={processing}>
                             {processing ? <Loader2 className="animate-spin" /> : <Save />}
                             {processing ? 'Saving…' : 'Save section'}

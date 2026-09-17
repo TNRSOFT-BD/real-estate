@@ -19,7 +19,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function HomeAboutEdit({ settings, stats, flash }: HomeAboutAdminProps) {
-    const { data, setData, post, processing, errors, transform } = useForm<{
+    const { data, setData, post, processing, errors, transform, recentlySuccessful } = useForm<{
         heading: string;
         description: string;
         badge_figure: string;
@@ -169,6 +169,7 @@ export default function HomeAboutEdit({ settings, stats, flash }: HomeAboutAdmin
                     </Card>
 
                     <div className="bg-card sticky bottom-4 flex items-center justify-end gap-3 rounded-lg border p-3 shadow-lg">
+                        {recentlySuccessful && <p className="text-muted-foreground text-sm">Saved.</p>}
                         <Button type="submit" size="lg" disabled={processing}>
                             {processing ? <Loader2 className="animate-spin" /> : <Save />}
                             {processing ? 'Saving…' : 'Save about section'}

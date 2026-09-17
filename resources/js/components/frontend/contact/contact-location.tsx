@@ -35,7 +35,10 @@ export default function ContactLocation({ locations, hero }: ContactLocationProp
         <section id="locations" aria-labelledby="locations-title" className="mx-auto w-full max-w-7xl px-4 py-8 sm:py-12 lg:px-8 lg:py-16">
             <Reveal className="max-w-2xl">
                 <SectionLabel>{hero.location_badge ?? 'Visit us'}</SectionLabel>
-                <h2 id="locations-title" className="text-ink mt-7 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance sm:text-4xl">
+                <h2
+                    id="locations-title"
+                    className="text-ink mt-7 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl"
+                >
                     {hero.location_title ?? 'Find us'}
                 </h2>
                 {hero.location_description && <p className="text-ink-soft mt-5 max-w-xl text-sm leading-relaxed">{hero.location_description}</p>}
@@ -45,7 +48,7 @@ export default function ContactLocation({ locations, hero }: ContactLocationProp
                 <Reveal className="lg:col-span-5">
                     <div className="flex flex-col gap-5">
                         <GlassPanel strong className="p-7 sm:p-8">
-                            <h3 className="text-ink text-xl font-medium tracking-[-0.01em] sm:text-2xl">
+                            <h3 className="text-ink text-xl font-medium tracking-[-0.01em] max-sm:text-lg sm:text-2xl">
                                 {primary.google_maps_url ? (
                                     <a
                                         href={primary.google_maps_url}
@@ -118,7 +121,9 @@ export default function ContactLocation({ locations, hero }: ContactLocationProp
                                             {!isLinkText(location.address) && (
                                                 <p className="text-ink-soft mt-1 text-sm leading-relaxed">{location.address}</p>
                                             )}
-                                            {location.description && <p className="text-ink-soft mt-1 text-sm leading-relaxed">{location.description}</p>}
+                                            {location.description && (
+                                                <p className="text-ink-soft mt-1 text-sm leading-relaxed">{location.description}</p>
+                                            )}
                                             {(location.phone || location.email) && (
                                                 <div className="mt-2 flex flex-col gap-1 text-sm">
                                                     {location.phone && (
@@ -127,7 +132,10 @@ export default function ContactLocation({ locations, hero }: ContactLocationProp
                                                         </a>
                                                     )}
                                                     {location.email && (
-                                                        <a href={`mailto:${location.email}`} className="text-ink-soft hover:text-ink break-all transition-colors">
+                                                        <a
+                                                            href={`mailto:${location.email}`}
+                                                            className="text-ink-soft hover:text-ink break-all transition-colors"
+                                                        >
                                                             {location.email}
                                                         </a>
                                                     )}

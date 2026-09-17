@@ -19,7 +19,7 @@ export default function LegalShow({ page }: LegalShowProps) {
             <article className="mx-auto w-full max-w-6xl px-6 pt-16 pb-10 sm:pt-20 sm:pb-12 lg:px-8">
                 <div className="text-center">
                     <p className="text-ink-soft text-[11px] font-medium tracking-[0.28em] uppercase">Legal</p>
-                    <h1 className="text-ink mt-5 text-4xl leading-[1.05] font-medium tracking-[-0.02em] text-balance sm:text-5xl lg:text-6xl xl:text-7xl">
+                    <h1 className="text-ink mt-5 text-4xl leading-[1.05] font-medium tracking-[-0.02em] text-balance max-sm:text-3xl sm:text-5xl lg:text-6xl xl:text-7xl">
                         {page.title}
                     </h1>
                     {updated && <p className="text-ink-soft mt-5 text-sm">Last updated: {updated}</p>}

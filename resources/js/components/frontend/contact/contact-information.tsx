@@ -27,7 +27,7 @@ export default function ContactInformation({ items }: ContactInformationProps) {
         <section className="mx-auto w-full max-w-7xl px-4 py-8 sm:py-12 lg:px-8 lg:py-16" aria-label="Contact information">
             <Reveal className="max-w-2xl">
                 <SectionLabel>Get in touch</SectionLabel>
-                <h2 className="text-ink mt-7 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance sm:text-4xl">
+                <h2 className="text-ink mt-7 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl">
                     We would love to hear from you.
                 </h2>
                 <p className="text-ink-soft mt-5 max-w-xl text-sm leading-relaxed">

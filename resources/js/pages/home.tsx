@@ -49,7 +49,7 @@ export default function Home({ featuredProjects, hero, about, whyChooseUs, seo }
                             <SectionLabel>Selected work</SectionLabel>
                             <h2
                                 id="home-projects-title"
-                                className="text-ink mt-6 text-[clamp(2rem,3.4vw+1rem,2.75rem)] leading-[1.16] font-medium tracking-normal text-balance"
+                                className="text-ink mt-6 text-[clamp(2rem,3.4vw+1rem,2.75rem)] leading-[1.16] font-medium tracking-normal text-balance max-sm:text-2xl"
                             >
                                 Our Projects
                             </h2>

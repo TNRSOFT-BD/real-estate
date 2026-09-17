@@ -249,14 +249,47 @@ export default function Dashboard({ projects, submissions, content }: DashboardD
                 </section>
 
                 <section className="grid gap-6 xl:grid-cols-2">
-                    <Card>
+                    <Card className="min-w-0">
                         <CardHeader className="flex-row items-center justify-between space-y-0">
                             <CardTitle>Recent enquiries</CardTitle>
                             <SectionLink href={route('admin.contact.submissions.index')} label="View all" />
                         </CardHeader>
                         <CardContent className="p-0">
                             {submissions.recent.length > 0 ? (
-                                <div className="overflow-x-auto">
+                                <>
+                                <ul className="divide-border divide-y sm:hidden">
+                                    {submissions.recent.map((submission: DashboardSubmission) => (
+                                        <li key={submission.id}>
+                                            <Link
+                                                href={route('admin.contact.submissions.show', { submission: submission.id })}
+                                                className="hover:bg-muted/50 block px-4 py-3 transition-colors"
+                                            >
+                                                <div className="flex items-start justify-between gap-3">
+                                                    <div className="min-w-0">
+                                                        <span className="block truncate text-sm font-medium">
+                                                            {submission.name ?? 'Unknown'}
+                                                        </span>
+                                                        <span className="text-muted-foreground block truncate text-xs">
+                                                            {submission.email ?? '—'}
+                                                        </span>
+                                                    </div>
+                                                    <span className="shrink-0">
+                                                        <StatusBadge value={submission.status} />
+                                                    </span>
+                                                </div>
+                                                <div className="mt-2 flex items-center justify-between gap-3">
+                                                    <span className="text-muted-foreground min-w-0 flex-1 truncate text-xs">
+                                                        {submission.subject ?? 'No subject'}
+                                                    </span>
+                                                    <span className="text-muted-foreground shrink-0 text-xs whitespace-nowrap">
+                                                        {formatDate(submission.created_at)}
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <div className="hidden overflow-x-auto sm:block">
                                     <table className="w-full min-w-[520px] border-collapse">
                                         <thead className="bg-muted/40 border-b">
                                             <tr>
@@ -294,13 +327,14 @@ export default function Dashboard({ projects, submissions, content }: DashboardD
                                         </tbody>
                                     </table>
                                 </div>
+                                </>
                             ) : (
                                 <p className="text-muted-foreground px-6 py-10 text-center text-sm">No enquiries yet.</p>
                             )}
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="min-w-0">
                         <CardHeader className="flex-row items-center justify-between space-y-0">
                             <CardTitle>Recent projects</CardTitle>
                             <SectionLink href={route('admin.projects.index')} label="View all" />

@@ -47,6 +47,62 @@ const sortOptions = [
     { value: 'oldest', label: 'Oldest first' },
 ];
 
+function ProjectChip({ project }: { project: { title: string; slug: string } }) {
+    return (
+        <Link
+            href={`/projects/${project.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border-amber-300 bg-amber-100 text-amber-800 hover:bg-amber-200 inline-flex max-w-full items-center gap-1 truncate rounded-full border px-2 py-0.5 text-[11px] font-medium dark:border-amber-900 dark:bg-amber-950/60 dark:text-amber-300 dark:hover:bg-amber-950"
+        >
+            {project.title}
+        </Link>
+    );
+}
+
+function SubmissionActions({ item }: { item: ContactSubmissionItem }) {
+    return (
+        <div className="flex items-center justify-end gap-1">
+            <Button asChild size="icon" variant="ghost" title="View">
+                <Link href={route('admin.contact.submissions.show', { submission: item.id })}>
+                    <Eye />
+                </Link>
+            </Button>
+            {item.status === 'spam' ? (
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    title="Restore"
+                    onClick={() => router.patch(route('admin.contact.submissions.restore', { submission: item.id }), {}, { preserveScroll: true })}
+                >
+                    <Undo2 />
+                </Button>
+            ) : (
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    title="Mark as spam"
+                    onClick={() => router.patch(route('admin.contact.submissions.mark-spam', { submission: item.id }), {}, { preserveScroll: true })}
+                >
+                    <ShieldAlert />
+                </Button>
+            )}
+            <Button
+                size="icon"
+                variant="ghost"
+                title="Delete"
+                onClick={() => {
+                    if (window.confirm('Delete this submission?')) {
+                        router.delete(route('admin.contact.submissions.destroy', { submission: item.id }), { preserveScroll: true });
+                    }
+                }}
+            >
+                <Trash />
+            </Button>
+        </div>
+    );
+}
+
 export default function SubmissionIndex({ items, filters, overview, assignees = [], flash }: SubmissionIndexProps) {
     const pathname = window.location.pathname;
     const [search, setSearch] = useState(filters.search ?? '');
@@ -131,31 +187,33 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
 
                 <div className="overflow-hidden rounded-xl border">
                     <div className="border-b bg-muted/40 p-4">
-                        <div className="flex flex-wrap items-center gap-3">
-                            <div className="relative">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                            <div className="relative w-full sm:w-48">
                                 <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-                                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="w-48 pl-9" aria-label="Search submissions" />
+                                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="w-full pl-9" aria-label="Search submissions" />
                             </div>
-                            <select value={status} onChange={(e) => { setStatus(e.target.value); setTimeout(applyFilters, 0); }} className="h-10 rounded-md border border-input bg-background px-3 text-sm" aria-label="Filter by status">
-                                <option value="">All statuses</option>
-                                {statusFilterOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
-                            </select>
-                            <select value={priority} onChange={(e) => { setPriority(e.target.value); setTimeout(applyFilters, 0); }} className="h-10 rounded-md border border-input bg-background px-3 text-sm" aria-label="Filter by priority">
-                                <option value="">All priorities</option>
-                                {priorityOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
-                            </select>
-                            <select value={assignedTo} onChange={(e) => { setAssignedTo(e.target.value); setTimeout(applyFilters, 0); }} className="h-10 rounded-md border border-input bg-background px-3 text-sm" aria-label="Filter by assignee">
-                                <option value="">Any assignee</option>
-                                {assignees.map((assignee) => (<option key={assignee.id} value={assignee.id}>{assignee.name}</option>))}
-                            </select>
-                            <div className="relative">
-                                <select value={sort} onChange={(e) => setSort(e.target.value)} className="h-10 rounded-md border border-input bg-background px-3 pr-8 text-sm" aria-label="Sort order">
-                                    {sortOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+                            <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center">
+                                <select value={status} onChange={(e) => { setStatus(e.target.value); setTimeout(applyFilters, 0); }} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm sm:w-auto" aria-label="Filter by status">
+                                    <option value="">All statuses</option>
+                                    {statusFilterOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
                                 </select>
-                                <ChevronDown className="pointer-events-none absolute top-1/2 right-2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                                <select value={priority} onChange={(e) => { setPriority(e.target.value); setTimeout(applyFilters, 0); }} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm sm:w-auto" aria-label="Filter by priority">
+                                    <option value="">All priorities</option>
+                                    {priorityOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+                                </select>
+                                <select value={assignedTo} onChange={(e) => { setAssignedTo(e.target.value); setTimeout(applyFilters, 0); }} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm sm:w-auto" aria-label="Filter by assignee">
+                                    <option value="">Any assignee</option>
+                                    {assignees.map((assignee) => (<option key={assignee.id} value={assignee.id}>{assignee.name}</option>))}
+                                </select>
+                                <div className="relative w-full sm:w-auto">
+                                    <select value={sort} onChange={(e) => setSort(e.target.value)} className="h-10 w-full rounded-md border border-input bg-background px-3 pr-8 text-sm" aria-label="Sort order">
+                                        {sortOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+                                    </select>
+                                    <ChevronDown className="pointer-events-none absolute top-1/2 right-2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                                </div>
                             </div>
 
-                            <span className="text-muted-foreground ml-auto inline-flex items-center gap-2 text-xs">
+                            <span className="text-muted-foreground inline-flex items-center gap-2 text-xs sm:ml-auto">
                                 <span className="border-amber-300 bg-amber-100 inline-block size-3 rounded-sm border" aria-hidden />
                                 Project enquiry
                             </span>
@@ -180,7 +238,51 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                     </div>
 
                     {items.data.length > 0 ? (
-                        <div className="overflow-x-auto">
+                        <>
+                            <ul className="divide-y sm:hidden">
+                                {items.data.map((item) => (
+                                    <li
+                                        key={item.id}
+                                        className={cn(
+                                            'flex gap-3 p-4',
+                                            item.project && 'border-l-2 border-l-amber-500 bg-amber-50 dark:bg-amber-950/30',
+                                        )}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={selected.includes(item.id)}
+                                            onChange={() => toggleOne(item.id)}
+                                            aria-label={`Select submission ${item.id}`}
+                                            className="accent-primary mt-1 size-4 shrink-0"
+                                        />
+                                        <div className="min-w-0 flex-1 space-y-2">
+                                            <div className="flex items-start justify-between gap-3">
+                                                <div className="min-w-0">
+                                                    <p className="truncate text-sm font-medium">{item.name || 'Anonymous'}</p>
+                                                    {item.email && <p className="text-muted-foreground truncate text-xs">{item.email}</p>}
+                                                </div>
+                                                <span className="text-muted-foreground shrink-0 text-[11px] whitespace-nowrap">
+                                                    {new Date(item.created_at).toLocaleDateString()}
+                                                </span>
+                                            </div>
+
+                                            <p className="text-muted-foreground truncate text-sm">{item.subject || item.message || '—'}</p>
+                                            {item.project && <ProjectChip project={item.project} />}
+
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <StatusBadge value={item.status} />
+                                                <PriorityBadge value={item.priority} />
+                                                {item.assignee?.name && (
+                                                    <span className="text-muted-foreground text-xs">{item.assignee.name}</span>
+                                                )}
+                                            </div>
+
+                                            <SubmissionActions item={item} />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="hidden overflow-x-auto sm:block">
                             <table className="w-full min-w-[820px] border-collapse">
                                 <thead className="border-b bg-muted/40">
                                     <tr>
@@ -223,14 +325,9 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                                             <td className="max-w-xs px-4 py-3 text-sm text-muted-foreground">
                                                 <div className="truncate">{item.subject || item.message || '—'}</div>
                                                 {item.project && (
-                                                    <Link
-                                                        href={`/projects/${item.project.slug}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="border-amber-300 bg-amber-100 text-amber-800 hover:bg-amber-200 mt-1 inline-flex max-w-full items-center gap-1 truncate rounded-full border px-2 py-0.5 text-[11px] font-medium dark:border-amber-900 dark:bg-amber-950/60 dark:text-amber-300 dark:hover:bg-amber-950"
-                                                    >
-                                                        {item.project.title}
-                                                    </Link>
+                                                    <div className="mt-1">
+                                                        <ProjectChip project={item.project} />
+                                                    </div>
                                                 )}
                                             </td>
                                             <td className="px-4 py-3 text-sm"><StatusBadge value={item.status} /></td>
@@ -241,31 +338,14 @@ export default function SubmissionIndex({ items, filters, overview, assignees = 
                                                 {item.status === 'spam' && <span className="text-xs font-medium text-destructive">Spam</span>}
                                             </td>
                                             <td className="px-4 py-3 text-sm">
-                                                <div className="flex items-center justify-end gap-1">
-                                                    <Button asChild size="icon" variant="ghost" title="View">
-                                                        <Link href={route('admin.contact.submissions.show', { submission: item.id })}>
-                                                            <Eye />
-                                                        </Link>
-                                                    </Button>
-                                                    {item.status === 'spam' ? (
-                                                        <Button size="icon" variant="ghost" title="Restore" onClick={() => router.patch(route('admin.contact.submissions.restore', { submission: item.id }), {}, { preserveScroll: true })}>
-                                                            <Undo2 />
-                                                        </Button>
-                                                    ) : (
-                                                        <Button size="icon" variant="ghost" title="Mark as spam" onClick={() => router.patch(route('admin.contact.submissions.mark-spam', { submission: item.id }), {}, { preserveScroll: true })}>
-                                                            <ShieldAlert />
-                                                        </Button>
-                                                    )}
-                                                    <Button size="icon" variant="ghost" title="Delete" onClick={() => { if (window.confirm('Delete this submission?')) router.delete(route('admin.contact.submissions.destroy', { submission: item.id }), { preserveScroll: true }); }}>
-                                                        <Trash />
-                                                    </Button>
-                                                </div>
+                                                <SubmissionActions item={item} />
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
+                        </>
                     ) : (
                         <div className="flex min-h-40 flex-col items-center justify-center gap-2 p-8 text-sm text-muted-foreground">
                             <span className="text-2xl">📭</span>

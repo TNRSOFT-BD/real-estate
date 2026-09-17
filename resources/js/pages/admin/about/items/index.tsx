@@ -8,6 +8,7 @@ import AppLayout from '@/layouts/app-layout';
 import { aboutItemTypeLabels, type AboutItemType, type AdminAboutItem } from '@/types/about-admin';
 import { type Filters, type FlashAlert, type Paginator } from '@/types/contact-admin';
 import { type BreadcrumbItem } from '@/types';
+import { cn } from '@/lib/utils';
 import { Link, router } from '@inertiajs/react';
 import { Plus, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -79,9 +80,9 @@ export default function ItemsIndex({ items, filters, types, flash }: ItemsIndexP
                 <div className="overflow-hidden rounded-xl border">
                     <div className="border-b bg-muted/40 p-4">
                         <div className="flex flex-wrap items-center gap-3">
-                            <div className="relative">
+                            <div className="relative w-full sm:w-56">
                                 <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-                                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="w-56 pl-9" aria-label="Search" />
+                                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="w-full pl-9" aria-label="Search" />
                             </div>
                             <select
                                 value={type}
@@ -89,7 +90,7 @@ export default function ItemsIndex({ items, filters, types, flash }: ItemsIndexP
                                     setType(e.target.value);
                                     setTimeout(applyFilters, 0);
                                 }}
-                                className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                                className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm sm:flex-none"
                                 aria-label="Filter by section"
                             >
                                 <option value="">All sections</option>
@@ -105,7 +106,7 @@ export default function ItemsIndex({ items, filters, types, flash }: ItemsIndexP
                                     setActive(e.target.value);
                                     setTimeout(applyFilters, 0);
                                 }}
-                                className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                                className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm sm:flex-none"
                                 aria-label="Filter by status"
                             >
                                 <option value="">Any status</option>
@@ -116,7 +117,36 @@ export default function ItemsIndex({ items, filters, types, flash }: ItemsIndexP
                     </div>
 
                     {items.data.length > 0 ? (
-                        <div className="overflow-x-auto">
+                        <>
+                            <ul className="divide-y sm:hidden">
+                                {items.data.map((item) => (
+                                    <li key={item.id} className="flex items-start gap-3 p-4">
+                                        <div className="min-w-0 flex-1 space-y-2">
+                                            <p className="text-foreground truncate text-sm font-medium">{primary(item)}</p>
+                                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                                                <Badge variant="secondary">{aboutItemTypeLabels[item.type]}</Badge>
+                                                <span className="text-muted-foreground inline-flex items-center gap-1.5 text-xs">
+                                                    <span
+                                                        className={cn(
+                                                            'size-1.5 rounded-full',
+                                                            item.is_active ? 'bg-emerald-500' : 'bg-muted-foreground/40',
+                                                        )}
+                                                    />
+                                                    {item.is_active ? 'Active' : 'Inactive'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="shrink-0">
+                                            <RowActions
+                                                editUrl={route('admin.about.items.edit', { item: item.id })}
+                                                onToggle={() => router.patch(route('admin.about.items.toggle', { item: item.id }), {}, { preserveScroll: true })}
+                                                onDelete={() => router.delete(route('admin.about.items.destroy', { item: item.id }), { preserveScroll: true })}
+                                            />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="hidden overflow-x-auto sm:block">
                             <table className="w-full min-w-[760px] border-collapse">
                                 <thead className="border-b bg-muted/40">
                                     <tr>
@@ -154,7 +184,8 @@ export default function ItemsIndex({ items, filters, types, flash }: ItemsIndexP
                                     ))}
                                 </tbody>
                             </table>
-                        </div>
+                            </div>
+                        </>
                     ) : (
                         <div className="flex min-h-40 items-center justify-center p-8 text-sm text-muted-foreground">No content yet.</div>
                     )}

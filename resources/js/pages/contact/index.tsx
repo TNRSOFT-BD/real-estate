@@ -56,7 +56,7 @@ export default function ContactIndex(props: ContactPageProps) {
 
                         <h2
                             id="contact-form-title"
-                            className="text-ink mt-6 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance sm:text-4xl"
+                            className="text-ink mt-6 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl"
                         >
                             {hero.form_title ?? 'Send us a message'}
                         </h2>

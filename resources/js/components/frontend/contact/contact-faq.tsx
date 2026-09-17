@@ -17,7 +17,10 @@ export default function ContactFaq({ faqs, hero }: ContactFaqProps) {
         <section id="faq" aria-labelledby="faq-title" className="mx-auto w-full max-w-7xl px-4 py-8 sm:py-12 lg:px-8 lg:py-16">
             <Reveal className="mx-auto flex max-w-2xl flex-col items-center text-center">
                 <SectionLabel withLine={false}>{hero.faq_badge ?? 'Questions'}</SectionLabel>
-                <h2 id="faq-title" className="text-ink mt-6 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance sm:text-4xl">
+                <h2
+                    id="faq-title"
+                    className="text-ink mt-6 text-3xl leading-tight font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl"
+                >
                     {hero.faq_title ?? 'Frequently asked questions'}
                 </h2>
                 {hero.faq_description && <p className="text-ink-soft mt-4 max-w-xl text-sm leading-relaxed">{hero.faq_description}</p>}

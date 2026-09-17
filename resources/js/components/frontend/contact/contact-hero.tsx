@@ -17,7 +17,7 @@ export default function ContactHero({ hero }: ContactHeroProps) {
 
                     <h1
                         id="contact-hero-title"
-                        className="text-ink mt-8 text-4xl leading-[1.04] font-medium tracking-[-0.02em] text-balance sm:text-5xl lg:text-6xl xl:text-7xl"
+                        className="text-ink mt-8 text-4xl leading-[1.04] font-medium tracking-[-0.02em] text-balance max-sm:text-3xl sm:text-5xl lg:text-6xl xl:text-7xl"
                     >
                         {hero.hero_title ?? "Let's build something exceptional."}
                         {hero.hero_highlight && <span className="text-ink-soft block">{hero.hero_highlight}</span>}

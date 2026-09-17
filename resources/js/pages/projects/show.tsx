@@ -82,12 +82,12 @@ export default function ProjectShow({ project, seo, relatedProjects, currency }:
             )}
 
             <div className="mx-auto w-full max-w-7xl px-4 py-10 lg:px-8 lg:py-16">
-                <div className="grid gap-12 lg:grid-cols-12 lg:gap-14">
+                <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
                     <div className="space-y-12 lg:col-span-8">
                         <div>
                             <ProjectMeta project={project} />
 
-                            <h1 className="text-ink mt-6 text-4xl leading-[1.08] font-semibold tracking-[-0.02em] text-balance sm:text-5xl lg:text-6xl xl:text-7xl">
+                            <h1 className="text-ink mt-6 text-4xl leading-[1.08] font-semibold tracking-[-0.02em] text-balance max-sm:text-3xl sm:text-5xl lg:text-6xl xl:text-7xl">
                                 {project.title}
                             </h1>
 

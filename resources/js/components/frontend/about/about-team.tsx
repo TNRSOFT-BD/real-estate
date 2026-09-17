@@ -29,7 +29,7 @@ export default function AboutTeam({ members, hero }: AboutTeamProps) {
                 <SectionLabel>{hero.team_badge ?? 'Our people'}</SectionLabel>
                 <h2
                     id="about-team-title"
-                    className="text-ink mt-7 text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance sm:text-4xl"
+                    className="text-ink mt-7 text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl"
                 >
                     {hero.team_title ?? 'The people behind the projects.'}
                 </h2>

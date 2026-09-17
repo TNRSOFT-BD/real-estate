@@ -9,8 +9,7 @@ const DEMO_VIDEO_ID = 'v1789364512/Landscape_yshfbt';
 
 const DEFAULT_EYEBROW = 'Excellence in Real Estate';
 const DEFAULT_TITLE = 'Crafting Iconic Landmarks & Luxury Living';
-const DEFAULT_DESCRIPTION =
-    "Discover bespoke architectural designs and premium residential properties in the city's most prestigious locations.";
+const DEFAULT_DESCRIPTION = "Discover bespoke architectural designs and premium residential properties in the city's most prestigious locations.";
 
 const SLIDESHOW_INTERVAL_MS = 5000;
 
@@ -81,13 +80,7 @@ function parseYouTubeId(url: string | null | undefined): string | null {
  * be a pure function so it can be called both from the useState initializer
  * (first render, synchronously) and from the useEffect (prop changes).
  */
-function computePoster(
-    source: string,
-    videoLink: string | null,
-    videoUrl: string | null,
-    tier: VideoTier,
-    firstImage: string | null,
-): string | null {
+function computePoster(source: string, videoLink: string | null, videoUrl: string | null, tier: VideoTier, firstImage: string | null): string | null {
     if (source === 'url' && videoLink) {
         const youtubeId = parseYouTubeId(videoLink);
         if (youtubeId) {
@@ -127,9 +120,7 @@ export default function HomeHero({ hero }: HomeHeroProps) {
 
     const [ready, setReady] = useState(false);
     const [slide, setSlide] = useState(0);
-    const [posterSrc, setPosterSrc] = useState<string | null>(() =>
-        computePoster(source, hero.video_link, hero.video_url, tier, firstImage),
-    );
+    const [posterSrc, setPosterSrc] = useState<string | null>(() => computePoster(source, hero.video_link, hero.video_url, tier, firstImage));
 
     const youtubeEmbedUrl = resolveYouTubeEmbedUrl();
     const videoSrc = resolveVideoSrc();
@@ -249,7 +240,10 @@ export default function HomeHero({ hero }: HomeHeroProps) {
                             return (
                                 <div
                                     key={src}
-                                    className={cn('absolute inset-0 transition-opacity duration-[1200ms] ease-out', active ? 'opacity-100' : 'opacity-0')}
+                                    className={cn(
+                                        'absolute inset-0 transition-opacity duration-[1200ms] ease-out',
+                                        active ? 'opacity-100' : 'opacity-0',
+                                    )}
                                 >
                                     <img
                                         src={src}
@@ -276,7 +270,7 @@ export default function HomeHero({ hero }: HomeHeroProps) {
                                 src={youtubeEmbedUrl}
                                 title="Hero background video"
                                 className={cn(
-                                    'pointer-events-none absolute inset-0 size-full border-0 object-cover scale-125 transition-opacity duration-700 ease-out',
+                                    'pointer-events-none absolute inset-0 size-full scale-125 border-0 object-cover transition-opacity duration-700 ease-out',
                                     ready ? 'opacity-100' : 'opacity-0',
                                 )}
                                 allow="autoplay; encrypted-media"
@@ -317,12 +311,12 @@ export default function HomeHero({ hero }: HomeHeroProps) {
 
                     <h1
                         id="home-hero-title"
-                        className="mt-6 text-4xl leading-[1.02] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-6xl xl:text-7xl"
+                        className="mt-6 text-4xl leading-[1.02] font-semibold tracking-[-0.03em] text-balance max-sm:text-3xl sm:text-5xl lg:text-6xl xl:text-7xl"
                     >
                         {title}
                     </h1>
 
-                    {description && <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">{description}</p>}
+                    {description && <p className="mt-6 max-w-xl text-justify text-base leading-relaxed text-white/80 sm:text-lg">{description}</p>}
                 </div>
             </div>
         </section>

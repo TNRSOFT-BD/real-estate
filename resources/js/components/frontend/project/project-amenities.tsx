@@ -14,14 +14,17 @@ export default function ProjectAmenities({ project }: { project: PublicProject }
     }
 
     return (
-        <ul className="grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid grid-cols-2 gap-x-4 gap-y-4 sm:gap-x-8 lg:grid-cols-3">
             {amenities.map((amenity, index) => {
                 const Icon = amenity.icon ? projectIconMap[amenity.icon] : undefined;
                 const name = amenityName(amenity);
 
                 return (
                     <li key={`${name}-${index}`} className="flex items-center gap-3">
-                        <span className={cn('border-line text-ink inline-flex size-8 shrink-0 items-center justify-center rounded-md border')} aria-hidden>
+                        <span
+                            className={cn('border-line text-ink inline-flex size-8 shrink-0 items-center justify-center rounded-md border')}
+                            aria-hidden
+                        >
                             {Icon ? <Icon className="size-4" /> : <Check className="size-4" />}
                         </span>
                         <span className="text-ink text-sm sm:text-base">{name}</span>

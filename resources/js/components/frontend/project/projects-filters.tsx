@@ -1,3 +1,4 @@
+import { useDragScroll } from '@/hooks/use-drag-scroll';
 import { cn } from '@/lib/utils';
 import { type ProjectFilterOption, type ProjectStatusFilterOption, type ProjectsIndexFilters } from '@/types/project';
 import { router } from '@inertiajs/react';
@@ -11,6 +12,8 @@ interface ProjectsFiltersProps {
 }
 
 export default function ProjectsFilters({ types, statuses, locations, filters }: ProjectsFiltersProps) {
+    const { ref: tabsRef, onPointerDown, onClickCapture } = useDragScroll<HTMLDivElement>();
+
     const apply = (next: Partial<ProjectsIndexFilters>) => {
         const projectType = next.project_type !== undefined ? next.project_type : filters.project_type;
         const projectStatus = next.project_status !== undefined ? next.project_status : filters.project_status;
@@ -53,7 +56,14 @@ export default function ProjectsFilters({ types, statuses, locations, filters }:
         <section className="mx-auto w-full max-w-7xl px-4 pb-10 lg:px-8" aria-label="Project filters">
             <div className="border-line bg-canvas/80 sticky top-[4.5rem] z-30 border-y backdrop-blur-xl lg:top-16">
                 <div className="flex flex-col gap-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-                    <div className="-mb-px flex items-center gap-7 overflow-x-auto" role="tablist" aria-label="Project type">
+                    <div
+                        ref={tabsRef}
+                        onPointerDown={onPointerDown}
+                        onClickCapture={onClickCapture}
+                        className="scrollbar-hide -mb-px flex cursor-grab items-center gap-7 overflow-x-auto select-none active:cursor-grabbing"
+                        role="tablist"
+                        aria-label="Project type"
+                    >
                         {typeOptions.map((type) => {
                             const active = (filters.project_type ?? '') === type.slug;
 
@@ -72,7 +82,10 @@ export default function ProjectsFilters({ types, statuses, locations, filters }:
                                     {type.name}
                                     <span
                                         aria-hidden
-                                        className={cn('bg-ink absolute inset-x-0 bottom-0 h-0.5 transition-opacity', active ? 'opacity-100' : 'opacity-0')}
+                                        className={cn(
+                                            'bg-ink absolute inset-x-0 bottom-0 h-0.5 transition-opacity',
+                                            active ? 'opacity-100' : 'opacity-0',
+                                        )}
                                     />
                                 </button>
                             );
@@ -95,7 +108,10 @@ export default function ProjectsFilters({ types, statuses, locations, filters }:
                                         </option>
                                     ))}
                                 </select>
-                                <ChevronDown className="text-ink-soft pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" aria-hidden />
+                                <ChevronDown
+                                    className="text-ink-soft pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2"
+                                    aria-hidden
+                                />
                             </div>
                         )}
 
@@ -114,7 +130,10 @@ export default function ProjectsFilters({ types, statuses, locations, filters }:
                                         </option>
                                     ))}
                                 </select>
-                                <ChevronDown className="text-ink-soft pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" aria-hidden />
+                                <ChevronDown
+                                    className="text-ink-soft pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2"
+                                    aria-hidden
+                                />
                             </div>
                         )}
 

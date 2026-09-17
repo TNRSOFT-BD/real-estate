@@ -16,7 +16,10 @@ export default function AboutWhyUs({ hero }: AboutWhyUsProps) {
         <section className="mx-auto w-full max-w-7xl px-3 py-6 sm:py-9 lg:px-6 lg:py-12" aria-labelledby="about-why-title">
             <Reveal className="max-w-2xl">
                 <SectionLabel>{hero.why_badge ?? 'Why choose us'}</SectionLabel>
-                <h2 id="about-why-title" className="text-ink mt-7 text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance sm:text-4xl">
+                <h2
+                    id="about-why-title"
+                    className="text-ink mt-7 text-3xl leading-[1.08] font-medium tracking-[-0.02em] text-balance max-sm:text-2xl sm:text-4xl"
+                >
                     {hero.why_title ?? 'A partner you can build on.'}
                 </h2>
             </Reveal>

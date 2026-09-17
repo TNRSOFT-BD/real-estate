@@ -23,7 +23,7 @@ export default function ContactClosing({ hero }: ContactClosingProps) {
 
                     <h2
                         id="contact-closing-title"
-                        className="text-ink mt-8 max-w-3xl text-4xl leading-[1.05] font-medium tracking-[-0.02em] text-balance sm:text-5xl lg:text-6xl"
+                        className="text-ink mt-8 max-w-3xl text-4xl leading-[1.05] font-medium tracking-[-0.02em] text-balance max-sm:text-3xl sm:text-5xl lg:text-6xl"
                     >
                         {hero.closing_title ?? 'Let us create something worth remembering.'}
                     </h2>
@@ -35,7 +35,7 @@ export default function ContactClosing({ hero }: ContactClosingProps) {
                     <div className="mt-11">
                         <Link
                             href="#contact-form"
-                            className="group bg-ink text-canvas hover:opacity-90 inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-medium transition-opacity"
+                            className="group bg-ink text-canvas inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-medium transition-opacity hover:opacity-90"
                         >
                             Contact our team
                             <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />

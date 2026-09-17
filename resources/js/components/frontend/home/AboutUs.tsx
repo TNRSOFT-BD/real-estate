@@ -165,7 +165,7 @@ export default function AboutUs({ about }: AboutUsProps) {
           font-size: 1.05rem;
           line-height: 1.75;
           color: var(--au-ink-soft);
-          text-align: left;
+          text-align: justify;
           margin: 0;
         }
 
@@ -252,7 +252,6 @@ export default function AboutUs({ about }: AboutUsProps) {
             padding-inline: 2rem;
           }
           .au-visual { margin-bottom: 0; }
-          .au-copy { text-align: justify; }
           .au-frame--accent { width: 46%; left: -4%; bottom: -12%; }
           .au-badge { top: -6%; right: -4%; }
         }
@@ -261,6 +260,10 @@ export default function AboutUs({ about }: AboutUsProps) {
         @media (min-width: 1200px) {
           .au-container { gap: 5.5rem; }
           .au-frame--accent { left: -5%; }
+        }
+
+        @media (max-width: 639px) {
+          .au-heading { font-size: 1.5rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {

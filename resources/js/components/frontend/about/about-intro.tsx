@@ -12,7 +12,7 @@ const BASES = ['#D2CABB', '#C0C0C0', '#F1EDE8', '#C9A986'];
 function StatCard({ base, stat }: { base: string; stat: AboutStat }) {
     return (
         <div
-            className="border-white/60 relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border p-6 shadow-[0_2px_12px_-6px_rgba(24,21,16,0.25)] transition-transform duration-500 ease-out hover:-translate-y-1 sm:p-7"
+            className="relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-white/60 p-6 shadow-[0_2px_12px_-6px_rgba(24,21,16,0.25)] transition-transform duration-500 ease-out hover:-translate-y-1 sm:p-7"
             style={{ backgroundColor: base }}
         >
             <p className="text-3xl font-bold tracking-[-0.03em] text-black sm:text-4xl">{stat.value}</p>
@@ -39,13 +39,11 @@ export default function AboutIntro({ hero }: AboutIntroProps) {
                 <Reveal className="lg:col-span-7">
                     <h2
                         id="about-intro-title"
-                        className="text-ink text-3xl leading-[1.08] font-medium tracking-[-0.02em] sm:text-4xl"
+                        className="text-ink text-3xl leading-[1.08] font-medium tracking-[-0.02em] max-sm:text-2xl sm:text-4xl"
                     >
                         {hero.intro_title}
                     </h2>
-                    {hero.intro_description && (
-                        <p className="text-ink-soft mt-6 text-base leading-relaxed sm:text-lg">{hero.intro_description}</p>
-                    )}
+                    {hero.intro_description && <p className="text-ink-soft mt-6 text-base leading-relaxed sm:text-lg">{hero.intro_description}</p>}
                 </Reveal>
 
                 {stats.length > 0 && (

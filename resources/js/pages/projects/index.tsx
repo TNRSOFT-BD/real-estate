@@ -60,7 +60,7 @@ export default function ProjectsIndex({ projects, types, statuses, locations, fi
                 {projects.data.length > 0 ? (
                     <section className="mx-auto w-full max-w-7xl px-4 pb-10 lg:px-8" aria-label="Projects">
                         <div className={cn('transition-opacity duration-300', loading && 'pointer-events-none opacity-60')}>
-                            <ProjectsGrid projects={projects.data} />
+                            <ProjectsGrid projects={projects.data} size="large" />
                             <ProjectsPagination paginator={projects} />
                         </div>
                     </section>

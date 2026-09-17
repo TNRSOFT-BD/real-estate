@@ -109,33 +109,37 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
             <main className="flex-1">{children}</main>
 
             <footer className="border-line mt-16 border-t bg-white">
-                <div className="mx-auto w-full max-w-7xl px-4 py-4 lg:px-8 lg:py-6">
-                    <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
-                        <div className="lg:col-span-4">
+                <div className="mx-auto w-full max-w-7xl px-4 py-9 sm:px-6 lg:px-8 lg:py-6">
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-12 lg:gap-10">
+                        <div className="col-span-2 lg:col-span-4">
                             <Link href="/" aria-label={name} className="inline-flex items-center">
                                 {company?.logo ? (
-                                    <img src={mediaUrl(company.logo) ?? undefined} alt={name} className="h-14 w-auto max-w-[240px] object-contain" />
+                                    <img
+                                        src={mediaUrl(company.logo) ?? undefined}
+                                        alt={name}
+                                        className="h-12 w-auto max-w-[220px] object-contain sm:h-14 sm:max-w-[240px]"
+                                    />
                                 ) : (
-                                    <span className="bg-ink text-canvas flex size-14 items-center justify-center">
-                                        <AppLogoIcon className="size-7 fill-current" />
+                                    <span className="bg-ink text-canvas flex size-12 items-center justify-center sm:size-14">
+                                        <AppLogoIcon className="size-6 fill-current sm:size-7" />
                                     </span>
                                 )}
                             </Link>
 
-                            <p className="text-ink-soft mt-5 max-w-xs text-sm leading-relaxed">
+                            <p className="text-ink-soft mt-4 max-w-xs text-sm leading-relaxed sm:mt-5">
                                 {company?.tagline ?? 'Design-led property development, delivered with clarity and care.'}
                             </p>
 
                             {socialLinks.length > 0 && (
-                                <div className="mt-7 [&_ul]:justify-start">
+                                <div className="mt-6 sm:mt-7 [&_ul]:justify-start">
                                     <ContactSocialLinks items={socialLinks} orientation="horizontal" />
                                 </div>
                             )}
                         </div>
 
-                        <nav className="lg:col-span-2" aria-label="Footer">
+                        <nav className="col-span-1 lg:col-span-2" aria-label="Footer">
                             <h2 className="text-ink-soft text-[11px] font-medium tracking-[0.24em] uppercase">Explore</h2>
-                            <ul className="mt-5 space-y-3">
+                            <ul className="mt-4 space-y-3 sm:mt-5">
                                 {navItems.map((item) => (
                                     <li key={item.href}>
                                         <Link href={item.href} className="text-ink-soft hover:text-ink text-sm font-medium transition-colors">
@@ -146,11 +150,11 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                             </ul>
                         </nav>
 
-                        <div className="lg:col-span-3">
+                        <div className="col-span-1 lg:col-span-3">
                             <h2 className="text-ink-soft text-[11px] font-medium tracking-[0.24em] uppercase">Contact</h2>
-                            <ul className="text-ink-soft mt-5 space-y-3 text-sm leading-relaxed">
+                            <ul className="text-ink-soft mt-4 space-y-3 text-sm leading-relaxed sm:mt-5">
                                 {address && (
-                                    <li>
+                                    <li className="break-words">
                                         {address.value}
                                         {address.secondary_value && <span className="block">{address.secondary_value}</span>}
                                     </li>
@@ -172,13 +176,13 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                             </ul>
                         </div>
 
-                        <div className="lg:col-span-3">
+                        <div className="col-span-2 lg:col-span-3">
                             <h2 className="text-ink-soft text-[11px] font-medium tracking-[0.24em] uppercase">Office hours</h2>
-                            {hours && <p className="text-ink-soft mt-5 text-sm leading-relaxed">{hours.value}</p>}
+                            {hours && <p className="text-ink-soft mt-4 text-sm leading-relaxed sm:mt-5">{hours.value}</p>}
 
                             <Link
                                 href="/contact"
-                                className="group bg-ink text-canvas mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-opacity hover:opacity-90"
+                                className="group bg-ink text-canvas mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-opacity hover:opacity-90 sm:mt-6 sm:w-auto sm:py-2.5"
                             >
                                 Contact our team
                                 <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -186,7 +190,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         </div>
                     </div>
 
-                    <div className="border-line mt-8 flex flex-col items-center justify-between gap-3 border-t pt-5 text-xs sm:flex-row">
+                    <div className="border-line mt-10 flex flex-col items-center gap-4 border-t pt-6 text-center text-xs sm:mt-8 sm:flex-row sm:justify-between sm:pt-5 sm:text-left">
                         <p className="text-ink-soft">
                             &copy; {new Date().getFullYear()} {name}. All rights reserved.
                         </p>
