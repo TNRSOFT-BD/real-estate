@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/toast';
 import { Head } from '@inertiajs/react';
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { type BreadcrumbItem } from '@/types';
@@ -23,6 +24,7 @@ function resolveTitle(breadcrumbs: BreadcrumbItem[] = []): string {
 export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
     <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
         <Head title={resolveTitle(breadcrumbs)} />
+        <Toaster />
         {children}
     </AppLayoutTemplate>
 );

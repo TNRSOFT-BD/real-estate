@@ -1,7 +1,6 @@
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CheckCircle2, TriangleAlert } from 'lucide-react';
-import { type ReactNode } from 'react';
+import { toast } from '@/components/ui/toast';
 import { type FlashAlert } from '@/types/contact-admin';
+import { useEffect, type ReactNode } from 'react';
 
 interface AdminPageHeaderProps {
     title: string;
@@ -11,6 +10,16 @@ interface AdminPageHeaderProps {
 }
 
 export default function AdminPageHeader({ title, description, actions, flash }: AdminPageHeaderProps) {
+    useEffect(() => {
+        if (flash?.success) {
+            toast(flash.success, 'success');
+        }
+
+        if (flash?.error) {
+            toast(flash.error, 'error');
+        }
+    }, [flash]);
+
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -20,22 +29,6 @@ export default function AdminPageHeader({ title, description, actions, flash }: 
                 </div>
                 {actions && <div className="flex items-center gap-2">{actions}</div>}
             </div>
-
-            {flash?.success && (
-                <Alert className="border-green-600/40 bg-green-50 text-green-800 dark:bg-green-950/40 dark:text-green-300">
-                    <CheckCircle2 className="size-4" />
-                    <AlertTitle>Done</AlertTitle>
-                    <AlertDescription>{flash.success}</AlertDescription>
-                </Alert>
-            )}
-
-            {flash?.error && (
-                <Alert variant="destructive">
-                    <TriangleAlert className="size-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>{flash.error}</AlertDescription>
-                </Alert>
-            )}
         </div>
     );
 }

@@ -63,20 +63,16 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         ))}
                     </nav>
 
-                    <div className="hidden items-center gap-2 md:flex">
-                        {auth.user ? (
+                    {auth.user && (
+                        <div className="hidden items-center gap-2 md:flex">
                             <Link
                                 href="/dashboard"
                                 className="bg-ink text-canvas rounded-full px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90"
                             >
                                 Dashboard
                             </Link>
-                        ) : (
-                            <Link href="/login" className={navLinkClass}>
-                                Log in
-                            </Link>
-                        )}
-                    </div>
+                        </div>
+                    )}
 
                     <button
                         type="button"
@@ -96,20 +92,16 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 {item.title}
                             </Link>
                         ))}
-                        <div className="border-glass-border mt-2 flex items-center gap-2 border-t pt-3">
-                            {auth.user ? (
+                        {auth.user && (
+                            <div className="border-glass-border mt-2 flex items-center gap-2 border-t pt-3">
                                 <Link
                                     href="/dashboard"
                                     className="bg-ink text-canvas flex-1 rounded-full px-4 py-2 text-center text-sm font-medium transition-opacity hover:opacity-90"
                                 >
                                     Dashboard
                                 </Link>
-                            ) : (
-                                <Link href="/login" className={cn(navLinkClass, 'border-glass-border flex-1 border text-center')}>
-                                    Log in
-                                </Link>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </nav>
                 </div>
             </header>
