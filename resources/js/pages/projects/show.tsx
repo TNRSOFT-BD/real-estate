@@ -87,7 +87,7 @@ export default function ProjectShow({ project, seo, relatedProjects, currency }:
                         <div>
                             <ProjectMeta project={project} />
 
-                            <h1 className="text-ink mt-6 text-3xl leading-[1.08] font-semibold tracking-[-0.02em] text-balance sm:text-4xl lg:text-5xl">
+                            <h1 className="text-ink mt-6 text-4xl leading-[1.08] font-semibold tracking-[-0.02em] text-balance sm:text-5xl lg:text-6xl xl:text-7xl">
                                 {project.title}
                             </h1>
 
