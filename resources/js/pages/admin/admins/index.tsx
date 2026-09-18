@@ -26,6 +26,51 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const perPageOptions = [10, 20, 50];
 
+function AdminActions({
+    item,
+    isSelf,
+    onChangePassword,
+    onDelete,
+}: {
+    item: AdminItem;
+    isSelf: boolean;
+    onChangePassword: () => void;
+    onDelete: () => void;
+}) {
+    return (
+        <div className="flex justify-end">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="Actions">
+                        <MoreHorizontal className="size-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                        <Link href={route('admin.admins.edit', { admin: item.id })}>
+                            <Pencil />
+                            Edit
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={onChangePassword}>
+                        <KeyRound />
+                        Change password
+                    </DropdownMenuItem>
+                    {!isSelf && (
+                        <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={onDelete} className="text-destructive focus:text-destructive">
+                                <Trash2 />
+                                Delete
+                            </DropdownMenuItem>
+                        </>
+                    )}
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
+    );
+}
+
 export default function AdminIndex({ items, filters, flash }: AdminIndexProps) {
     const { auth } = usePage<SharedData>().props;
     const pathname = window.location.pathname;
@@ -72,13 +117,13 @@ export default function AdminIndex({ items, filters, flash }: AdminIndexProps) {
                 <div className="overflow-hidden rounded-xl border">
                     <div className="border-b bg-muted/40 p-4">
                         <div className="flex flex-wrap items-center gap-3">
-                            <div className="relative">
+                            <div className="relative w-full sm:w-64">
                                 <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                                 <Input
                                     value={search}
                                     onChange={(event) => handleSearchChange(event.target.value)}
                                     placeholder="Search name or email…"
-                                    className="w-64 pl-9"
+                                    className="w-full pl-9"
                                     aria-label="Search administrators"
                                 />
                             </div>
@@ -88,7 +133,7 @@ export default function AdminIndex({ items, filters, flash }: AdminIndexProps) {
                                     setPerPage(event.target.value);
                                     applyFilters(search, event.target.value);
                                 }}
-                                className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                                className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm sm:flex-none"
                                 aria-label="Rows per page"
                             >
                                 {perPageOptions.map((option) => (
@@ -101,7 +146,32 @@ export default function AdminIndex({ items, filters, flash }: AdminIndexProps) {
                     </div>
 
                     {items.data.length > 0 ? (
-                        <div className="overflow-x-auto">
+                        <>
+                            <ul className="divide-y sm:hidden">
+                                {items.data.map((item) => (
+                                    <li key={item.id} className="flex items-start gap-3 p-4">
+                                        <div className="min-w-0 flex-1 space-y-2">
+                                            <div className="flex min-w-0 items-center gap-2">
+                                                <span className="text-foreground truncate text-sm font-medium">{item.name}</span>
+                                                {item.id === auth.user.id && <Badge variant="secondary">You</Badge>}
+                                            </div>
+                                            <p className="text-muted-foreground truncate text-xs">{item.email}</p>
+                                            <p className="text-muted-foreground text-xs">
+                                                Created {new Date(item.created_at).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                        <div className="shrink-0">
+                                            <AdminActions
+                                                item={item}
+                                                isSelf={item.id === auth.user.id}
+                                                onChangePassword={() => setPasswordTarget(item)}
+                                                onDelete={() => setDeleteTarget(item)}
+                                            />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="hidden overflow-x-auto sm:block">
                             <table className="w-full min-w-[720px] border-collapse">
                                 <thead className="border-b bg-muted/40">
                                     <tr>
@@ -127,45 +197,19 @@ export default function AdminIndex({ items, filters, flash }: AdminIndexProps) {
                                                 {new Date(item.created_at).toLocaleDateString()}
                                             </td>
                                             <td className="px-4 py-3 text-sm">
-                                                <div className="flex justify-end">
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger asChild>
-                                                            <Button variant="ghost" size="icon" aria-label="Actions">
-                                                                <MoreHorizontal className="size-4" />
-                                                            </Button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end">
-                                                            <DropdownMenuItem asChild>
-                                                                <Link href={route('admin.admins.edit', { admin: item.id })}>
-                                                                    <Pencil />
-                                                                    Edit
-                                                                </Link>
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuItem onClick={() => setPasswordTarget(item)}>
-                                                                <KeyRound />
-                                                                Change password
-                                                            </DropdownMenuItem>
-                                                            {item.id !== auth.user.id && (
-                                                                <>
-                                                                    <DropdownMenuSeparator />
-                                                                    <DropdownMenuItem
-                                                                        onClick={() => setDeleteTarget(item)}
-                                                                        className="text-destructive focus:text-destructive"
-                                                                    >
-                                                                        <Trash2 />
-                                                                        Delete
-                                                                    </DropdownMenuItem>
-                                                                </>
-                                                            )}
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                </div>
+                                                <AdminActions
+                                                    item={item}
+                                                    isSelf={item.id === auth.user.id}
+                                                    onChangePassword={() => setPasswordTarget(item)}
+                                                    onDelete={() => setDeleteTarget(item)}
+                                                />
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
+                        </>
                     ) : (
                         <div className="flex min-h-40 items-center justify-center p-8 text-sm text-muted-foreground">
                             No administrators found.

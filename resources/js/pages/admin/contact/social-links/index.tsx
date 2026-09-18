@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { type AdminSocialLinkItem, type Filters, type FlashAlert, type Paginator } from '@/types/contact-admin';
 import { Link, router } from '@inertiajs/react';
@@ -69,11 +70,11 @@ export default function SocialLinkIndex({ items, filters, flash }: SocialLinkInd
                 <div className="overflow-hidden rounded-xl border">
                     <div className="border-b bg-muted/40 p-4">
                         <div className="flex flex-wrap items-center gap-3">
-                            <div className="relative">
+                            <div className="relative w-full sm:w-56">
                                 <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-                                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="w-56 pl-9" aria-label="Search" />
+                                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="w-full pl-9" aria-label="Search" />
                             </div>
-                            <select value={active} onChange={(e) => { setActive(e.target.value); setTimeout(applyFilters, 0); }} className="h-10 rounded-md border border-input bg-background px-3 text-sm" aria-label="Filter by status">
+                            <select value={active} onChange={(e) => { setActive(e.target.value); setTimeout(applyFilters, 0); }} className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm sm:flex-none" aria-label="Filter by status">
                                 <option value="">Any status</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
@@ -81,7 +82,47 @@ export default function SocialLinkIndex({ items, filters, flash }: SocialLinkInd
                         </div>
                     </div>
                     {items.data.length > 0 ? (
-                        <div className="overflow-x-auto">
+                        <>
+                            <ul className="divide-y sm:hidden">
+                                {items.data.map((item) => (
+                                    <li key={item.id} className="flex items-start gap-3 p-4">
+                                        <div className="min-w-0 flex-1 space-y-2">
+                                            <div className="min-w-0">
+                                                <p className="text-foreground truncate text-sm font-medium capitalize">{item.platform}</p>
+                                                {item.label && <p className="text-muted-foreground truncate text-xs">{item.label}</p>}
+                                            </div>
+                                            <a
+                                                href={item.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-muted-foreground hover:text-foreground inline-flex max-w-full items-center gap-1 text-xs hover:underline"
+                                            >
+                                                <span className="truncate">{item.url}</span>
+                                                <ExternalLink className="size-3 shrink-0" />
+                                            </a>
+                                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                                                <span className="text-muted-foreground inline-flex items-center gap-1.5 text-xs">
+                                                    <span
+                                                        className={cn(
+                                                            'size-1.5 rounded-full',
+                                                            item.is_active ? 'bg-emerald-500' : 'bg-muted-foreground/40',
+                                                        )}
+                                                    />
+                                                    {item.is_active ? 'Active' : 'Inactive'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="shrink-0">
+                                            <RowActions
+                                                editUrl={route('admin.contact.social-links.edit', { link: item.id })}
+                                                onToggle={() => router.patch(route('admin.contact.social-links.toggle', { link: item.id }), {}, { preserveScroll: true })}
+                                                onDelete={() => router.delete(route('admin.contact.social-links.destroy', { link: item.id }), { preserveScroll: true })}
+                                            />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="hidden overflow-x-auto sm:block">
                             <table className="w-full min-w-[680px] border-collapse">
                                 <thead className="border-b bg-muted/40">
                                     <tr>
@@ -118,6 +159,7 @@ export default function SocialLinkIndex({ items, filters, flash }: SocialLinkInd
                                 </tbody>
                             </table>
                         </div>
+                        </>
                     ) : (
                         <div className="flex min-h-40 items-center justify-center p-8 text-sm text-muted-foreground">No social links yet.</div>
                     )}

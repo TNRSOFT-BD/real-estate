@@ -25,6 +25,33 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Projects', href: '/admin/projects' },
 ];
 
+function togglePublish(item: AdminProjectItem) {
+    const action = item.is_published ? 'unpublish' : 'publish';
+    router.patch(route(`admin.projects.${action}`, { project: item.id }), {}, { preserveScroll: true });
+}
+
+function ProjectActions({ item }: { item: AdminProjectItem }) {
+    return (
+        <div className="flex items-center justify-end gap-1">
+            <Button variant="ghost" size="icon" asChild aria-label="Gallery">
+                <Link href={route('admin.projects.gallery.index', { project: item.id })}>
+                    <ImageIcon className="size-4" />
+                </Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild aria-label="Pricing">
+                <Link href={route('admin.projects.pricing.index', { project: item.id })}>
+                    <Wallet className="size-4" />
+                </Link>
+            </Button>
+            <RowActions
+                editUrl={route('admin.projects.edit', { project: item.id })}
+                onToggle={() => togglePublish(item)}
+                onDelete={() => router.delete(route('admin.projects.destroy', { project: item.id }), { preserveScroll: true })}
+            />
+        </div>
+    );
+}
+
 export default function ProjectIndex({ items, filters, types, statuses, flash }: ProjectIndexProps) {
     const pathname = window.location.pathname;
     const [search, setSearch] = useState(filters.search ?? '');
@@ -51,11 +78,6 @@ export default function ProjectIndex({ items, filters, types, statuses, flash }:
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
 
-    const togglePublish = (item: AdminProjectItem) => {
-        const action = item.is_published ? 'unpublish' : 'publish';
-        router.patch(route(`admin.projects.${action}`, { project: item.id }), {}, { preserveScroll: true });
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
@@ -74,11 +96,12 @@ export default function ProjectIndex({ items, filters, types, statuses, flash }:
                 />
 
                 <div className="overflow-hidden rounded-xl border">
-                    <div className="bg-muted/40 flex flex-wrap items-center gap-3 border-b p-4">
-                        <div className="relative">
+                    <div className="bg-muted/40 flex flex-col gap-3 border-b p-4 sm:flex-row sm:flex-wrap sm:items-center">
+                        <div className="relative w-full sm:w-56">
                             <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-                            <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search…" className="w-56 pl-9" aria-label="Search" />
+                            <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search…" className="w-full pl-9" aria-label="Search" />
                         </div>
+                        <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center">
                         <FilterSelect value={type} onChange={(v) => { setType(v); setTimeout(() => applyFilters(), 0); }} placeholder="All types" options={types} />
                         <FilterSelect value={status} onChange={(v) => { setStatus(v); setTimeout(() => applyFilters(), 0); }} placeholder="All statuses" options={statuses} />
                         <FilterSelect
@@ -105,10 +128,54 @@ export default function ProjectIndex({ items, filters, types, statuses, flash }:
                                 { value: 'published_at', label: 'Published date' },
                             ]}
                         />
+                        </div>
                     </div>
 
                     {items.data.length > 0 ? (
-                        <div className="overflow-x-auto">
+                        <>
+                            <ul className="divide-y sm:hidden">
+                                {items.data.map((item) => {
+                                    const thumb = mediaUrl(item.hero_banner ?? null);
+
+                                    return (
+                                        <li key={item.id} className="flex gap-3 p-4">
+                                            {thumb ? (
+                                                <img src={thumb} alt="" className="size-12 shrink-0 rounded-md border object-cover" />
+                                            ) : (
+                                                <div className="bg-muted size-12 shrink-0 rounded-md border" />
+                                            )}
+                                            <div className="min-w-0 flex-1 space-y-2">
+                                                <div className="min-w-0">
+                                                    <p className="text-foreground truncate text-sm font-medium">{item.title}</p>
+                                                    <p className="text-muted-foreground truncate text-xs">/{item.slug}</p>
+                                                </div>
+                                                <div className="flex flex-wrap items-center gap-1.5">
+                                                    <Badge variant={item.is_published ? 'default' : 'secondary'}>
+                                                        {item.is_published ? 'Published' : 'Draft'}
+                                                    </Badge>
+                                                    {item.is_featured && <Badge variant="outline">Featured</Badge>}
+                                                </div>
+                                                <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                                                    {item.project_code && <span>{item.project_code}</span>}
+                                                    {item.type?.name && <span>{item.type.name}</span>}
+                                                    {item.location_city && <span>{item.location_city}</span>}
+                                                    {item.status && (
+                                                        <span className="inline-flex items-center gap-1.5">
+                                                            <span
+                                                                className="size-2 rounded-full"
+                                                                style={{ backgroundColor: item.status.color ?? undefined }}
+                                                            />
+                                                            {item.status.name}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <ProjectActions item={item} />
+                                            </div>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                            <div className="hidden overflow-x-auto sm:block">
                             <table className="w-full min-w-[900px] border-collapse">
                                 <thead className="bg-muted/40 border-b">
                                     <tr>
@@ -160,23 +227,7 @@ export default function ProjectIndex({ items, filters, types, statuses, flash }:
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-3 text-sm">
-                                                    <div className="flex items-center justify-end gap-1">
-                                                        <Button variant="ghost" size="icon" asChild aria-label="Gallery">
-                                                            <Link href={route('admin.projects.gallery.index', { project: item.id })}>
-                                                                <ImageIcon className="size-4" />
-                                                            </Link>
-                                                        </Button>
-                                                        <Button variant="ghost" size="icon" asChild aria-label="Pricing">
-                                                            <Link href={route('admin.projects.pricing.index', { project: item.id })}>
-                                                                <Wallet className="size-4" />
-                                                            </Link>
-                                                        </Button>
-                                                        <RowActions
-                                                            editUrl={route('admin.projects.edit', { project: item.id })}
-                                                            onToggle={() => togglePublish(item)}
-                                                            onDelete={() => router.delete(route('admin.projects.destroy', { project: item.id }), { preserveScroll: true })}
-                                                        />
-                                                    </div>
+                                                    <ProjectActions item={item} />
                                                 </td>
                                             </tr>
                                         );
@@ -184,6 +235,7 @@ export default function ProjectIndex({ items, filters, types, statuses, flash }:
                                 </tbody>
                             </table>
                         </div>
+                        </>
                     ) : (
                         <div className="text-muted-foreground flex min-h-40 items-center justify-center p-8 text-sm">
                             No projects found. Create your first project to get started.
@@ -209,7 +261,7 @@ function FilterSelect({
     placeholder: string;
 }) {
     return (
-        <select value={value} onChange={(event) => onChange(event.target.value)} className="border-input bg-background h-10 rounded-md border px-3 text-sm" aria-label={placeholder}>
+        <select value={value} onChange={(event) => onChange(event.target.value)} className="border-input bg-background h-10 w-full rounded-md border px-3 text-sm sm:w-auto" aria-label={placeholder}>
             <option value="">{placeholder}</option>
             {options.map((option) => (
                 <option key={option.value} value={option.value}>
