@@ -5,9 +5,10 @@ import ProjectCard from './project-card';
 interface ProjectsGridProps {
     projects: PublicProjectCard[];
     size?: 'default' | 'large';
+    showFeaturedBadge?: boolean;
 }
 
-export default function ProjectsGrid({ projects, size = 'default' }: ProjectsGridProps) {
+export default function ProjectsGrid({ projects, size = 'default', showFeaturedBadge = true }: ProjectsGridProps) {
     return (
         <div
             className={cn(
@@ -16,7 +17,7 @@ export default function ProjectsGrid({ projects, size = 'default' }: ProjectsGri
             )}
         >
             {projects.map((project, index) => (
-                <ProjectCard key={project.id} project={project} priority={index < 4} />
+                <ProjectCard key={project.id} project={project} priority={index < 4} showFeaturedBadge={showFeaturedBadge} />
             ))}
         </div>
     );

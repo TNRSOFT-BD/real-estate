@@ -108,7 +108,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
             <main className="flex-1">{children}</main>
 
-            <footer className="border-line mt-16 border-t bg-white">
+            <footer className="site-footer border-line mt-16 border-t bg-white">
                 <div className="mx-auto w-full max-w-7xl px-4 py-9 sm:px-6 lg:px-8 lg:py-6">
                     <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-12 lg:gap-10">
                         <div className="col-span-2 lg:col-span-4">

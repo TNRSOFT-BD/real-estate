@@ -90,12 +90,12 @@ class EloquentProjectRepository implements ProjectRepositoryInterface
             ->get();
     }
 
-    public function latestPublished(int $limit = 6): Collection
+    public function featuredPublished(int $limit = 6): Collection
     {
         return Project::query()
             ->published()
+            ->featured()
             ->with(['type:id,name,slug', 'status:id,name,slug,color'])
-            ->orderByDesc('is_featured')
             ->ordered()
             ->limit($limit)
             ->get();

@@ -7,9 +7,10 @@ import { MapPin } from 'lucide-react';
 interface ProjectCardProps {
     project: PublicProjectCard;
     priority?: boolean;
+    showFeaturedBadge?: boolean;
 }
 
-export default function ProjectCard({ project, priority = false }: ProjectCardProps) {
+export default function ProjectCard({ project, priority = false, showFeaturedBadge = true }: ProjectCardProps) {
     const image = mediaUrl(project.hero_banner);
     const location = [project.location_area, project.location_city].filter(Boolean).join(', ') || project.location_country || null;
 
@@ -49,7 +50,7 @@ export default function ProjectCard({ project, priority = false }: ProjectCardPr
                 className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/5 opacity-0 transition-opacity duration-700 ease-out lg:group-hover:opacity-100 motion-reduce:transition-none"
             />
 
-            {project.is_featured && (
+            {project.is_featured && showFeaturedBadge && (
                 <span className="bg-canvas/90 text-ink absolute top-4 left-4 px-2.5 py-1 text-[10px] font-medium tracking-[0.22em] uppercase backdrop-blur-sm">
                     Featured
                 </span>

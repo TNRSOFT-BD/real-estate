@@ -46,7 +46,7 @@ class HomeController extends Controller
             ?? 'Architectural excellence and modern living — premium residential and commercial developments.';
 
         return Inertia::render('home', [
-            'featuredProjects' => ProjectCardResource::collection($this->projects->latestPublished(6))->resolve(),
+            'featuredProjects' => ProjectCardResource::collection($this->projects->featuredPublished(6))->resolve(),
             'about' => [
                 ...$this->homeAbout->getSettings(),
                 'stats' => $this->homeAboutStats->all()

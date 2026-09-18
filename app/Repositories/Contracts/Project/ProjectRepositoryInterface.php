@@ -28,7 +28,7 @@ interface ProjectRepositoryInterface
     /**
      * @return Collection<int, Project>
      */
-    public function latestPublished(int $limit = 6): Collection;
+    public function featuredPublished(int $limit = 6): Collection;
 
     /**
      * All published projects, used for the sitemap.

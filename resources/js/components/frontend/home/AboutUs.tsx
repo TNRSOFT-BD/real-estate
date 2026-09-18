@@ -62,11 +62,11 @@ export default function AboutUs({ about }: AboutUsProps) {
         <section className="au-section" ref={sectionRef} aria-labelledby="au-heading">
             <style>{`
         .au-section {
-          --au-ink: #23221E;
-          --au-ink-soft: rgba(35, 34, 30, 0.68);
-          --au-panel: #263129;
-          --au-panel-text: #F3EFE6;
-          --au-line: #DCD6C7;
+          --au-ink: var(--ink);
+          --au-ink-soft: var(--ink-soft);
+          --au-panel: var(--ink);
+          --au-panel-text: var(--canvas);
+          --au-line: var(--line);
 
           padding: 3rem 0;
           overflow: hidden;
@@ -148,7 +148,8 @@ export default function AboutUs({ about }: AboutUsProps) {
           font-family: var(--font-sans);
           font-size: 0.78rem;
           line-height: 1.45;
-          color: rgba(243, 239, 230, 0.8);
+          color: var(--au-panel-text);
+          opacity: 0.8;
         }
 
         .au-heading {

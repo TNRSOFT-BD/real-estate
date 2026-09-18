@@ -4,7 +4,9 @@ import { ExternalLink } from 'lucide-react';
 export function mapEmbedUrl(project: PublicProject): string | null {
     const url = project.google_map_url?.trim();
 
-    if (url && /(\/maps\/embed|output=embed|[?&]q=)/i.test(url)) {
+    // Only true embed URLs can be framed; a plain share link is opened
+    // externally and the map falls back to coordinates below.
+    if (url && /(\/maps\/embed|output=embed)/i.test(url)) {
         return url.startsWith('http') ? url : `https://${url}`;
     }
 

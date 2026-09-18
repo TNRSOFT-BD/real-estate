@@ -82,7 +82,7 @@ export default function ProjectSidebar({ project, plans, currency }: ProjectSide
                             href={mediaUrl(project.brochure_pdf) ?? '#'}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="border-line text-ink hover:bg-glass-strong mt-6 flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium transition-colors"
+                            className="bg-ink text-canvas hover:opacity-90 mt-6 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold shadow-sm transition-opacity"
                         >
                             <Download className="size-4" />
                             Download brochure

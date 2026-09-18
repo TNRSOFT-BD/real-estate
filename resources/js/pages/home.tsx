@@ -65,7 +65,7 @@ export default function Home({ featuredProjects, hero, about, whyChooseUs, seo }
                     </div>
 
                     <div className="mt-12">
-                        <ProjectsGrid projects={featuredProjects} />
+                        <ProjectsGrid projects={featuredProjects} size="large" showFeaturedBadge={false} />
                     </div>
                 </section>
             )}

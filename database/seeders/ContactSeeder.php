@@ -49,8 +49,8 @@ class ContactSeeder extends Seeder
             'hero_primary_button_text' => 'Send a message',
             'hero_primary_button_link' => '#contact-form',
             'hero_secondary_button_text' => 'Call us now',
-            'hero_secondary_button_link' => 'tel:+8466000000',
-            'hero_background_image' => null,
+            'hero_secondary_button_link' => 'tel:+8809610000000',
+            'hero_background_image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1400&auto=format&fit=crop',
 
             'form_title' => 'Send us a message',
             'form_description' => 'Fill in the form and we will reply within one business day.',
@@ -91,12 +91,12 @@ class ContactSeeder extends Seeder
     private function addInformation(): void
     {
         $items = [
-            [ContactInformationType::Hotline, 'Hotline', '+84 66 000 000', '+84 900 000 000', 'tel:+8466000000', 'Reach us any time.'],
-            [ContactInformationType::Email, 'Email us', 'hello@example.com', null, 'mailto:hello@example.com', 'For general questions.'],
-            [ContactInformationType::Address, 'Head office', '123 Le Loi Street, District 1', 'Ho Chi Minh City, Vietnam', 'https://maps.google.com/?q=Le+Loi+Street+District+1', 'Visit us on weekdays.'],
-            [ContactInformationType::BusinessHours, 'Business hours', 'Monday – Saturday: 8:00 – 18:00', null, null, 'Sunday closed.'],
-            [ContactInformationType::WhatsApp, 'WhatsApp', '+84 900 000 000', null, 'tel:+84900000000', 'Fastest response time.'],
-            [ContactInformationType::Support, 'Support', 'support@example.com', null, 'mailto:support@example.com', 'For help after purchase.'],
+            [ContactInformationType::Hotline, 'Hotline', '+880 9610 000 000', '+880 1710 000 000', 'tel:+8809610000000', 'Reach us any time.'],
+            [ContactInformationType::Email, 'Email us', 'hello@srproperties.com', null, 'mailto:hello@srproperties.com', 'For general questions.'],
+            [ContactInformationType::Address, 'Head office', 'Level 5, Concord Tower, Gulshan Avenue', 'Dhaka 1212, Bangladesh', 'https://maps.google.com/?q=Concord+Tower+Gulshan+Dhaka', 'Visit us on weekdays.'],
+            [ContactInformationType::BusinessHours, 'Business hours', 'Saturday – Thursday: 9:00 – 18:00', null, null, 'Friday closed.'],
+            [ContactInformationType::WhatsApp, 'WhatsApp', '+880 1710 000 000', null, 'https://wa.me/8801710000000', 'Fastest response time.'],
+            [ContactInformationType::Support, 'Support', 'support@srproperties.com', null, 'mailto:support@srproperties.com', 'For help after purchase.'],
         ];
 
         foreach ($items as $index => [$type, $title, $value, $secondary, $link, $description]) {
@@ -144,7 +144,7 @@ class ContactSeeder extends Seeder
             ['How soon do you reply to messages?', 'We normally reply within one business day. Messages sent on weekends are answered first thing Monday.', 'General', FaqDisplayLocation::Contact],
             ['Do you offer virtual viewings?', 'Yes. If you cannot visit in person, we can arrange a live video walkthrough of the property.', 'Viewings', FaqDisplayLocation::Contact],
             ['Is your consultation free?', 'Absolutely. Our first consultation is free and there is no obligation to use our services afterwards.', 'Pricing', FaqDisplayLocation::Contact],
-            ['Which areas do you cover?', 'We specialise in Ho Chi Minh City, Hanoi and Da Nang, but we can help with projects nationwide.', 'General', FaqDisplayLocation::Contact],
+            ['Which areas do you cover?', 'We specialise in Gulshan, Banani, Bashundhara, Uttara and Purbachal, but we can help with projects across Dhaka and beyond.', 'General', FaqDisplayLocation::Contact],
             ['Can I sell my property through you?', 'Yes, we handle listings, photos, valuation and advertising for sellers. Reach out for a free valuation.', 'Selling', FaqDisplayLocation::Contact],
         ];
 
@@ -162,59 +162,126 @@ class ContactSeeder extends Seeder
     private function addTeamMembers(): void
     {
         $members = [
-            ['Minh Tran', 'Senior Advisor', TeamMemberDepartment::Sales, 'minh@example.com', 'Mon – Sat 9:00 – 18:00'],
-            ['Linh Nguyen', 'Client Care', TeamMemberDepartment::Support, 'linh@example.com', 'Mon – Fri 8:30 – 17:30'],
-            ['Anh Pham', 'Listing Coordinator', TeamMemberDepartment::Technical, 'anh@example.com', 'Mon – Fri 9:00 – 17:00'],
+            [
+                'name' => 'Rakib Hasan',
+                'role' => 'Senior Sales Advisor',
+                'department' => TeamMemberDepartment::Sales,
+                'email' => 'rakib@srproperties.com',
+                'phone' => '+880 1711 100 100',
+                'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop',
+                'bio' => 'Rakib has helped more than 300 families find their home over a decade in Dhaka real estate.',
+                'availability' => 'Sat – Thu 9:00 – 18:00',
+            ],
+            [
+                'name' => 'Nusrat Jahan',
+                'role' => 'Client Care Manager',
+                'department' => TeamMemberDepartment::Support,
+                'email' => 'nusrat@srproperties.com',
+                'phone' => '+880 1711 200 200',
+                'avatar' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600&auto=format&fit=crop',
+                'bio' => 'Nusrat leads our after-sales care, making sure every handover runs smoothly.',
+                'availability' => 'Sat – Thu 9:00 – 18:00',
+            ],
+            [
+                'name' => 'Tanvir Ahmed',
+                'role' => 'Listing Coordinator',
+                'department' => TeamMemberDepartment::Technical,
+                'email' => 'tanvir@srproperties.com',
+                'phone' => '+880 1711 300 300',
+                'avatar' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop',
+                'bio' => 'Tanvir prepares floor plans, site documents and approvals for every development.',
+                'availability' => 'Sun – Thu 9:00 – 17:00',
+            ],
+            [
+                'name' => 'Farhana Islam',
+                'role' => 'Property Consultant',
+                'department' => TeamMemberDepartment::Sales,
+                'email' => 'farhana@srproperties.com',
+                'phone' => '+880 1711 400 400',
+                'avatar' => 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=600&auto=format&fit=crop',
+                'bio' => 'Farhana guides first-time buyers through financing, site visits and paperwork.',
+                'availability' => 'Sat – Thu 10:00 – 18:00',
+            ],
+            [
+                'name' => 'Imran Chowdhury',
+                'role' => 'Head of Construction',
+                'department' => TeamMemberDepartment::Management,
+                'email' => 'imran@srproperties.com',
+                'phone' => '+880 1711 500 500',
+                'avatar' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop',
+                'bio' => 'Imran oversees quality and timelines across all active construction sites.',
+                'availability' => 'Sun – Thu 8:00 – 17:00',
+            ],
+            [
+                'name' => 'Sadia Rahman',
+                'role' => 'Marketing Lead',
+                'department' => TeamMemberDepartment::Other,
+                'email' => 'sadia@srproperties.com',
+                'phone' => '+880 1711 600 600',
+                'avatar' => 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop',
+                'bio' => 'Sadia tells the story of each project and keeps buyers informed at every launch.',
+                'availability' => 'Sat – Thu 9:00 – 18:00',
+            ],
         ];
 
-        foreach ($members as $index => [$name, $role, $department, $email, $availability]) {
-            ContactTeamMember::updateOrCreate(['name' => $name], [
-                'role' => $role,
-                'department' => $department,
-                'email' => $email,
-                'availability' => $availability,
-                'bio' => null,
-                'sort_order' => $index,
-                'is_active' => true,
-            ]);
+        foreach ($members as $index => $member) {
+            ContactTeamMember::updateOrCreate(
+                ['email' => $member['email']],
+                [
+                    'name' => $member['name'],
+                    'role' => $member['role'],
+                    'department' => $member['department'],
+                    'phone' => $member['phone'],
+                    'avatar' => $member['avatar'],
+                    'bio' => $member['bio'],
+                    'availability' => $member['availability'],
+                    'sort_order' => $index,
+                    'is_active' => true,
+                ],
+            );
         }
+
+        // Keep the demo team authoritative so placeholder entries do not leak.
+        ContactTeamMember::query()
+            ->whereNotIn('email', array_column($members, 'email'))
+            ->delete();
     }
 
     private function addLocations(): void
     {
         ContactLocation::updateOrCreate(['name' => 'Head Office'], [
-            'address' => '123 Le Loi Street, Ben Nghe Ward, District 1',
+            'address' => 'Level 5, Concord Tower, Gulshan Avenue, Gulshan 1',
             'description' => 'Our main showroom and sales office. Free parking available in the building basement.',
-            'city' => 'Ho Chi Minh City',
+            'city' => 'Dhaka',
             'state' => null,
-            'country' => 'Vietnam',
-            'postal_code' => '700000',
-            'latitude' => 10.7756,
-            'longitude' => 106.7019,
-            'google_maps_url' => 'https://maps.google.com/?q=Le+Loi+Street+District+1+Ho+Chi+Minh',
-            'place_id' => 'ChIJv4q8K9yxQzERFcKq3s4F2b4',
-            'phone' => '+84 66 000 000',
-            'email' => 'hello@example.com',
-            'business_hours' => "Monday – Friday: 8:00 – 18:00\nSaturday: 9:00 – 12:00\nSunday: Closed",
+            'country' => 'Bangladesh',
+            'postal_code' => '1212',
+            'latitude' => 23.7806,
+            'longitude' => 90.4153,
+            'google_maps_url' => 'https://maps.google.com/?q=Concord+Tower+Gulshan+Dhaka',
+            'place_id' => null,
+            'phone' => '+880 9610 000 000',
+            'email' => 'hello@srproperties.com',
+            'business_hours' => "Saturday – Thursday: 9:00 – 18:00\nFriday: Closed",
             'is_primary' => true,
             'sort_order' => 0,
             'is_active' => true,
         ]);
 
-        ContactLocation::updateOrCreate(['name' => 'Hanoi Branch'], [
-            'address' => '45 Hang Bai Street, Hoan Kiem District',
-            'description' => 'Branch office for northern clients. 5 minutes from the Old Quarter.',
-            'city' => 'Hanoi',
+        ContactLocation::updateOrCreate(['name' => 'Banani Branch'], [
+            'address' => 'House 45, Road 11, Kemal Ataturk Avenue, Banani',
+            'description' => 'Sales lounge for northern Dhaka clients. Walk-ins welcome.',
+            'city' => 'Dhaka',
             'state' => null,
-            'country' => 'Vietnam',
-            'postal_code' => '100000',
-            'latitude' => 21.0278,
-            'longitude' => 105.8342,
-            'google_maps_url' => 'https://maps.google.com/?q=Hang+Bai+Hanoi',
+            'country' => 'Bangladesh',
+            'postal_code' => '1213',
+            'latitude' => 23.7944,
+            'longitude' => 90.4039,
+            'google_maps_url' => 'https://maps.google.com/?q=Kemal+Ataturk+Avenue+Banani+Dhaka',
             'place_id' => null,
-            'phone' => '+84 24 000 000',
-            'email' => 'hanoi@example.com',
-            'business_hours' => "Monday – Friday: 8:30 – 17:30\nSaturday: 9:00 – 12:00\nSunday: Closed",
+            'phone' => '+880 1710 000 000',
+            'email' => 'banani@srproperties.com',
+            'business_hours' => "Saturday – Thursday: 10:00 – 19:00\nFriday: Closed",
             'is_primary' => false,
             'sort_order' => 1,
             'is_active' => true,

@@ -15,7 +15,18 @@ class HomePageTest extends ProjectTestCase
             'title' => 'Published',
             'slug' => 'published',
             'is_published' => true,
+            'is_featured' => true,
             'location_city' => 'Dhaka',
+            'project_type_id' => $type->id,
+            'project_status_id' => $status->id,
+        ]);
+
+        $this->makeProject([
+            'title' => 'Not Featured',
+            'slug' => 'not-featured',
+            'is_published' => true,
+            'is_featured' => false,
+            'location_city' => 'Sylhet',
             'project_type_id' => $type->id,
             'project_status_id' => $status->id,
         ]);
@@ -24,6 +35,7 @@ class HomePageTest extends ProjectTestCase
             'title' => 'Draft',
             'slug' => 'draft',
             'is_published' => false,
+            'is_featured' => true,
             'location_city' => 'Chattogram',
             'project_type_id' => $type->id,
             'project_status_id' => $status->id,
